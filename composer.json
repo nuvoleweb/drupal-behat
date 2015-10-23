@@ -1,12 +1,12 @@
 {
-  "name": "nuvole/drupal-behat",
-  "description": "Traits and Contexts for Drupal Behat tests",
+  "name": "nuvoleweb/drupal-behat",
+  "description": "Traits and other components for the Drupal Behat extestion.",
   "require": {
     "drupal/drupal-extension": "~3.1"
   },
   "autoload": {
     "psr-4": {
-      "Nuvole\\Drupal\\Behat\\": "./src/"
+      "NuvoleWeb\\Drupal\\Behat\\": "./src/"
     }
   }
 }

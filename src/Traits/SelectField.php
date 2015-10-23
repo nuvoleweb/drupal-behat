@@ -4,7 +4,7 @@
  * Contains trait class.
  */
 
-namespace Nuvole\Drupal\Behat\Traits;
+namespace NuvoleWeb\Drupal\Behat\Traits;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
