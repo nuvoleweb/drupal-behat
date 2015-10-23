@@ -1,0 +1,3 @@
+# Ignore non relevant files
+vendor/
+composer.lock
