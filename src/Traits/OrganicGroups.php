@@ -6,6 +6,8 @@
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 
+use Behat\Gherkin\Node\TableNode;
+
 /**
  * Trait OrganicGroups.
  *
@@ -15,6 +17,7 @@ trait OrganicGroups {
 
   /**
    * @Given :name has the :role role in the :group group
+   * @Given :name is a :role of the :group group
    */
   public function assignUserToGroupRole($name, $role, $group) {
 
@@ -55,6 +58,69 @@ trait OrganicGroups {
     // Grant the OG role to the user.
     og_role_grant($entity_type, $entity_id, $user->uid, $rid);
   }
+
+  /**
+   * @Then :name can :op any :type content in the :group group
+   */
+  public function canOpAnyContentInTheGroup($name, $op, $type, $group)
+  {
+    $op = strtr($op, array('edit' => 'update'));
+    $node = $this->loadNodeByName($group);
+    $account = user_load_by_name($name);
+    $access = og_user_access('node', $node->nid, "$op any $type content", $account);
+
+    if (!$access) {
+      $params = array(
+        '@name' => $name,
+        '@op' => $op,
+        '@type' => $type,
+        '@group' => $group,
+      );
+      throw new \Exception(format_string("@name can not @op any @type in @group.", $params));
+    }
+  }
+
+  /**
+   * @Then :name can not :op any :type content in the :group group
+   */
+  public function canNotOpAnyContentInTheGroup($name, $op, $type, $group)
+  {
+    try {
+      $this->canOpAnyContentInTheGroup($name, $op, $type, $group);
+    }
+    catch (\Exception $e) {
+      return;
+    }
+    $params = array(
+      '@name' => $name,
+      '@op' => $op,
+      '@type' => $type,
+      '@group' => $group,
+    );
+    throw new \Exception(format_string("@name can @op any @type in @group but shouldn't.", $params));
+  }
+
+
+  /**
+   * @Then :name can :op any :type content in the following groups:
+   */
+  public function canOpAnyContentInTheFollowingGroups($name, $op, $type, TableNode $table)
+  {
+    foreach ($table->getHash() as $group) {
+      $this->canOpAnyContentInTheGroup($name, $op, $type, $group['title']);
+    }
+  }
+
+  /**
+   * @Then :name can not :op any :type content in the following groups:
+   */
+  public function canNotOpAnyContentInTheFollowingGroups($name, $op, $type, TableNode $table)
+  {
+    foreach ($table->getHash() as $group) {
+      $this->canNotOpAnyContentInTheGroup($name, $op, $type, $group['title']);
+    }
+  }
+
 
   /**
    * Returns a list of OG groups with the given name across all entities.
