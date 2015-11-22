@@ -186,32 +186,6 @@ trait WebApi {
   }
 
   /**
-   * Checks that response body contains specific text.
-   *
-   * @param string $text
-   *
-   * @Then /^(?:the )?response should contain "([^"]*)"$/
-   */
-  public function theResponseShouldContain($text) {
-    $expectedRegexp = '/' . preg_quote($text) . '/i';
-    $actual = (string) $this->getResponse()->getContent();
-    Assertions::assertRegExp($expectedRegexp, $actual);
-  }
-
-  /**
-   * Checks that response body doesn't contains specific text.
-   *
-   * @param string $text
-   *
-   * @Then /^(?:the )?response should not contain "([^"]*)"$/
-   */
-  public function theResponseShouldNotContain($text) {
-    $expectedRegexp = '/' . preg_quote($text) . '/';
-    $actual = (string) $this->getResponse()->getContent();
-    Assertions::assertNotRegExp($expectedRegexp, $actual);
-  }
-
-  /**
    * Checks that response body contains JSON from PyString.
    *
    * Do not check that the response body /only/ contains the JSON from PyString,
@@ -358,6 +332,18 @@ trait WebApi {
     if ($this->token) {
       $this->addHeader('X-CSRF-Token', $this->token);
     }
+
+    // Replace entity ID placeholders in request content.
+    foreach ($this->nodes as $node) {
+      $this->setPlaceHolder("[id:$node->title]", $node->nid);
+    }
+    foreach ($this->users as $user) {
+      $this->setPlaceHolder("[id:$user->name]", $user->uid);
+    }
+    foreach ($this->terms as $term) {
+      $this->setPlaceHolder("[id:$term->name]", $term->tid);
+    }
+    $request['content'] = $this->replacePlaceHolder($request['content']);
 
     // Request URI must be absolute for Mink to work properly with subsequent
     // service requests in the same scenario.
