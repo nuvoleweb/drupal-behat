@@ -8,6 +8,7 @@ namespace NuvoleWeb\Drupal\Behat\Traits;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use \Symfony\Component\BrowserKit\Response;
 use PHPUnit_Framework_Assert as Assertions;
 
 /**
@@ -21,7 +22,7 @@ use PHPUnit_Framework_Assert as Assertions;
 trait WebApi {
 
   /**
-   * Request paramenters.
+   * Request parameters.
    *
    * @var array
    */
@@ -30,7 +31,7 @@ trait WebApi {
   /**
    * Response object reference.
    *
-   * @var \Symfony\Component\BrowserKit\Response
+   * @var Response
    */
   private $response;
 
@@ -40,6 +41,13 @@ trait WebApi {
    * @var array
    */
   private $placeHolders = array();
+
+  /**
+   * CSRF authentication token.
+   *
+   * @var null
+   */
+  private $token = NULL;
 
   /**
    * Adds Basic Authentication header to next request.
@@ -160,7 +168,7 @@ trait WebApi {
    */
   public function theResponseCodeShouldBe($code) {
     $expected = intval($code);
-    $actual = intval($this->response->getStatus());
+    $actual = intval($this->getResponse()->getStatus());
     Assertions::assertSame($expected, $actual);
   }
 
@@ -173,7 +181,7 @@ trait WebApi {
    */
   public function theResponseShouldContain($text) {
     $expectedRegexp = '/' . preg_quote($text) . '/i';
-    $actual = (string) $this->response->getContent();
+    $actual = (string) $this->getResponse()->getContent();
     Assertions::assertRegExp($expectedRegexp, $actual);
   }
 
@@ -186,7 +194,7 @@ trait WebApi {
    */
   public function theResponseShouldNotContain($text) {
     $expectedRegexp = '/' . preg_quote($text) . '/';
-    $actual = (string) $this->response->getContent();
+    $actual = (string) $this->getResponse()->getContent();
     Assertions::assertNotRegExp($expectedRegexp, $actual);
   }
 
@@ -203,20 +211,40 @@ trait WebApi {
    */
   public function theResponseShouldContainJson(PyStringNode $jsonString) {
     $text = $this->replacePlaceHolder($jsonString->getRaw());
-    $etalon = json_decode($text, TRUE);
-    $actual = json_decode($this->response->getContent(), TRUE);
+    $expected = json_decode($text, TRUE);
+    $actual = $this->parseResponse($this->getResponse());
 
-    if (null === $etalon) {
+    if (null === $expected) {
       throw new \RuntimeException(
-        "Can not convert etalon to json:\n" . $this->replacePlaceHolder($jsonString->getRaw())
+        "Can not convert expected to json:\n" . $this->replacePlaceHolder($jsonString->getRaw())
       );
     }
 
-    Assertions::assertGreaterThanOrEqual(count($etalon), count($actual));
-    foreach ($etalon as $key => $needle) {
+    Assertions::assertGreaterThanOrEqual(count($expected), count($actual));
+    foreach ($expected as $key => $needle) {
       Assertions::assertArrayHasKey($key, $actual);
-      Assertions::assertEquals($etalon[$key], $actual[$key]);
+      Assertions::assertEquals($expected[$key], $actual[$key]);
     }
+  }
+
+  /**
+   * Get CSRF Token from service endpoint.
+   *
+   * Token wil be automatically set to each request if found.
+   *
+   * @see WebApi::sendRequest()
+   *
+   * @Given I get the authentication token from :url
+   */
+  public function iGetTheAuthenticationTokenFrom($url) {
+    $url = $this->prepareUrl($url);
+    $this->request['method'] = 'GET';
+    $this->request['uri'] = $url;
+
+    $response = $this->sendRequest()->getResponse();
+    Assertions::assertSame(200, $response->getStatus());
+    $content = $this->parseResponse($response);
+    $this->token = $content['X-CSRF-Token'];
   }
 
   /**
@@ -226,7 +254,7 @@ trait WebApi {
    */
   public function printResponse() {
     $request = $this->request;
-    $response = $this->response;
+    $response = $this->getResponse();
 
     echo sprintf(
       "%s %s => %d:\n%s",
@@ -297,8 +325,12 @@ trait WebApi {
 
   /**
    * Send request to web service.
+   *
+   * @return $this
+   *    Return this object after performing the request.
    */
-  private function sendRequest() {
+  protected function sendRequest() {
+    drupal_static_reset();
     // Add defaults
     $request = $this->request + [
       'method' => 'GET',
@@ -309,16 +341,46 @@ trait WebApi {
       'content' => NULL,
       'changeHistory' => TRUE,
     ];
+
+    if ($this->token) {
+      $this->addHeader('X-CSRF-Token', $this->token);
+    }
+    // Request URI must be absolute for Mink to work properly with subsequent
+    // service requests in the same scenario.
+    $request['uri'] = url($request['uri'], ['absolute' => TRUE]);
     $this->getClient()->request($request['method'], $request['uri'], $request['parameters'], $request['files'], $request['server'], $request['content'], $request['changeHistory']);
     $this->response = $this->getClient()->getResponse();
+    return $this;
+  }
+
+  /**
+   * Get response after firing a request.
+   *
+   * @return Response
+   *    Response object.
+   */
+  protected function getResponse() {
+    return $this->response;
+  }
+
+  /**
+   * Return parsed response content.
+   *
+   * @param Response $response
+   *    Response object.
+   *
+   * @return array
+   *    Parsed response content.
+   */
+  protected function parseResponse(Response $response) {
+    return json_decode($response->getContent(), TRUE);
   }
 
   /**
    * @return \Behat\Mink\Driver\Goutte\Client
    */
-  private function getClient() {
+  protected function getClient() {
     return  $client = $this->getMink()->getSession()->getDriver()->getClient();
   }
-
 
 }
