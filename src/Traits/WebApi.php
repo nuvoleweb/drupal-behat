@@ -8,6 +8,7 @@ namespace NuvoleWeb\Drupal\Behat\Traits;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ExpectationException;
 use \Symfony\Component\BrowserKit\Response;
 use PHPUnit_Framework_Assert as Assertions;
 
@@ -125,14 +126,18 @@ trait WebApi {
    * @param PyStringNode $string request body
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with body:$/
+   * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with "([^"]+)" body:$/
    */
-  public function iSendARequestWithBody($method, $url, PyStringNode $string) {
+  public function sendRequestWithBody($method, $url, PyStringNode $string, $format = 'json') {
     $url = $this->prepareUrl($url);
     $string = $this->replacePlaceHolder(trim($string));
 
     $this->request['method'] = $method;
     $this->request['uri'] = $url;
     $this->request['content'] = $string;
+
+    $this->addHeader('Content-Type', "application/$format");
+    $this->addHeader('Accept', "application/$format");
 
     $this->sendRequest();
   }
@@ -171,7 +176,13 @@ trait WebApi {
   public function theResponseCodeShouldBe($code) {
     $expected = intval($code);
     $actual = intval($this->getResponse()->getStatus());
-    Assertions::assertSame($expected, $actual);
+    try {
+      Assertions::assertSame($expected, $actual);
+    }
+    catch (\Exception $e) {
+      $this->printResponse();
+      throw new \Exception("Response returned $actual while $expected was expected.");
+    }
   }
 
   /**
@@ -347,6 +358,7 @@ trait WebApi {
     if ($this->token) {
       $this->addHeader('X-CSRF-Token', $this->token);
     }
+
     // Request URI must be absolute for Mink to work properly with subsequent
     // service requests in the same scenario.
     $request['uri'] = url($request['uri'], ['absolute' => TRUE]);
