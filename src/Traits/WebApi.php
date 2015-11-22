@@ -21,15 +21,24 @@ use PHPUnit_Framework_Assert as Assertions;
 trait WebApi {
 
   /**
+   * Request paramenters.
+   *
    * @var array
    */
   private $request = array();
 
   /**
+   * Response object reference.
+   *
    * @var \Symfony\Component\BrowserKit\Response
    */
   private $response;
 
+  /**
+   * List of placeholders to be replaced in URL, request or response body.
+   *
+   * @var array
+   */
   private $placeHolders = array();
 
   /**
@@ -40,8 +49,7 @@ trait WebApi {
    *
    * @Given /^I am authenticating as "([^"]*)" with "([^"]*)" password$/
    */
-  public function iAmAuthenticatingAs($username, $password)
-  {
+  public function iAmAuthenticatingAs($username, $password) {
     $this->removeHeader('Authorization');
     $authorization = base64_encode($username . ':' . $password);
     $this->addHeader('Authorization', 'Basic ' . $authorization);
@@ -55,8 +63,7 @@ trait WebApi {
    *
    * @Given /^I set header "([^"]*)" with value "([^"]*)"$/
    */
-  public function iSetHeaderWithValue($name, $value)
-  {
+  public function iSetHeaderWithValue($name, $value) {
     $this->addHeader($name, $value);
   }
 
@@ -68,8 +75,7 @@ trait WebApi {
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)"$/
    */
-  public function iSendARequest($method, $url)
-  {
+  public function iSendARequest($method, $url) {
     $url = $this->prepareUrl($url);
     $this->request['method'] = $method;
     $this->request['uri'] = $url;
@@ -86,8 +92,7 @@ trait WebApi {
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with values:$/
    */
-  public function iSendARequestWithValues($method, $url, TableNode $post)
-  {
+  public function iSendARequestWithValues($method, $url, TableNode $post) {
     $url = $this->prepareUrl($url);
     $fields = array();
 
@@ -111,8 +116,7 @@ trait WebApi {
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with body:$/
    */
-  public function iSendARequestWithBody($method, $url, PyStringNode $string)
-  {
+  public function iSendARequestWithBody($method, $url, PyStringNode $string) {
     $url = $this->prepareUrl($url);
     $string = $this->replacePlaceHolder(trim($string));
 
@@ -132,8 +136,7 @@ trait WebApi {
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with form data:$/
    */
-  public function iSendARequestWithFormData($method, $url, PyStringNode $body)
-  {
+  public function iSendARequestWithFormData($method, $url, PyStringNode $body) {
     $url = $this->prepareUrl($url);
     $body = $this->replacePlaceHolder(trim($body));
 
@@ -155,8 +158,7 @@ trait WebApi {
    *
    * @Then /^(?:the )?response code should be (\d+)$/
    */
-  public function theResponseCodeShouldBe($code)
-  {
+  public function theResponseCodeShouldBe($code) {
     $expected = intval($code);
     $actual = intval($this->response->getStatus());
     Assertions::assertSame($expected, $actual);
@@ -169,8 +171,7 @@ trait WebApi {
    *
    * @Then /^(?:the )?response should contain "([^"]*)"$/
    */
-  public function theResponseShouldContain($text)
-  {
+  public function theResponseShouldContain($text) {
     $expectedRegexp = '/' . preg_quote($text) . '/i';
     $actual = (string) $this->response->getContent();
     Assertions::assertRegExp($expectedRegexp, $actual);
@@ -183,8 +184,7 @@ trait WebApi {
    *
    * @Then /^(?:the )?response should not contain "([^"]*)"$/
    */
-  public function theResponseShouldNotContain($text)
-  {
+  public function theResponseShouldNotContain($text) {
     $expectedRegexp = '/' . preg_quote($text) . '/';
     $actual = (string) $this->response->getContent();
     Assertions::assertNotRegExp($expectedRegexp, $actual);
@@ -201,8 +201,7 @@ trait WebApi {
    *
    * @Then /^(?:the )?response should contain json:$/
    */
-  public function theResponseShouldContainJson(PyStringNode $jsonString)
-  {
+  public function theResponseShouldContainJson(PyStringNode $jsonString) {
     $text = $this->replacePlaceHolder($jsonString->getRaw());
     $etalon = json_decode($text, TRUE);
     $actual = json_decode($this->response->getContent(), TRUE);
@@ -225,8 +224,7 @@ trait WebApi {
    *
    * @Then print response
    */
-  public function printResponse()
-  {
+  public function printResponse() {
     $request = $this->request;
     $response = $this->response;
 
@@ -246,22 +244,20 @@ trait WebApi {
    *
    * @return string
    */
-  private function prepareUrl($url)
-  {
+  private function prepareUrl($url) {
     return ltrim($this->replacePlaceHolder($url), '/');
   }
 
   /**
    * Sets place holder for replacement.
    *
-   * you can specify placeholders, which will
+   * You can specify placeholders, which will
    * be replaced in URL, request or response body.
    *
    * @param string $key   token name
    * @param string $value replace value
    */
-  public function setPlaceHolder($key, $value)
-  {
+  public function setPlaceHolder($key, $value) {
     $this->placeHolders[$key] = $value;
   }
 
@@ -272,8 +268,7 @@ trait WebApi {
    *
    * @return string
    */
-  protected function replacePlaceHolder($string)
-  {
+  protected function replacePlaceHolder($string) {
     foreach ($this->placeHolders as $key => $val) {
       $string = str_replace($key, $val, $string);
     }
@@ -287,8 +282,7 @@ trait WebApi {
    * @param string $name
    * @param string $value
    */
-  protected function addHeader($name, $value)
-  {
+  protected function addHeader($name, $value) {
     $this->getClient()->setHeader($name, $value);
   }
 
@@ -297,13 +291,14 @@ trait WebApi {
    *
    * @param string $headerName
    */
-  protected function removeHeader($headerName)
-  {
+  protected function removeHeader($headerName) {
     $this->getClient()->removeHeader($headerName);
   }
 
-  private function sendRequest()
-  {
+  /**
+   * Send request to web service.
+   */
+  private function sendRequest() {
     // Add defaults
     $request = $this->request + [
       'method' => 'GET',
@@ -321,8 +316,7 @@ trait WebApi {
   /**
    * @return \Behat\Mink\Driver\Goutte\Client
    */
-  private function getClient()
-  {
+  private function getClient() {
     return  $client = $this->getMink()->getSession()->getDriver()->getClient();
   }
 
