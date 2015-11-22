@@ -17,6 +17,8 @@ use PHPUnit_Framework_Assert as Assertions;
  * This trait is an adapted copy of the behat web-api-extension to work with
  * the mink browser and thus using the session from it.
  *
+ * @method \Behat\Mink\Mink getMink()
+ *
  * @package Nuvole\Drupal\Behat\Traits
  */
 trait WebApi {
@@ -377,10 +379,15 @@ trait WebApi {
   }
 
   /**
-   * @return \Behat\Mink\Driver\Goutte\Client
+   * Get current Mink session client.
+   *
+   * @return \Goutte\Client
+   *    Return client object.
    */
   protected function getClient() {
-    return  $client = $this->getMink()->getSession()->getDriver()->getClient();
+    /** @var \Behat\Mink\Driver\GoutteDriver $driver */
+    $driver = $this->getMink()->getSession()->getDriver();
+    return $driver->getClient();
   }
 
 }
