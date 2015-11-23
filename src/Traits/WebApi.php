@@ -343,6 +343,12 @@ trait WebApi {
     foreach ($this->terms as $term) {
       $this->setPlaceHolder("[id:$term->name]", $term->tid);
     }
+    if (isset($this->comments)) {
+      foreach ($this->comments as $comment) {
+        $this->setPlaceHolder("[id:$comment->subject]", $comment->cid);
+      }
+    }
+
     $request['content'] = $this->replacePlaceHolder($request['content']);
 
     // Request URI must be absolute for Mink to work properly with subsequent
