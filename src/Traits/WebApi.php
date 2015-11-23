@@ -350,10 +350,12 @@ trait WebApi {
     }
 
     $request['content'] = $this->replacePlaceHolder($request['content']);
+    $request['uri'] = $this->replacePlaceHolder($request['uri']);
 
     // Request URI must be absolute for Mink to work properly with subsequent
     // service requests in the same scenario.
     $request['uri'] = url($request['uri'], ['absolute' => TRUE]);
+    $request['uri'] = urldecode($request['uri']);
     $this->getClient()->request($request['method'], $request['uri'], $request['parameters'], $request['files'], $request['server'], $request['content'], $request['changeHistory']);
     $this->response = $this->getClient()->getResponse();
     return $this;
