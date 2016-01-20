@@ -32,6 +32,13 @@ trait WebApi {
   private $request = array();
 
   /**
+   * Request headers.
+   *
+   * @var array
+   */
+  private $headers = array();
+
+  /**
    * Response object reference.
    *
    * @var Response
@@ -292,22 +299,36 @@ trait WebApi {
   }
 
   /**
-   * Adds header
+   * Adds header.
    *
    * @param string $name
    * @param string $value
    */
   protected function addHeader($name, $value) {
+    $this->headers[$name] = $value;
     $this->getClient()->setHeader($name, $value);
   }
 
   /**
-   * Removes a header identified by $headerName
+   * Removes a header identified by $headerName.
    *
    * @param string $headerName
    */
   protected function removeHeader($headerName) {
-    $this->getClient()->removeHeader($headerName);
+    if (isset($this->headers[$headerName])) {
+      unset($this->headers[$headerName]);
+      $this->getClient()->removeHeader($headerName);
+    }
+  }
+
+  /**
+   * Remove all headers previously set.
+   */
+  protected function removeAllHeaders() {
+    $headers = array_keys($this->headers);
+    foreach ($headers as $name) {
+      $this->removeHeader($name);
+    }
   }
 
   /**
@@ -358,6 +379,7 @@ trait WebApi {
     $request['uri'] = urldecode($request['uri']);
     $this->getClient()->request($request['method'], $request['uri'], $request['parameters'], $request['files'], $request['server'], $request['content'], $request['changeHistory']);
     $this->response = $this->getClient()->getResponse();
+    $this->removeAllHeaders();
     return $this;
   }
 
