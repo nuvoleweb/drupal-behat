@@ -23,6 +23,23 @@ use Behat\Mink\Exception\DriverException;
 trait ScreenShot {
 
   /**
+   * @Then (I )take a screenshot :name
+   */
+  public function takeAScreenshot($i = NULL, $name = NULL) {
+    $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
+    $message = "Screenshot created in @file_name";
+    $this->createScreenshot($file_name, $message, FALSE);
+  }
+  /**
+   * @Then (I )take a screenshot
+   */
+  public function takeAScreenshotUnnamed() {
+    $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-screenshot';
+    $message = "Screenshot created in @file_name";
+    $this->createScreenshot($file_name, $message);
+  }
+
+  /**
    * @AfterStep
    *
    * Make sure there is no PHP notice on the screen during tests.
