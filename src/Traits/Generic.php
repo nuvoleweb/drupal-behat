@@ -14,6 +14,9 @@ use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Exception\DriverException;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
 
 /**
  * Trait Generic.
@@ -27,12 +30,10 @@ trait Generic {
    */
   public function iAmViewingTheContent($type, $title) {
 
-    $result = db_select('node', 'n')
-      ->fields('n', array('nid'))
-      ->condition('n.type', $type)
-      ->condition('n.title', $title)
-      ->execute()
-      ->fetchCol();
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', $type)
+      ->condition('title', $title)
+      ->execute();
 
     if (!empty($result)) {
       $nid = array_shift($result);
@@ -48,12 +49,10 @@ trait Generic {
    */
   public function iAmEditingTheContent($type, $title) {
 
-    $result = db_select('node', 'n')
-      ->fields('n', array('nid'))
-      ->condition('n.type', $type)
-      ->condition('n.title', $title)
-      ->execute()
-      ->fetchCol();
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', $type)
+      ->condition('title', $title)
+      ->execute();
 
     if (!empty($result)) {
       $nid = array_shift($result);
@@ -89,7 +88,7 @@ trait Generic {
     $op = strtr($op, array('edit' => 'update'));
     $node = $this->loadNodeByName($content);
     $account = user_load_by_name($name);
-    $access = node_access($op, $node, $account);
+    $access = $node->access($op, $account);
 
     if (!$access) {
       $params = array(
@@ -108,11 +107,10 @@ trait Generic {
    *   If the user can edit the node.
    */
   public function userCanNotContent($name, $op, $content) {
-
     $op = strtr($op, array('edit' => 'update'));
     $node = $this->loadNodeByName($content);
     $account = user_load_by_name($name);
-    $access = node_access($op, $node, $account);
+    $access = $node->access($op, $account);
 
     if ($access) {
       $params = array(
@@ -206,30 +204,29 @@ trait Generic {
    * @param string $title
    *   The title of the node to load.
    *
-   * @return \stdClass
+   * @return Node
    *   The loaded node.
    *
    * @throws \Exception
    *   Thrown when no node with the given title can be loaded.
    */
   public function loadNodeByName($title) {
-    $query = new \EntityFieldQuery();
-    $result = $query
-      ->entityCondition('entity_type', 'node')
-      ->propertyCondition('title', $title)
-      ->propertyCondition('status', NODE_PUBLISHED)
+
+    $result = \Drupal::entityQuery('node')
+      ->condition('title', $title)
+      ->condition('status', NODE_PUBLISHED)
       ->range(0, 1)
       ->execute();
 
-    if (empty($result['node'])) {
+    if (empty($result)) {
       $params = array(
         '@title' => $title,
       );
-      throw new \Exception(format_string("Node @title not found.", $params));
+      throw new \Exception(new FormattableMarkup("Node @title not found.", $params));
     }
 
-    $nid = key($result['node']);
-    return node_load($nid);
+    $nid = current($result);
+    return Node::load($nid);
   }
 
   /**
@@ -258,7 +255,7 @@ trait Generic {
     // Loop over all the links on the page and check for the node edit path.
     foreach ($links as $result) {
       $target = $result->getAttribute('href');
-      if (strpos($target,'node/' . $node->nid . '/edit') !== false) {
+      if (strpos($target,'node/' . $node->id() . '/edit') !== false) {
         return $result;
       }
     }
