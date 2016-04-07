@@ -222,6 +222,35 @@ trait WebApi {
   }
 
   /**
+   * Checks that response body contains JSON from PyString but checks a subset.
+   *
+   * Do not check that the response body /only/ contains the JSON from PyString,
+   *
+   * @param PyStringNode $jsonString
+   *
+   * @throws \RuntimeException
+   *
+   * @Then /^(?:the )?response should contain json like:$/
+   */
+  public function theResponseShouldContainJsonLike(PyStringNode $jsonString) {
+    $text = $this->replacePlaceHolder($jsonString->getRaw());
+    $expected = json_decode($text, TRUE);
+    $actual = $this->parseResponse($this->getResponse());
+
+    if (null === $expected) {
+      throw new \RuntimeException(
+        "Can not convert expected to json:\n" . $this->replacePlaceHolder($jsonString->getRaw())
+      );
+    }
+
+    Assertions::assertGreaterThanOrEqual(count($expected), count($actual));
+    foreach ($expected as $key => $needle) {
+      Assertions::assertArrayHasKey($key, $actual);
+      Assertions::assertArraySubset($expected[$key], $actual[$key]);
+    }
+  }
+
+  /**
    * Get CSRF Token from service endpoint.
    *
    * Token wil be automatically set to each request if found.
