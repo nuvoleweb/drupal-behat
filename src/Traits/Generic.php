@@ -27,43 +27,27 @@ use Drupal\user\Entity\User;
 trait Generic {
 
   /**
+   * @Given I am visiting the :type content :title
    * @Given I visit the :type content :title
    */
   public function iAmViewingTheContent($type, $title) {
-    $type = $this->convertLabelToNodeTypeId($type);
-
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', $type)
-      ->condition('title', $title)
-      ->execute();
-
-    if (!empty($result)) {
-      $nid = array_shift($result);
-      $this->visitPath("node/$nid");
-    }
-    else {
-      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
-    }
+    $this->iAmVisitingAContentPage('view', $type, $title);
   }
 
   /**
+   * @Given I am editing the :type content :title
    * @Given I edit the :type content :title
    */
   public function iAmEditingTheContent($type, $title) {
-    $type = $this->convertLabelToNodeTypeId($type);
+    $this->iAmVisitingAContentPage('edit', $type, $title);
+  }
 
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', $type)
-      ->condition('title', $title)
-      ->execute();
-
-    if (!empty($result)) {
-      $nid = array_shift($result);
-      $this->visitPath("node/$nid/edit");
-    }
-    else {
-      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
-    }
+  /**
+   * @Given I am deleting the :type content :title
+   * @Given I delete the :type content :title
+   */
+  public function iAmDeletingTheContent($type, $title) {
+    $this->iAmVisitingAContentPage('delete', $type, $title);
   }
 
   /**
@@ -289,7 +273,7 @@ trait Generic {
    * @return string
    *   The node-type id.
    *
-   * @throws \Exception
+   * @throws ExpectationException
    *   When the passed node type doesn't exist.
    */
   protected function convertLabelToNodeTypeId($type) {
@@ -302,7 +286,41 @@ trait Generic {
       return key($result);
     }
 
-    throw new \Exception("Node type '$type' doesn't exist.");
+    throw new ExpectationException("Node type '$type' doesn't exist.", $this->getSession());
+  }
+
+  /**
+   * Provides a common step definition callback for node pages.
+   *
+   * @param string $op
+   *   The operation being performed: 'view', 'edit', 'delete'.
+   * @param string $type
+   *   The node type either as id or as label.
+   * @param string $title
+   *   The node title.
+   *
+   * @throws ExpectationException
+   *   When the node doesn't exist.
+   */
+  protected function iAmVisitingAContentPage($op, $type, $title) {
+    $type = $this->convertLabelToNodeTypeId($type);
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', $type)
+      ->condition('title', $title)
+      ->execute();
+
+    if (!empty($result)) {
+      $nid = array_shift($result);
+      $path = [
+        'view' => "node/$nid",
+        'edit' => "node/$nid/edit",
+        'delete' => "node/$nid/delete",
+      ];
+      $this->visitPath($path[$op]);
+    }
+    else {
+      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
+    }
   }
 
 }
