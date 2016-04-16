@@ -16,6 +16,7 @@ use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Exception\DriverException;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\User;
 
 /**
@@ -29,6 +30,7 @@ trait Generic {
    * @Given I visit the :type content :title
    */
   public function iAmViewingTheContent($type, $title) {
+    $type = $this->convertLabelToNodeTypeId($type);
 
     $result = \Drupal::entityQuery('node')
       ->condition('type', $type)
@@ -48,6 +50,7 @@ trait Generic {
    * @Given I edit the :type content :title
    */
   public function iAmEditingTheContent($type, $title) {
+    $type = $this->convertLabelToNodeTypeId($type);
 
     $result = \Drupal::entityQuery('node')
       ->condition('type', $type)
@@ -162,6 +165,8 @@ trait Generic {
    * @Given :user created :type content:
    */
   public function manuallyCreateNodes($user, $type, TableNode $nodesTable) {
+    $type = $this->convertLabelToNodeTypeId($type);
+
     // Log in with the user.
     $this->assertLoggedInByName($user);
     foreach ($nodesTable->getHash() as $nodeHash) {
@@ -273,6 +278,31 @@ trait Generic {
       // We make sure the the PhantonJS browser uses the desktop version.
       $this->getSession()->resizeWindow(1024, 768, 'current');
     } catch (UnsupportedDriverActionException $e) { }
+  }
+
+  /**
+   * Converts a node-type label into its id.
+   *
+   * @param string $type
+   *   The node-type id or label.
+   *
+   * @return string
+   *   The node-type id.
+   *
+   * @throws \Exception
+   *   When the passed node type doesn't exist.
+   */
+  protected function convertLabelToNodeTypeId($type) {
+    // First suppose that the id has been passed.
+    if (NodeType::load($type)) {
+      return $type;
+    }
+    $storage = \Drupal::entityTypeManager()->getStorage('node_type');
+    if ($result = $storage->loadByProperties(['name' => $type])) {
+      return key($result);
+    }
+
+    throw new \Exception("Node type '$type' doesn't exist.");
   }
 
 }
