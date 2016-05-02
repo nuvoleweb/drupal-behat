@@ -91,7 +91,16 @@ trait ScreenShot {
       // Not a failed step.
       return;
     }
-    $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-failed-step';
+    $step = $event->getStep();
+    if (function_exists('transliteration_clean_filename')) {
+      $file_name = transliteration_clean_filename($step->getKeyword() . '_' . $step->getText());
+    }
+    else {
+      $file_name = str_replace(' ', '_', $step->getKeyword() . '_' . $step->getText());
+      $file_name = preg_replace('![^0-9A-Za-z_.-]!', '', $file_name);
+    }
+    $file_name = substr($file_name, 0, 30);
+    $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-failed__' . $file_name;
     $message = "Screenshot for failed step created in @file_name";
     $this->createScreenshot($file_name, $message);
   }
