@@ -17,6 +17,7 @@ use Behat\Mink\Exception\DriverException;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\User;
 
 /**
@@ -321,6 +322,80 @@ trait Generic {
     else {
       throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
     }
+  }
+
+  /**
+   * @Given I am visiting the :type term :title
+   * @Given I visit the :type term :title
+   */
+  public function iAmViewingTheTerm($type, $title) {
+    $this->iAmVisitingATermPage('view', $type, $title);
+  }
+
+  /**
+   * @Given I am editing the :type term :title
+   * @Given I edit the :type term :title
+   */
+  public function iAmEditingTheTerm($type, $title) {
+    $this->iAmVisitingATermPage('edit', $type, $title);
+  }
+  /**
+   * Provides a common step definition callback for node pages.
+   *
+   * @param string $op
+   *   The operation being performed: 'view', 'edit', 'delete'.
+   * @param string $type
+   *   The node type either as id or as label.
+   * @param string $title
+   *   The node title.
+   *
+   * @throws ExpectationException
+   *   When the node doesn't exist.
+   */
+  protected function iAmVisitingATermPage($op, $type, $title) {
+    $type = $this->convertLabelToTermTypeId($type);
+    $result = \Drupal::entityQuery('taxonomy_term')
+      ->condition('vid', $type)
+      ->condition('name', $title)
+      ->execute();
+
+    if (!empty($result)) {
+      $tid = array_shift($result);
+      $path = [
+        'view' => "taxonomy/term/$tid",
+        'edit' => "taxonomy/term/$tid/edit",
+        'delete' => "taxonomy/term/$tid/delete",
+      ];
+      $this->visitPath($path[$op]);
+    }
+    else {
+      throw new ExpectationException("No term with vocabulary '$type' and title '$title' has been found.", $this->getSession());
+    }
+  }
+
+  /**
+   * Converts a vocabulary label into its id.
+   *
+   * @param string $type
+   *   The node-type id or label.
+   *
+   * @return string
+   *   The node-type id.
+   *
+   * @throws ExpectationException
+   *   When the passed node type doesn't exist.
+   */
+  protected function convertLabelToTermTypeId($type) {
+    // First suppose that the id has been passed.
+    if (Vocabulary::load($type)) {
+      return $type;
+    }
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary');
+    if ($result = $storage->loadByProperties(['name' => $type])) {
+      return key($result);
+    }
+
+    throw new ExpectationException("Node type '$type' doesn't exist.", $this->getSession());
   }
 
 }
