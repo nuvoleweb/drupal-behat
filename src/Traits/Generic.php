@@ -23,45 +23,27 @@ use Behat\Mink\Exception\DriverException;
 trait Generic {
 
   /**
+   * @Given I am visiting the :type content :title
    * @Given I visit the :type content :title
    */
   public function iAmViewingTheContent($type, $title) {
-
-    $result = db_select('node', 'n')
-      ->fields('n', array('nid'))
-      ->condition('n.type', $type)
-      ->condition('n.title', $title)
-      ->execute()
-      ->fetchCol();
-
-    if (!empty($result)) {
-      $nid = array_shift($result);
-      $this->visitPath("node/$nid");
-    }
-    else {
-      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
-    }
+    $this->iAmVisitingAContentPage('view', $type, $title);
   }
 
   /**
+   * @Given I am editing the :type content :title
    * @Given I edit the :type content :title
    */
   public function iAmEditingTheContent($type, $title) {
+    $this->iAmVisitingAContentPage('edit', $type, $title);
+  }
 
-    $result = db_select('node', 'n')
-      ->fields('n', array('nid'))
-      ->condition('n.type', $type)
-      ->condition('n.title', $title)
-      ->execute()
-      ->fetchCol();
-
-    if (!empty($result)) {
-      $nid = array_shift($result);
-      $this->visitPath("node/$nid/edit");
-    }
-    else {
-      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
-    }
+  /**
+   * @Given I am deleting the :type content :title
+   * @Given I delete the :type content :title
+   */
+  public function iAmDeletingTheContent($type, $title) {
+    $this->iAmVisitingAContentPage('delete', $type, $title);
   }
 
   /**
@@ -164,6 +146,8 @@ trait Generic {
    * @Given :user created :type content:
    */
   public function manuallyCreateNodes($user, $type, TableNode $nodesTable) {
+    $type = $this->convertLabelToNodeTypeId($type);
+
     // Log in with the user.
     $this->assertLoggedInByName($user);
     foreach ($nodesTable->getHash() as $nodeHash) {
@@ -276,6 +260,60 @@ trait Generic {
       // We make sure the the PhantonJS browser uses the desktop version.
       $this->getSession()->resizeWindow(1024, 768, 'current');
     } catch (UnsupportedDriverActionException $e) { }
+  }
+
+  /**
+   * Converts a node-type label into its id.
+   *
+   * @param string $type
+   *   The node-type id or label.
+   *
+   * @return string
+   *   The node-type id.
+   *
+   * @throws ExpectationException
+   *   When the passed node type doesn't exist.
+   */
+  protected function convertLabelToNodeTypeId($type) {
+    // First suppose that the id has been passed.
+    if (node_type_load($type)) {
+      return $type;
+    }
+    foreach (node_type_get_types() as $type_id => $info) {
+      if ($info->name == $type) {
+        return $type_id;
+      }
+    }
+    throw new ExpectationException("Node type '$type' doesn't exist.", $this->getSession());
+  }
+
+  /**
+   * Provides a common step definition callback for node pages.
+   *
+   * @param string $op
+   *   The operation being performed: 'view', 'edit', 'delete'.
+   * @param string $type
+   *   The node type either as id or as label.
+   * @param string $title
+   *   The node title.
+   *
+   * @throws ExpectationException
+   *   When the node doesn't exist.
+   */
+  protected function iAmVisitingAContentPage($op, $type, $title) {
+    $type = $this->convertLabelToNodeTypeId($type);
+    if ($nodes = node_load_multiple(NULL, array('title' => $title, 'type' => $type))) {
+      $nid = key($nodes);
+      $path = array(
+        'view' => "node/$nid",
+        'edit' => "node/$nid/edit",
+        'delete' => "node/$nid/delete",
+      );
+      $this->visitPath($path[$op]);
+    }
+    else {
+      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
+    }
   }
 
 }
