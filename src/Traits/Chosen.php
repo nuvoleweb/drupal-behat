@@ -15,7 +15,7 @@ use Behat\Mink\Exception\ExpectationException;
  * @package Nuvole\Drupal\Behat\Traits
  */
 trait Chosen {
-  
+
   /**
    * Fills in chosen form fields with provided table.
    *
@@ -28,10 +28,28 @@ trait Chosen {
   }
 
   /**
+   * Fills in chosen form fields with provided table.
+   *
+   * @When /^(?:|I )unset the following chosen fields:$/
+   */
+  public function unsetChosenFields(TableNode $fields) {
+    foreach ($fields->getRowsHash() as $field => $value) {
+      $this->iUnSetChosenElement($value, $field);
+    }
+  }
+
+  /**
+   * @When /^I add "([^"]*)" to the chosen element "([^"]*)"$/
+   */
+  public function iAddChosenElement($value, $locator) {
+    $this->iSetChosenElement($locator, $value);
+  }
+
+  /**
    * This is from a patch which is very much work-in-progress...
    * https://www.drupal.org/node/2562805
    *
-   * @When /^I the set the chosen element "([^"]*)" to "([^"]*)"$/
+   * @When /^I set the chosen element "([^"]*)" to "([^"]*)"$/
    */
   public function iSetChosenElement($locator, $value) {
     $session = $this->getSession();
@@ -65,4 +83,33 @@ trait Chosen {
 
     $el->click();
   }
+
+  /**
+   * @When /^I remove "([^"]*)" from the chosen element "([^"]*)"$/
+   */
+  public function iUnSetChosenElement($value, $locator) {
+    $session = $this->getSession();
+    $el = $session->getPage()->findField($locator);
+
+    if (empty($el)) {
+      throw new ExpectationException('No such select element ' . $locator, $session);
+    }
+
+    $element_id = str_replace('-', '_', $el->getAttribute('id')) . '_chosen';
+
+    $el =$session->getPage()->find('xpath', "//div[@id='{$element_id}']");
+    if ($el->hasClass('chosen-container-single')) {
+      // This is a single select element, unsetting doesn't make sense
+    }
+
+    $selector = "//div[@id='{$element_id}']/ul[@class='chosen-choices']//li[span = '{$value}']/a";
+    $el = $session->getPage()->find('xpath', $selector);
+
+    if (empty($el)) {
+      throw new ExpectationException('No such option ' . $value . ' selected in ' . $locator, $session);
+    }
+
+    $el->click();
+  }
+
 }
