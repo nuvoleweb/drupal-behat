@@ -339,6 +339,7 @@ trait Generic {
   public function iAmEditingTheTerm($type, $title) {
     $this->iAmVisitingATermPage('edit', $type, $title);
   }
+
   /**
    * Provides a common step definition callback for node pages.
    *
@@ -397,5 +398,24 @@ trait Generic {
 
     throw new ExpectationException("Node type '$type' doesn't exist.", $this->getSession());
   }
+
+  /**
+   * @Then :first should precede :second
+   */
+  public function shouldPrecede($first, $second) {
+    $page = $this->getSession()->getPage()->getText();
+    $pos1 = strpos($page, $first);
+    if ($pos1 === FALSE) {
+      throw new ExpectationException("Text not found: '$first'.", $this->getSession());
+    }
+    $pos2 = strpos($page, $second);
+    if ($pos2 === FALSE) {
+      throw new ExpectationException("Text not found: '$second'.", $this->getSession());
+    }
+    if ($pos2 < $pos1) {
+      throw new \Exception("Text '$first' does not precede text '$second'.");
+    }
+  }
+
 
 }
