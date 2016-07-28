@@ -253,15 +253,39 @@ trait Generic {
   }
 
   /**
+   * Default screen size.
+   */
+  protected $defaultScreenSize = ['width' => 1024, 'height' => 768];
+  /**
+   * Screen size in use.
+   */
+  protected $screenSize = ['width' => 1024, 'height' => 768];
+
+  /**
+   * Set browser size to mobile.
+   * @BeforeScenario @javascript&&@mobile
+   */
+  public function beforeMobileScenario() {
+    $this->screenSize = ['width' => 450, 'height' => 768];
+  }
+
+  /**
+   * Reset browser size.
+   * @AfterScenario @javascript
+   */
+  public function afterJavascriptScenario() {
+    $this->screenSize = $this->defaultScreenSize;
+  }
+
+  /**
    * @BeforeStep
    *
-   * Resize the browser window to some desktop size.
+   * Resize the browser window.
    */
-  public function beforeStep() {
-    // @TODO: make this conditional.
+  public function adjustScreenSizeBeforeStep() {
     try {
-      // We make sure the the PhantonJS browser uses the desktop version.
-      $this->getSession()->resizeWindow(1024, 768, 'current');
+      // We make sure all selenium drivers use the same screen size.
+      $this->getSession()->resizeWindow($this->screenSize['width'], $this->screenSize['height'], 'current');
     } catch (UnsupportedDriverActionException $e) { }
   }
 
