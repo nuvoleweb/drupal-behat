@@ -290,6 +290,48 @@ trait Generic {
   }
 
   /**
+   * @Then I should see the field :field
+   */
+  public function iShouldSeeTheField($field) {
+    $element = $this->getSession()->getPage();
+    $result = $element->findField($field);
+    try {
+      if ($result && !$result->isVisible()) {
+        throw new \Exception(sprintf("No field '%s' on the page %s", $field, $this->getSession()->getCurrentUrl()));
+      }
+    }
+    catch (UnsupportedDriverActionException $e) {
+      // We catch the UnsupportedDriverActionException exception in case
+      // this step is not being performed by a driver that supports javascript.
+      // All other exceptions are valid.
+    }
+    if (empty($result)) {
+      throw new \Exception(sprintf("No field '%s' on the page %s", $field, $this->getSession()->getCurrentUrl()));
+    }
+  }
+
+  /**
+   * @Then I should not see the field :field
+   */
+  public function iShouldNotSeeTheField($field) {
+    $element = $this->getSession()->getPage();
+    $result = $element->findField($field);
+    try {
+      if ($result && $result->isVisible()) {
+        throw new \Exception(sprintf("The field '%s' was present on the page %s and was not supposed to be", $field, $this->getSession()->getCurrentUrl()));
+      }
+    }
+    catch (UnsupportedDriverActionException $e) {
+      // We catch the UnsupportedDriverActionException exception in case
+      // this step is not being performed by a driver that supports javascript.
+      // All other exceptions are valid.
+      if ($result) {
+        throw new \Exception(sprintf("The field '%s' was present on the page %s and was not supposed to be", $field, $this->getSession()->getCurrentUrl()));
+      }
+    }
+  }
+
+  /**
    * Converts a node-type label into its id.
    *
    * @param string $type
