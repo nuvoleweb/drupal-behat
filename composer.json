@@ -1,8 +1,8 @@
 {
   "name": "nuvoleweb/drupal-behat",
-  "description": "Traits and other components for the Drupal Behat extestion.",
+  "description": "Traits and other components for the Drupal Behat extension.",
   "require": {
-    "drupal/drupal-extension": "dev-master"
+    "drupal/drupal-extension": "~3.2"
   },
   "autoload": {
     "psr-4": {
