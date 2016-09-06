@@ -1,12 +1,61 @@
 {
   "name": "nuvoleweb/drupal-behat",
-  "description": "Traits and other components for the Drupal Behat extension.",
+  "description": "Contexts and other components for the Drupal Behat extension.",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
   "require": {
-    "drupal/drupal-extension": "~3.2"
+    "drupal/drupal-extension": "~3.2",
+    "phpunit/phpunit": "5.5.*"
+  },
+  "require-dev": {
+    "composer/installers": "1.1.0",
+    "drupal-composer/drupal-scaffold": "dev-master",
+    "drupal/core": "~8.1",
+    "drupal/chosen": "~8.2",
+    "drush/drush": "~8.1",
+    "drupal/config_installer": "~8.1",
+    "behat/mink-zombie-driver": "^1.4"
   },
   "autoload": {
     "psr-4": {
       "NuvoleWeb\\Drupal\\Behat\\": "./src/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.drupal-composer.org"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "harvesthq/chosen",
+        "version": "1.5.0",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/harvesthq/chosen/releases/download/v1.5.0/chosen_v1.5.0.zip",
+          "type": "zip"
+        }
+      }
+    }
+  ],
+  "extra": {
+    "installer-paths": {
+      "drupal/core": [
+        "type:drupal-core"
+      ],
+      "drupal/modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "drupal/profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "drupal/themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "drupal/libraries/{$name}": [
+        "type:drupal-library"
+      ]
     }
   }
 }
