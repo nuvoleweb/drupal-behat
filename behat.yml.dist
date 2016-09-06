@@ -1,0 +1,26 @@
+default:
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+        - Drupal\DrupalExtension\Context\ConfigContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MarkupContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      zombie: ~
+      javascript_session: zombie
+      base_url: http://127.0.0.1:8888
+    Drupal\DrupalExtension:
+      api_driver: "drupal"
+      drupal:
+        # Change this to the absolute path to Drupal install.
+        drupal_root: "drupal"
+      region_map:
+        left sidebar: "#sidebar-first"
+        content: "#content"
+      selectors:
+        error_message_selector: '.messages--error'
