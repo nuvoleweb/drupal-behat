@@ -23,9 +23,9 @@ before_script:
   # Create database.
   - mysql -e 'create database drupal'
   # Install Drupal 8 from existing configuration.
-  - drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../config/sync
+  - ../vendor/bin/drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../config/sync
   # Run Drush web server.
-  - drush --debug runserver :8888 > ~/debug.txt 2>&1 &
+  - ../vendor/bin/drush --debug runserver :8888 > ~/debug.txt 2>&1 &
   - cd -
   - sleep 4s
 
