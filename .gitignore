@@ -1,3 +1,6 @@
 # Ignore non relevant files
 vendor/
+drupal
 composer.lock
+behat.yml
+node_modules
