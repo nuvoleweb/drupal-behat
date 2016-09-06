@@ -1,10 +1,13 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
  * Features context for testing the Drupal Extension.
  */
-class FeatureContext implements Context {
+class FeatureContext extends RawDrupalContext implements Context {
+
+  use \NuvoleWeb\Drupal\Behat\Traits\Generic;
 
 }

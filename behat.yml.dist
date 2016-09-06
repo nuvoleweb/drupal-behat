@@ -11,8 +11,8 @@ default:
   extensions:
     Behat\MinkExtension:
       goutte: ~
-      zombie: ~
-      javascript_session: zombie
+      selenium2: ~
+      javascript_session: selenium2
       base_url: http://127.0.0.1:8888
     Drupal\DrupalExtension:
       api_driver: "drupal"

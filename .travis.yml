@@ -14,8 +14,8 @@ install:
   - npm install
 
 before_script:
-  # Set NODE_PATH for zombie driver.
-  - export NODE_PATH="`pwd`/node_modules"
+  # Start PhantomJS server.
+  - phantomjs --webdriver=4444 > /dev/null &
   # Change to Drupal root directory.
   - cd drupal
   # Set sendmail so drush doesn't throw an error during site install.
