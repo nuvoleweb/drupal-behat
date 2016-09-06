@@ -1,0 +1,36 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+
+env:
+  global:
+    - PATH=$PATH:/home/travis/.composer/vendor/bin
+
+install:
+  - composer self-update
+  - composer install
+  - npm install
+
+before_script:
+  # Set NODE_PATH for zombie driver.
+  - export NODE_PATH="`pwd`/node_modules"
+  # Change to Drupal root directory.
+  - cd drupal
+  # Set sendmail so drush doesn't throw an error during site install.
+  - echo "sendmail_path='true'" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
+  # Create database.
+  - mysql -e 'create database drupal'
+  # Install Drupal 8 from existing configuration.
+  - drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../config/sync
+  # Run Drush web server.
+  - drush --debug runserver :8888 > ~/debug.txt 2>&1 &
+  - cd -
+  - sleep 4s
+
+script:
+  - vendor/bin/behat -fprogress --strict
+
+after_failure:
+  - cat ~/debug.txt
