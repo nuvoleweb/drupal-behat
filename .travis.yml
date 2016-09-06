@@ -11,7 +11,6 @@ env:
 install:
   - composer self-update
   - composer install
-  - npm install
 
 before_script:
   # Start PhantomJS server.
