@@ -13,6 +13,8 @@ install:
   - composer install
 
 before_script:
+  # Setup Code Sniffer.
+  - bash ./scripts/setup.sh
   # Start PhantomJS server.
   - phantomjs --webdriver=4444 > /dev/null &
   # Change to Drupal root directory.
