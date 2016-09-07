@@ -1,5 +1,11 @@
+checks:
+    php:
+        code_rating: true
+        duplication: true
 filter:
     paths: ["src/*"]
+    excluded_paths:
+        - vendor/*
 tools:
     php_code_sniffer:
         config:
