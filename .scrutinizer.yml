@@ -6,6 +6,7 @@ filter:
   paths: ["src/*"]
   excluded_paths:
     - vendor/*
+    - drupal/*
 tools:
   php_analyzer: true
   php_changetracking: true
