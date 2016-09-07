@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains trait class.
- */
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 

@@ -1,14 +1,9 @@
 <?php
-/**
- * @file
- * Contains trait class.
- */
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Exception\ExpectationException;
 use \Symfony\Component\BrowserKit\Response;
 use PHPUnit_Framework_Assert as Assertions;
 
@@ -50,7 +45,7 @@ trait WebApi {
    *
    * @var array
    */
-  private $placeHolders = array();
+  private $placeholders = array();
 
   /**
    * CSRF authentication token.
@@ -61,9 +56,6 @@ trait WebApi {
 
   /**
    * Adds Basic Authentication header to next request.
-   *
-   * @param string $username
-   * @param string $password
    *
    * @Given /^I am authenticating as "([^"]*)" with "([^"]*)" password$/
    */
@@ -76,8 +68,10 @@ trait WebApi {
   /**
    * Sets a HTTP Header.
    *
-   * @param string $name  header name
-   * @param string $value header value
+   * @param string $name
+   *   Header name.
+   * @param string $value
+   *   Header value.
    *
    * @Given /^I set header "([^"]*)" with value "([^"]*)"$/
    */
@@ -88,12 +82,14 @@ trait WebApi {
   /**
    * Sends HTTP request to specific relative URL.
    *
-   * @param string $method request method
-   * @param string $url    relative url
+   * @param string $method
+   *   Request method.
+   * @param string $url
+   *   Relative URL.
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)"$/
    */
-  public function iSendARequest($method, $url) {
+  public function assertSendRequest($method, $url) {
     $url = $this->prepareUrl($url);
     $this->request['method'] = $method;
     $this->request['uri'] = $url;
@@ -104,18 +100,21 @@ trait WebApi {
   /**
    * Sends HTTP request to specific URL with field values from Table.
    *
-   * @param string    $method request method
-   * @param string    $url    relative url
-   * @param TableNode $post   table of post values
+   * @param string $method
+   *   Request method.
+   * @param string $url
+   *   Relative URL.
+   * @param TableNode $post
+   *   Table of post values.
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with values:$/
    */
-  public function iSendARequestWithValues($method, $url, TableNode $post) {
+  public function assertSendRequestWithValues($method, $url, TableNode $post) {
     $url = $this->prepareUrl($url);
     $fields = array();
 
     foreach ($post->getRowsHash() as $key => $val) {
-      $fields[$key] = $this->replacePlaceHolder($val);
+      $fields[$key] = $this->replacePlaceholder($val);
     }
 
     $this->request['method'] = $method;
@@ -128,16 +127,19 @@ trait WebApi {
   /**
    * Sends HTTP request to specific URL with raw body from PyString.
    *
-   * @param string       $method request method
-   * @param string       $url    relative url
-   * @param PyStringNode $string request body
+   * @param string $method
+   *   Request method.
+   * @param string $url
+   *   Relative URL.
+   * @param PyStringNode $string
+   *   Request body.
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with body:$/
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with "([^"]+)" body:$/
    */
-  public function sendRequestWithBody($method, $url, PyStringNode $string, $format = 'json') {
+  public function assertSendRequestWithBody($method, $url, PyStringNode $string, $format = 'json') {
     $url = $this->prepareUrl($url);
-    $string = $this->replacePlaceHolder(trim($string));
+    $string = $this->replacePlaceholder(trim($string));
 
     $this->request['method'] = $method;
     $this->request['uri'] = $url;
@@ -152,15 +154,18 @@ trait WebApi {
   /**
    * Sends HTTP request to specific URL with form data from PyString.
    *
-   * @param string       $method request method
-   * @param string       $url    relative url
-   * @param PyStringNode $body   request body
+   * @param string $method
+   *   Request method.
+   * @param string $url
+   *   Relative URL.
+   * @param PyStringNode $body
+   *   Request body.
    *
    * @When /^(?:I )?send a ([A-Z]+) request to "([^"]+)" with form data:$/
    */
-  public function iSendARequestWithFormData($method, $url, PyStringNode $body) {
+  public function assertSendRequestWithFormData($method, $url, PyStringNode $body) {
     $url = $this->prepareUrl($url);
-    $body = $this->replacePlaceHolder(trim($body));
+    $body = $this->replacePlaceholder(trim($body));
 
     // TODO: make sure this results in the desired request.
     $fields = array();
@@ -176,7 +181,11 @@ trait WebApi {
   /**
    * Checks that response has specific status code.
    *
-   * @param string $code status code
+   * @param string $code
+   *   Status code.
+   *
+   * @throws \Exception
+   *    If response codes do not match.
    *
    * @Then /^(?:the )?response code should be (\d+)$/
    */
@@ -195,22 +204,24 @@ trait WebApi {
   /**
    * Checks that response body contains JSON from PyString.
    *
-   * Do not check that the response body /only/ contains the JSON from PyString,
+   * Do not check that the response body /only/ contains the JSON from PyString.
    *
    * @param PyStringNode $jsonString
+   *    JSON string.
    *
    * @throws \RuntimeException
+   *    If JSON string cannot be parsed.
    *
    * @Then /^(?:the )?response should contain json:$/
    */
   public function theResponseShouldContainJson(PyStringNode $jsonString) {
-    $text = $this->replacePlaceHolder($jsonString->getRaw());
+    $text = $this->replacePlaceholder($jsonString->getRaw());
     $expected = json_decode($text, TRUE);
     $actual = $this->parseResponse($this->getResponse());
 
-    if (null === $expected) {
+    if (NULL === $expected) {
       throw new \RuntimeException(
-        "Can not convert expected to json:\n" . $this->replacePlaceHolder($jsonString->getRaw())
+        "Can not convert expected to json:\n" . $this->replacePlaceholder($jsonString->getRaw())
       );
     }
 
@@ -263,11 +274,13 @@ trait WebApi {
    * Prepare URL by replacing placeholders and trimming slashes.
    *
    * @param string $url
+   *    URL string.
    *
    * @return string
+   *    Processed URL string.
    */
   private function prepareUrl($url) {
-    return ltrim($this->replacePlaceHolder($url), '/');
+    return ltrim($this->replacePlaceholder($url), '/');
   }
 
   /**
@@ -276,33 +289,38 @@ trait WebApi {
    * You can specify placeholders, which will
    * be replaced in URL, request or response body.
    *
-   * @param string $key   token name
-   * @param string $value replace value
+   * @param string $key
+   *   Token name.
+   * @param string $value
+   *   Replace value.
    */
-  public function setPlaceHolder($key, $value) {
-    $this->placeHolders[$key] = $value;
+  public function setPlaceholder($key, $value) {
+    $this->placeholders[$key] = $value;
   }
 
   /**
    * Replaces placeholders in provided text.
    *
    * @param string $string
+   *    Placeholder string.
    *
    * @return string
+   *    String with replaced placeholders.
    */
-  protected function replacePlaceHolder($string) {
-    foreach ($this->placeHolders as $key => $val) {
+  protected function replacePlaceholder($string) {
+    foreach ($this->placeholders as $key => $val) {
       $string = str_replace($key, $val, $string);
     }
-
     return $string;
   }
 
   /**
-   * Adds header.
+   * Add headers.
    *
    * @param string $name
+   *    Header name.
    * @param string $value
+   *    Header values.
    */
   protected function addHeader($name, $value) {
     $this->headers[$name] = $value;
@@ -310,14 +328,15 @@ trait WebApi {
   }
 
   /**
-   * Removes a header identified by $headerName.
+   * Removes a header given its name.
    *
-   * @param string $headerName
+   * @param string $header_name
+   *    Header name.
    */
-  protected function removeHeader($headerName) {
-    if (isset($this->headers[$headerName])) {
-      unset($this->headers[$headerName]);
-      $this->getClient()->removeHeader($headerName);
+  protected function removeHeader($header_name) {
+    if (isset($this->headers[$header_name])) {
+      unset($this->headers[$header_name]);
+      $this->getClient()->removeHeader($header_name);
     }
   }
 
@@ -339,7 +358,7 @@ trait WebApi {
    */
   protected function sendRequest() {
     drupal_static_reset();
-    // Add defaults
+    // Add defaults.
     $request = $this->request + [
       'method' => 'GET',
       'uri' => '',
@@ -356,22 +375,22 @@ trait WebApi {
 
     // Replace entity ID placeholders in request content.
     foreach ($this->nodes as $node) {
-      $this->setPlaceHolder("[id:$node->title]", $node->nid);
+      $this->setPlaceholder("[id:$node->title]", $node->nid);
     }
     foreach ($this->users as $user) {
-      $this->setPlaceHolder("[id:$user->name]", $user->uid);
+      $this->setPlaceholder("[id:$user->name]", $user->uid);
     }
     foreach ($this->terms as $term) {
-      $this->setPlaceHolder("[id:$term->name]", $term->tid);
+      $this->setPlaceholder("[id:$term->name]", $term->tid);
     }
     if (isset($this->comments)) {
       foreach ($this->comments as $comment) {
-        $this->setPlaceHolder("[id:$comment->subject]", $comment->cid);
+        $this->setPlaceholder("[id:$comment->subject]", $comment->cid);
       }
     }
 
-    $request['content'] = $this->replacePlaceHolder($request['content']);
-    $request['uri'] = $this->replacePlaceHolder($request['uri']);
+    $request['content'] = $this->replacePlaceholder($request['content']);
+    $request['uri'] = $this->replacePlaceholder($request['uri']);
 
     // Request URI must be absolute for Mink to work properly with subsequent
     // service requests in the same scenario.

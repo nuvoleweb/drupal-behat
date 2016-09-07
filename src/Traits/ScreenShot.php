@@ -1,18 +1,10 @@
 <?php
-/**
- * @file
- * Contains trait class.
- */
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 
-use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Element\NodeElement;
-use Behat\Mink\Element\DocumentElement;
-use Behat\Mink\Exception\ExpectationException;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Exception\DriverException;
 
 /**
@@ -23,28 +15,31 @@ use Behat\Mink\Exception\DriverException;
 trait ScreenShot {
 
   /**
+   * Save screenshot with a specific name.
+   *
    * @Then (I )take a screenshot :name
    */
-  public function takeAScreenshot($i = NULL, $name = NULL) {
+  public function takeScreenshot($name = NULL) {
     $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
     $message = "Screenshot created in @file_name";
     $this->createScreenshot($file_name, $message, FALSE);
   }
+
   /**
+   * Save screenshot.
+   *
    * @Then (I )take a screenshot
    */
-  public function takeAScreenshotUnnamed() {
+  public function takeScreenshotUnnamed() {
     $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-screenshot';
     $message = "Screenshot created in @file_name";
     $this->createScreenshot($file_name, $message);
   }
 
   /**
-   * @AfterStep
-   *
    * Make sure there is no PHP notice on the screen during tests.
    *
-   * @param $event
+   * @AfterStep
    */
   public function screenshotForPhpNotices(AfterStepScope $event) {
     $environment = $event->getEnvironment();
@@ -76,15 +71,17 @@ trait ScreenShot {
             // We don't throw $e any more because we don't fail on the notice.
           }
         }
-      } catch (DriverException $driver_exception) { }
+      }
+      catch (DriverException $driver_exception) {
+
+      }
     }
   }
 
   /**
-   * @AfterStep
+   * Take a screenshot after failed steps or save the HTML for non js drivers.
    *
-   * Take a screen shot after failed steps for Selenium drivers or save the html
-   * for non js drivers.
+   * @AfterStep
    */
   public function takeScreenshotAfterFailedStep(AfterStepScope $event) {
     if ($event->getTestResult()->isPassed()) {
@@ -106,17 +103,17 @@ trait ScreenShot {
   }
 
   /**
-   * Create a screenshot or save the html
+   * Create a screenshot or save the html.
    *
    * @param string $file_name
    *   The filename of the screenshot (complete).
    * @param string $message
    *   The message to be printed. @file_name will be replaced with $file name.
-   * @param bool|TRUE $ext
+   * @param bool|true $ext
    *   Whether to add .png or .html to the name of the screenshot.
    */
   public function createScreenshot($file_name, $message, $ext = TRUE) {
-    if ($this->getSession()->getDriver() instanceof \Behat\Mink\Driver\Selenium2Driver) {
+    if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
       if ($ext) {
         $file_name .= '.png';
       }

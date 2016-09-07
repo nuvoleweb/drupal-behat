@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains trait class.
- */
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 
@@ -39,6 +35,8 @@ trait Chosen {
   }
 
   /**
+   * Select one more option from a Chosen select box.
+   *
    * @When /^I add "([^"]*)" to the chosen element "([^"]*)"$/
    */
   public function iAddChosenElement($value, $locator) {
@@ -46,8 +44,9 @@ trait Chosen {
   }
 
   /**
-   * This is from a patch which is very much work-in-progress...
-   * https://www.drupal.org/node/2562805
+   * This is from a patch which is very much work-in-progress.
+   *
+   * @link https://www.drupal.org/node/2562805.
    *
    * @When /^I set the chosen element "([^"]*)" to "([^"]*)"$/
    */
@@ -61,7 +60,7 @@ trait Chosen {
 
     $element_id = str_replace('-', '_', $el->getAttribute('id')) . '_chosen';
 
-    $el =$session->getPage()->find('xpath', "//div[@id='{$element_id}']");
+    $el = $session->getPage()->find('xpath', "//div[@id='{$element_id}']");
 
     if ($el->hasClass('chosen-container-single')) {
       // This is a single select element.
@@ -85,6 +84,8 @@ trait Chosen {
   }
 
   /**
+   * Remove an option from a Chosen select box.
+   *
    * @When /^I remove "([^"]*)" from the chosen element "([^"]*)"$/
    */
   public function iUnSetChosenElement($value, $locator) {
@@ -97,9 +98,9 @@ trait Chosen {
 
     $element_id = str_replace('-', '_', $el->getAttribute('id')) . '_chosen';
 
-    $el =$session->getPage()->find('xpath', "//div[@id='{$element_id}']");
+    $el = $session->getPage()->find('xpath', "//div[@id='{$element_id}']");
     if ($el->hasClass('chosen-container-single')) {
-      // This is a single select element, unsetting doesn't make sense
+      // This is a single select element, unsetting doesn't make sense.
     }
 
     $selector = "//div[@id='{$element_id}']/ul[@class='chosen-choices']//li[span = '{$value}']/a";

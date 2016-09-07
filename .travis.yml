@@ -30,6 +30,7 @@ before_script:
 
 script:
   - vendor/bin/behat -fprogress --strict
+  - composer phpcs
 
 after_failure:
   - cat ~/debug.txt

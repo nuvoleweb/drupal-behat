@@ -10,15 +10,24 @@
   "require-dev": {
     "composer/installers": "1.1.0",
     "drupal-composer/drupal-scaffold": "dev-master",
+    "drupal/coder": "8.2.8",
+    "drush/drush": "~8.1",
     "drupal/core": "~8.1",
     "drupal/chosen": "~8.2",
-    "drush/drush": "~8.1",
+    "drupal/coffee": "dev-8.x-1.x",
     "drupal/config_installer": "~8.1"
   },
   "autoload": {
     "psr-4": {
       "NuvoleWeb\\Drupal\\Behat\\": "./src/"
     }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "bash ./scripts/setup.sh"
+    ],
+    "phpcs": "./vendor/bin/phpcs --standard=Drupal,DrupalPractice ./src",
+    "phpcbf": "./vendor/bin/phpcbf --standard=Drupal,DrupalPractice ./src"
   },
   "repositories": [
     {

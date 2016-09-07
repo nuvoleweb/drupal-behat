@@ -1,24 +1,15 @@
 <?php
-/**
- * @file
- * Contains trait class.
- */
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Exception\ExpectationException;
-use Behat\Behat\Context\Environment\InitializedContextEnvironment;
-use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
-use Behat\Mink\Exception\DriverException;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\user\Entity\User;
 
 /**
  * Trait Generic.
@@ -28,30 +19,63 @@ use Drupal\user\Entity\User;
 trait Generic {
 
   /**
+   * Default screen size.
+   */
+  protected $defaultScreenSize = ['width' => 1024, 'height' => 768];
+
+  /**
+   * Screen size in use.
+   */
+  protected $screenSize = ['width' => 1024, 'height' => 768];
+
+  /**
+   * Assert viewing content given its type and title.
+   *
+   * @param string $type
+   *    Content type machine name.
+   * @param string $title
+   *    Content title.
+   *
    * @Given I am visiting the :type content :title
    * @Given I visit the :type content :title
    */
   public function iAmViewingTheContent($type, $title) {
-    $this->iAmVisitingAContentPage('view', $type, $title);
+    $this->visitContentPage('view', $type, $title);
   }
 
   /**
+   * Assert editing content given its type and title.
+   *
+   * @param string $type
+   *    Content type machine name.
+   * @param string $title
+   *    Content title.
+   *
    * @Given I am editing the :type content :title
    * @Given I edit the :type content :title
    */
   public function iAmEditingTheContent($type, $title) {
-    $this->iAmVisitingAContentPage('edit', $type, $title);
+    $this->visitContentPage('edit', $type, $title);
   }
 
   /**
+   * Assert deleting content given its type and title.
+   *
+   * @param string $type
+   *    Content type machine name.
+   * @param string $title
+   *    Content title.
+   *
    * @Given I am deleting the :type content :title
    * @Given I delete the :type content :title
    */
   public function iAmDeletingTheContent($type, $title) {
-    $this->iAmVisitingAContentPage('delete', $type, $title);
+    $this->visitContentPage('delete', $type, $title);
   }
 
   /**
+   * Assert access denied page.
+   *
    * @Then I should get an access denied error
    */
   public function assertAccessDenied() {
@@ -59,6 +83,8 @@ trait Generic {
   }
 
   /**
+   * Pause execution for given number of seconds.
+   *
    * @Then I wait :seconds seconds
    */
   public function iWaitSeconds($seconds) {
@@ -66,15 +92,24 @@ trait Generic {
   }
 
   /**
-   * @Then :name can :op content :content
+   * Assert that given user can perform given operation on given content.
+   *
+   * @param string $name
+   *    User name.
+   * @param string $op
+   *    Operation: view, edit or delete.
+   * @param string $title
+   *    Content title.
    *
    * @throws \Exception
-   *   If the user can not edit the node.
+   *   If user cannot perform given operation on given content.
+   *
+   * @Then :name can :op content :content
    */
-  public function userCanContent($name, $op, $content) {
+  public function userCanContent($name, $op, $title) {
 
     $op = strtr($op, array('edit' => 'update'));
-    $node = $this->loadNodeByName($content);
+    $node = $this->loadNodeByName($title);
     $account = user_load_by_name($name);
     $access = $node->access($op, $account);
 
@@ -82,21 +117,31 @@ trait Generic {
       $params = array(
         '@name' => $name,
         '@op' => $op,
-        '@content' => $content,
+        '@content' => $title,
       );
       throw new \Exception(format_string("@name can not @op @content.", $params));
     }
   }
 
   /**
-   * @Then :name can not :op content :content
+   * Assert that given user cannot perform given operation on given content.
+   *
+   * @param string $name
+   *    User name.
+   * @param string $op
+   *    Operation: view, edit or delete.
+   * @param string $title
+   *    Content title.
    *
    * @throws \Exception
-   *   If the user can edit the node.
+   *   If user can perform given operation on given content.
+   *
+   * @Then :name can not :op content :content
+   * @Then :name cannot :op content :content
    */
-  public function userCanNotContent($name, $op, $content) {
+  public function userCanNotContent($name, $op, $title) {
     $op = strtr($op, array('edit' => 'update'));
-    $node = $this->loadNodeByName($content);
+    $node = $this->loadNodeByName($title);
     $account = user_load_by_name($name);
     $access = $node->access($op, $account);
 
@@ -104,35 +149,54 @@ trait Generic {
       $params = array(
         '@name' => $name,
         '@op' => $op,
-        '@content' => $content,
+        '@content' => $title,
       );
       throw new \Exception(format_string("@name can @op @content but should not.", $params));
     }
   }
 
   /**
+   * Assert presence of content edit link given its name and content title.
+   *
+   * @param string $link
+   *    Link "name" HTML attribute.
+   * @param string $title
+   *    Content title.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *    If no edit link for given content has been found.
+   *
    * @Then I should see the link :link to edit content :content
    */
-  public function assertContentEditLink($link, $content) {
-    if (!$this->getContentEditLink($link, $content)) {
-      throw new ExpectationException("No '$link' link to edit '$content' has been found.", $this->getSession());
+  public function assertContentEditLink($link, $title) {
+    if (!$this->getContentEditLink($link, $title)) {
+      throw new ExpectationException("No '$link' link to edit '$title' has been found.", $this->getSession());
     }
   }
 
   /**
+   * Assert absence of content edit link given its content title.
+   *
+   * @param string $title
+   *    Content title.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *    If edit link for given content has been found.
+   *
    * @Then I should not see a link to edit content :content
    */
-  public function assertNoContentEditLink($content) {
-    if ($this->getContentEditLink(NULL, $content)) {
-      throw new ExpectationException("link to edit '$content' has been found.", $this->getSession());
+  public function assertNoContentEditLink($title) {
+    if ($this->getContentEditLink(NULL, $title)) {
+      throw new ExpectationException("link to edit '$title' has been found.", $this->getSession());
     }
   }
 
   /**
+   * Assert string in HTTP response header.
+   *
    * @Then I should see in the header :header::value
    */
-  public function iShouldSeeInTheHeader($header, $value)
-  {
+  public function iShouldSeeInTheHeader($header, $value) {
     $headers = $this->getSession()->getResponseHeaders();
     if ($headers[$header] != $value) {
       throw new \Exception(sprintf("Did not see %s with value %s.", $header, $value));
@@ -140,12 +204,17 @@ trait Generic {
   }
 
   /**
-   * Creates content of a given type provided in the form:
-   * | Title    | Author     | Label | of the field      |
-   * | My title | Joe Editor | 1     | 2014-10-17 8:00am |
-   * | ...      | ...        | ...   | ...               |
+   * Creates content by filling specified form fields.
+   *
+   * Use as follow:
+   *
+   *  | Title    | Author     | Label | of the field      |
+   *  | My title | Joe Editor | 1     | 2014-10-17 8:00am |
+   *  | ...      | ...        | ...   | ...               |
    *
    * Requires DrupalContext::assertLoggedInByName()
+   *
+   * @see DrupalContext::assertLoggedInByName()
    *
    * @Given :user created :type content:
    */
@@ -220,19 +289,20 @@ trait Generic {
   }
 
   /**
-   *  Get the edit link for a node.
+   * Get the edit link for a node.
    *
-   * @param $link
+   * @param string $link
    *   The link name.
-   * @param $content
-   *   The name of the node.
+   * @param string $title
+   *   The node title.
    *
    * @return \Behat\Mink\Element\NodeElement|null
    *   The link if found.
+   *
    * @throws \Exception
    */
-  public function getContentEditLink($link, $content) {
-    $node = $this->loadNodeByName($content);
+  public function getContentEditLink($link, $title) {
+    $node = $this->loadNodeByName($title);
 
     /** @var DocumentElement $element */
     $element = $this->getSession()->getPage();
@@ -245,7 +315,7 @@ trait Generic {
     // Loop over all the links on the page and check for the node edit path.
     foreach ($links as $result) {
       $target = $result->getAttribute('href');
-      if (strpos($target,'node/' . $node->id() . '/edit') !== false) {
+      if (strpos($target, 'node/' . $node->id() . '/edit') !== FALSE) {
         return $result;
       }
     }
@@ -253,16 +323,8 @@ trait Generic {
   }
 
   /**
-   * Default screen size.
-   */
-  protected $defaultScreenSize = ['width' => 1024, 'height' => 768];
-  /**
-   * Screen size in use.
-   */
-  protected $screenSize = ['width' => 1024, 'height' => 768];
-
-  /**
    * Set browser size to mobile.
+   *
    * @BeforeScenario @javascript&&@mobile
    */
   public function beforeMobileScenario() {
@@ -271,6 +333,7 @@ trait Generic {
 
   /**
    * Reset browser size.
+   *
    * @AfterScenario @javascript
    */
   public function afterJavascriptScenario() {
@@ -278,18 +341,22 @@ trait Generic {
   }
 
   /**
-   * @BeforeStep
-   *
    * Resize the browser window.
+   *
+   * @BeforeStep
    */
   public function adjustScreenSizeBeforeStep() {
     try {
       // We make sure all selenium drivers use the same screen size.
       $this->getSession()->resizeWindow($this->screenSize['width'], $this->screenSize['height'], 'current');
-    } catch (UnsupportedDriverActionException $e) { }
+    }
+    catch (UnsupportedDriverActionException $e) {
+    }
   }
 
   /**
+   * Assert presence of given field on the page.
+   *
    * @Then I should see the field :field
    */
   public function iShouldSeeTheField($field) {
@@ -311,6 +378,8 @@ trait Generic {
   }
 
   /**
+   * Assert absence of given field.
+   *
    * @Then I should not see the field :field
    */
   public function iShouldNotSeeTheField($field) {
@@ -335,13 +404,13 @@ trait Generic {
    * Converts a node-type label into its id.
    *
    * @param string $type
-   *   The node-type id or label.
+   *   The node-type ID or label.
    *
    * @return string
-   *   The node-type id.
+   *   The node-type ID.
    *
    * @throws ExpectationException
-   *   When the passed node type doesn't exist.
+   *   When the passed node type does not exist.
    */
   protected function convertLabelToNodeTypeId($type) {
     // First suppose that the id has been passed.
@@ -367,9 +436,9 @@ trait Generic {
    *   The node title.
    *
    * @throws ExpectationException
-   *   When the node doesn't exist.
+   *   When the node does not exist.
    */
-  protected function iAmVisitingAContentPage($op, $type, $title) {
+  protected function visitContentPage($op, $type, $title) {
     $type = $this->convertLabelToNodeTypeId($type);
     $result = \Drupal::entityQuery('node')
       ->condition('type', $type)
@@ -391,19 +460,23 @@ trait Generic {
   }
 
   /**
+   * Visit taxonomy term page given its type and name.
+   *
    * @Given I am visiting the :type term :title
    * @Given I visit the :type term :title
    */
   public function iAmViewingTheTerm($type, $title) {
-    $this->iAmVisitingATermPage('view', $type, $title);
+    $this->visitTermPage('view', $type, $title);
   }
 
   /**
+   * Visit taxonomy term edit page given its type and name.
+   *
    * @Given I am editing the :type term :title
    * @Given I edit the :type term :title
    */
   public function iAmEditingTheTerm($type, $title) {
-    $this->iAmVisitingATermPage('edit', $type, $title);
+    $this->visitTermPage('edit', $type, $title);
   }
 
   /**
@@ -417,9 +490,9 @@ trait Generic {
    *   The node title.
    *
    * @throws ExpectationException
-   *   When the node doesn't exist.
+   *   When the node does not exist.
    */
-  protected function iAmVisitingATermPage($op, $type, $title) {
+  protected function visitTermPage($op, $type, $title) {
     $type = $this->convertLabelToTermTypeId($type);
     $result = \Drupal::entityQuery('taxonomy_term')
       ->condition('vid', $type)
@@ -466,6 +539,8 @@ trait Generic {
   }
 
   /**
+   * Assert first element precedes second one.
+   *
    * @Then :first should precede :second
    */
   public function shouldPrecede($first, $second) {
@@ -482,6 +557,5 @@ trait Generic {
       throw new \Exception("Text '$first' does not precede text '$second'.");
     }
   }
-
 
 }

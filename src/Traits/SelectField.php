@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains trait class.
- */
 
 namespace NuvoleWeb\Drupal\Behat\Traits;
 
@@ -94,6 +90,8 @@ trait SelectField {
   }
 
   /**
+   * Assert that given option field is selected.
+   *
    * @Then the option :option_label from select :select is selected
    */
   public function theOptionFromIsSelected($select, $option_label) {
@@ -101,6 +99,8 @@ trait SelectField {
   }
 
   /**
+   * Assert that given option field is not selected.
+   *
    * @Then the option :option_label from select :select is not selected
    */
   public function theOptionFromIsNotSelected($select, $option_label) {
