@@ -1,12 +1,15 @@
 checks:
-    php:
-        code_rating: true
-        duplication: true
+  php:
+    code_rating: true
+    duplication: true
 filter:
-    paths: ["src/*"]
-    excluded_paths:
-        - vendor/*
+  paths: ["src/*"]
+  excluded_paths:
+    - vendor/*
 tools:
-    php_code_sniffer:
-        config:
-            standard: Drupal,DrupalPractice
+  php_analyzer: true
+  php_changetracking: true
+  php_mess_detector: true
+  php_code_sniffer:
+    config:
+      standard: Drupal,DrupalPractice
