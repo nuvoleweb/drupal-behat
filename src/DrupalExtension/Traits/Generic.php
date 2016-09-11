@@ -6,10 +6,6 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\node\Entity\Node;
-use Drupal\node\Entity\NodeType;
-use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * Trait Generic.

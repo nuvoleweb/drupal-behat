@@ -8,13 +8,14 @@ default:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MarkupContext
         - Drupal\DrupalExtension\Context\MessageContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\DrupalContext
   extensions:
     Behat\MinkExtension:
       goutte: ~
       selenium2: ~
       javascript_session: selenium2
       base_url: http://127.0.0.1:8888
-    Drupal\DrupalExtension:
+    NuvoleWeb\Drupal\DrupalExtension:
       api_driver: "drupal"
       drupal:
         # Change this to the absolute path to Drupal install.
@@ -24,3 +25,5 @@ default:
         content: "#content"
       selectors:
         error_message_selector: '.messages--error'
+  formatters:
+    progress: ~
