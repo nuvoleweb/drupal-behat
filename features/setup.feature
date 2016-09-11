@@ -1,15 +1,15 @@
 @api
 Feature: Setup
-  In order to be sure that we can test the Behat Toolbox
+  In order to properly test the Behat Toolbox
   As a developer
-  I want to be sure that all test environment is properly setup.
+  I want to be sure that the test environment is properly setup.
 
   Background:
     Given users:
       | name    | mail              | pass |
       | test    | test@example.com  | pass |
 
-  Scenario: Registered users can login.
+  Scenario: Behat can access a working copy of Drupal 8.
     Given I am not logged in
     When I visit "/user"
     Then I should see "Username"
@@ -20,7 +20,7 @@ Feature: Setup
     And I should see the link "Edit"
 
   @javascript
-  Scenario: Administrator users can filter modules.
+  Scenario: JavaScript driver is properly setup.
     Given I am logged in as a user with the "administrator" role
     And I am on "admin/modules"
     Then I should see "Actions"
