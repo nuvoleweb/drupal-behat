@@ -8,6 +8,4 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
  */
 class FeatureContext extends RawDrupalContext implements Context {
 
-  use \NuvoleWeb\Drupal\DrupalExtension\Traits\Generic;
-
 }

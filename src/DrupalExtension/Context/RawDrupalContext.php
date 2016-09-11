@@ -2,12 +2,9 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
-use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\DrupalExtension\Context\RawDrupalContext as OriginalRawDrupalContext;
 use Drupal\node\Entity\Node;
-use Drupal\node\Entity\NodeType;
-use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * Class RawDrupalContext.
@@ -15,6 +12,16 @@ use Drupal\taxonomy\Entity\Vocabulary;
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
 class RawDrupalContext extends OriginalRawDrupalContext {
+
+  /**
+   * Get current Drupal core.
+   *
+   * @return \NuvoleWeb\Drupal\Driver\Cores\CoreInterface
+   *    Drupal core object instance.
+   */
+  public function getCore() {
+    return $this->getDriver()->getCore();
+  }
 
   /**
    * Assert access denied page.
@@ -63,56 +70,6 @@ class RawDrupalContext extends OriginalRawDrupalContext {
 
     $nid = current($result);
     return Node::load($nid);
-  }
-
-  /**
-   * Converts a node-type label into its id.
-   *
-   * @param string $type
-   *   The node-type ID or label.
-   *
-   * @return string
-   *   The node-type ID.
-   *
-   * @throws ExpectationException
-   *   When the passed node type does not exist.
-   */
-  protected function convertLabelToNodeTypeId($type) {
-    // First suppose that the id has been passed.
-    if (NodeType::load($type)) {
-      return $type;
-    }
-    $storage = \Drupal::entityTypeManager()->getStorage('node_type');
-    if ($result = $storage->loadByProperties(['name' => $type])) {
-      return key($result);
-    }
-
-    throw new ExpectationException("Node type '$type' doesn't exist.", $this->getSession());
-  }
-
-  /**
-   * Converts a vocabulary label into its id.
-   *
-   * @param string $type
-   *   The node-type id or label.
-   *
-   * @return string
-   *   The node-type id.
-   *
-   * @throws ExpectationException
-   *   When the passed node type doesn't exist.
-   */
-  protected function convertLabelToTermTypeId($type) {
-    // First suppose that the id has been passed.
-    if (Vocabulary::load($type)) {
-      return $type;
-    }
-    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary');
-    if ($result = $storage->loadByProperties(['name' => $type])) {
-      return key($result);
-    }
-
-    throw new ExpectationException("Node type '$type' doesn't exist.", $this->getSession());
   }
 
 }
