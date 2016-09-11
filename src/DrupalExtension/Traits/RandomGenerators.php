@@ -1,6 +1,6 @@
 <?php
 
-namespace NuvoleWeb\Drupal\Behat\Traits;
+namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
 
 /**
  * Trait RandomGenerators.

@@ -1,6 +1,6 @@
 <?php
 
-namespace NuvoleWeb\Drupal\Behat\Traits;
+namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
 
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
