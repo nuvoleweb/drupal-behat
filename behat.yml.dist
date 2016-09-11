@@ -4,11 +4,12 @@ default:
       contexts:
         - FeatureContext
         - Drupal\DrupalExtension\Context\ConfigContext
-        - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MarkupContext
         - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrupalContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\DrupalContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\ContentContext
   extensions:
     Behat\MinkExtension:
       goutte: ~
@@ -25,5 +26,7 @@ default:
         content: "#content"
       selectors:
         error_message_selector: '.messages--error'
+      text:
+        node_submit_label: "Save and publish"
   formatters:
     progress: ~

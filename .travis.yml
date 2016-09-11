@@ -31,8 +31,8 @@ before_script:
   - sleep 4s
 
 script:
-  - vendor/bin/behat -fprogress --strict
   - composer phpcs
+  - vendor/bin/behat -fprogress --strict
 
 after_failure:
   - cat ~/debug.txt

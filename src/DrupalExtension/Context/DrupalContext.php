@@ -3,92 +3,64 @@
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Mink\Exception\ExpectationException;
+use Behat\Gherkin\Node\TableNode;
 
 /**
- * Class DrupalContext.
+ * Extends Drupal Extension DrupalContext class.
+ *
+ * Load this context instead of Drupal\DrupalExtension\Context\DrupalContext.
  *
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
 class DrupalContext extends RawDrupalContext implements SnippetAcceptingContext {
 
   /**
-   * Assert viewing content given its type and title.
+   * Assert access denied page.
    *
-   * @param string $type
-   *    Content type machine name.
-   * @param string $title
-   *    Content title.
-   *
-   * @Given I am visiting the :type content :title
-   * @Given I visit the :type content :title
+   * @Then I should get an access denied error
    */
-  public function iAmViewingTheContent($type, $title) {
-    $this->visitContentPage('view', $type, $title);
+  public function assertAccessDenied() {
+    $this->assertSession()->statusCodeEquals(403);
   }
 
   /**
-   * Assert editing content given its type and title.
+   * Pause execution for given number of seconds.
    *
-   * @param string $type
-   *    Content type machine name.
-   * @param string $title
-   *    Content title.
-   *
-   * @Given I am editing the :type content :title
-   * @Given I edit the :type content :title
+   * @Then I wait :seconds seconds
    */
-  public function iAmEditingTheContent($type, $title) {
-    $this->visitContentPage('edit', $type, $title);
+  public function iWaitSeconds($seconds) {
+    sleep((int) $seconds);
   }
 
   /**
-   * Assert deleting content given its type and title.
+   * Creates content by filling specified form fields via the UI.
    *
-   * @param string $type
-   *    Content type machine name.
-   * @param string $title
-   *    Content title.
+   * Use as follow:
    *
-   * @Given I am deleting the :type content :title
-   * @Given I delete the :type content :title
+   *  | Title    | Author     | Label | of the field      |
+   *  | My title | Joe Editor | 1     | 2014-10-17 8:00am |
+   *  | ...      | ...        | ...   | ...               |
+   *
+   * @Given I create :type content:
    */
-  public function iAmDeletingTheContent($type, $title) {
-    $this->visitContentPage('delete', $type, $title);
-  }
-
-  /**
-   * Provides a common step definition callback for node pages.
-   *
-   * @param string $op
-   *   The operation being performed: 'view', 'edit', 'delete'.
-   * @param string $type
-   *   The node type either as id or as label.
-   * @param string $title
-   *   The node title.
-   *
-   * @throws ExpectationException
-   *   When the node does not exist.
-   */
-  protected function visitContentPage($op, $type, $title) {
+  public function manuallyCreateNodes($type, TableNode $nodesTable) {
     $type = $this->getCore()->convertLabelToNodeTypeId($type);
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', $type)
-      ->condition('title', $title)
-      ->execute();
 
-    if (!empty($result)) {
-      $nid = array_shift($result);
-      $path = [
-        'view' => "node/$nid",
-        'edit' => "node/$nid/edit",
-        'delete' => "node/$nid/delete",
-      ];
-      $this->visitPath($path[$op]);
+    foreach ($nodesTable->getHash() as $nodeHash) {
+      $this->getSession()->visit($this->locatePath("/node/add/$type"));
+      $element = $this->getSession()->getPage();
+      // Fill in the form.
+      foreach ($nodeHash as $field => $value) {
+        $element->fillField($field, $value);
+      }
+      $submit = $element->findButton($this->getDrupalText('node_submit_label'));
+      if (empty($submit)) {
+        throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
+      }
+      // Submit the form.
+      $submit->click();
     }
-    else {
-      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
-    }
+
   }
 
 }

@@ -39,4 +39,44 @@ interface CoreInterface extends OriginalCoreInterface {
    */
   public function convertLabelToTermTypeId($type);
 
+  /**
+   * Loads a node by name.
+   *
+   * @param string $title
+   *   The title of the node to load.
+   *
+   * @return object
+   *   The loaded node.
+   *
+   * @throws \Exception
+   *   Thrown when no node with the given title can be loaded.
+   */
+  public function loadNodeByName($title);
+
+  /**
+   * Get entity ID given its type, bundle and label.
+   *
+   * @param string $entity_type
+   *    Entity type machine name.
+   * @param string $bundle
+   *    Entity type machine name.
+   * @param string $label
+   *    Entity type machine name.
+   *
+   * @return int
+   *    Entity ID.
+   */
+  public function getEntityIdByLabel($entity_type, $bundle, $label);
+
+  /**
+   * Load user given its username.
+   *
+   * @param string $name
+   *    User name.
+   *
+   * @return object
+   *    The full user object.
+   */
+  public function loadUserByName($name);
+
 }

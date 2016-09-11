@@ -2,7 +2,6 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
 
-use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
@@ -23,51 +22,6 @@ trait Generic {
    * Screen size in use.
    */
   protected $screenSize = ['width' => 1024, 'height' => 768];
-
-  /**
-   * Assert viewing content given its type and title.
-   *
-   * @param string $type
-   *    Content type machine name.
-   * @param string $title
-   *    Content title.
-   *
-   * @Given I am visiting the :type content :title
-   * @Given I visit the :type content :title
-   */
-  public function iAmViewingTheContent($type, $title) {
-    $this->visitContentPage('view', $type, $title);
-  }
-
-  /**
-   * Assert editing content given its type and title.
-   *
-   * @param string $type
-   *    Content type machine name.
-   * @param string $title
-   *    Content title.
-   *
-   * @Given I am editing the :type content :title
-   * @Given I edit the :type content :title
-   */
-  public function iAmEditingTheContent($type, $title) {
-    $this->visitContentPage('edit', $type, $title);
-  }
-
-  /**
-   * Assert deleting content given its type and title.
-   *
-   * @param string $type
-   *    Content type machine name.
-   * @param string $title
-   *    Content title.
-   *
-   * @Given I am deleting the :type content :title
-   * @Given I delete the :type content :title
-   */
-  public function iAmDeletingTheContent($type, $title) {
-    $this->visitContentPage('delete', $type, $title);
-  }
 
   /**
    * Assert that given user can perform given operation on given content.
@@ -179,43 +133,6 @@ trait Generic {
     if ($headers[$header] != $value) {
       throw new \Exception(sprintf("Did not see %s with value %s.", $header, $value));
     }
-  }
-
-  /**
-   * Creates content by filling specified form fields.
-   *
-   * Use as follow:
-   *
-   *  | Title    | Author     | Label | of the field      |
-   *  | My title | Joe Editor | 1     | 2014-10-17 8:00am |
-   *  | ...      | ...        | ...   | ...               |
-   *
-   * Requires DrupalContext::assertLoggedInByName()
-   *
-   * @see DrupalContext::assertLoggedInByName()
-   *
-   * @Given :user created :type content:
-   */
-  public function manuallyCreateNodes($user, $type, TableNode $nodesTable) {
-    $type = $this->convertLabelToNodeTypeId($type);
-
-    // Log in with the user.
-    $this->assertLoggedInByName($user);
-    foreach ($nodesTable->getHash() as $nodeHash) {
-      $this->getSession()->visit($this->locatePath("/node/add/$type"));
-      $element = $this->getSession()->getPage();
-      // Fill in the form.
-      foreach ($nodeHash as $field => $value) {
-        $element->fillField($field, $value);
-      }
-      $submit = $element->findButton('edit-submit');
-      if (empty($submit)) {
-        throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
-      }
-      // Submit the form.
-      $submit->click();
-    }
-
   }
 
   /**
@@ -344,40 +261,6 @@ trait Generic {
       if ($result) {
         throw new \Exception(sprintf("The field '%s' was present on the page %s and was not supposed to be", $field, $this->getSession()->getCurrentUrl()));
       }
-    }
-  }
-
-  /**
-   * Provides a common step definition callback for node pages.
-   *
-   * @param string $op
-   *   The operation being performed: 'view', 'edit', 'delete'.
-   * @param string $type
-   *   The node type either as id or as label.
-   * @param string $title
-   *   The node title.
-   *
-   * @throws ExpectationException
-   *   When the node does not exist.
-   */
-  protected function visitContentPage($op, $type, $title) {
-    $type = $this->convertLabelToNodeTypeId($type);
-    $result = \Drupal::entityQuery('node')
-      ->condition('type', $type)
-      ->condition('title', $title)
-      ->execute();
-
-    if (!empty($result)) {
-      $nid = array_shift($result);
-      $path = [
-        'view' => "node/$nid",
-        'edit' => "node/$nid/edit",
-        'delete' => "node/$nid/delete",
-      ];
-      $this->visitPath($path[$op]);
-    }
-    else {
-      throw new ExpectationException("No node with type '$type' and title '$title' has been found.", $this->getSession());
     }
   }
 

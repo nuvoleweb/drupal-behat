@@ -16,7 +16,7 @@
     "drupal/chosen": "~8.2",
     "drupal/coffee": "dev-8.x-1.x",
     "drupal/config_installer": "~8.1",
-    "bovigo/assert": "2.1.0"
+    "bovigo/assert": "^1.7"
   },
   "autoload": {
     "psr-4": {
