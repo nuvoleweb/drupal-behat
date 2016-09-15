@@ -25,7 +25,9 @@
   },
   "scripts": {
     "post-install-cmd": [
-      "bash ./scripts/setup.sh"
+      "vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer",
+      "vendor/bin/phpcs --config-set show_progress 1",
+      "cp scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push"
     ],
     "phpcs": "./vendor/bin/phpcs --standard=Drupal,DrupalPractice ./src",
     "phpcbf": "./vendor/bin/phpcbf --standard=Drupal,DrupalPractice ./src"
