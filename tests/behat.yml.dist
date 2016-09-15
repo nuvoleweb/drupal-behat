@@ -2,7 +2,6 @@ default:
   suites:
     default:
       contexts:
-        - FeatureContext
         - Drupal\DrupalExtension\Context\ConfigContext
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MarkupContext
@@ -21,7 +20,7 @@ default:
       api_driver: "drupal"
       drupal:
         # Change this to the absolute path to Drupal install.
-        drupal_root: "drupal"
+        drupal_root: "cores/drupal8/drupal"
       region_map:
         left sidebar: "#sidebar-first"
         content: "#content"
