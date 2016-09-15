@@ -79,4 +79,30 @@ interface CoreInterface extends OriginalCoreInterface {
    */
   public function loadUserByName($name);
 
+  /**
+   * Check whereas a user can perform and operation on a given node.
+   *
+   * @param string $op
+   *    Operation: view, update or delete.
+   * @param string $name
+   *    Username.
+   * @param object $node
+   *    Node object.
+   *
+   * @return bool
+   *    TRUE if user can perform operation, FALSE otherwise.
+   */
+  public function nodeAccess($op, $name, $node);
+
+  /**
+   * Get node ID given node object.
+   *
+   * @param object $node
+   *    Node object.
+   *
+   * @return int
+   *    Node ID.
+   */
+  public function getNodeId($node);
+
 }

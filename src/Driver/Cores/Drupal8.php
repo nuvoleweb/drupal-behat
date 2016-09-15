@@ -85,4 +85,19 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     return $user;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function nodeAccess($op, $name, $node) {
+    $account = $this->loadUserByName($name);
+    return $node->access($op, $account);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNodeId($node) {
+    return $node->id();
+  }
+
 }

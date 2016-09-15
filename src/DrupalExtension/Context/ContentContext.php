@@ -3,6 +3,7 @@
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Mink\Exception\ExpectationException;
 
 /**
  * Class ContentContext.
@@ -74,6 +75,125 @@ class ContentContext extends RawDrupalContext implements SnippetAcceptingContext
       'delete' => "node/$nid/delete",
     ];
     $this->visitPath($path[$op]);
+  }
+
+  /**
+   * Assert that given user can perform given operation on given content.
+   *
+   * @param string $name
+   *    User name.
+   * @param string $op
+   *    Operation: view, edit or delete.
+   * @param string $title
+   *    Content title.
+   *
+   * @throws \Exception
+   *   If user cannot perform given operation on given content.
+   *
+   * @Then :name can :op content :content
+   */
+  public function userCanContent($name, $op, $title) {
+    $op = strtr($op, ['edit' => 'update']);
+    $node = $this->getCore()->loadNodeByName($title);
+    $access = $this->getCore()->nodeAccess($op, $name, $node);
+    if (!$access) {
+      throw new \Exception("{$name} cannot {$op} '{$title}' but it is supposed to.");
+    }
+  }
+
+  /**
+   * Assert that given user cannot perform given operation on given content.
+   *
+   * @param string $name
+   *    User name.
+   * @param string $op
+   *    Operation: view, edit or delete.
+   * @param string $title
+   *    Content title.
+   *
+   * @throws \Exception
+   *   If user can perform given operation on given content.
+   *
+   * @Then :name can not :op content :content
+   * @Then :name cannot :op content :content
+   */
+  public function userCanNotContent($name, $op, $title) {
+    $op = strtr($op, ['edit' => 'update']);
+    $node = $this->getCore()->loadNodeByName($title);
+    $access = $this->getCore()->nodeAccess($op, $name, $node);
+    if ($access) {
+      throw new \Exception("{$name} can {$op} '{$title}' but it is not supposed to.");
+    }
+  }
+
+  /**
+   * Assert presence of content edit link given its name and content title.
+   *
+   * @param string $link
+   *    Link "name" HTML attribute.
+   * @param string $title
+   *    Content title.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *    If no edit link for given content has been found.
+   *
+   * @Then I should see the link :link to edit content :content
+   */
+  public function assertContentEditLink($link, $title) {
+    if (!$this->getContentEditLink($link, $title)) {
+      throw new ExpectationException("No '$link' link to edit '$title' has been found.", $this->getSession());
+    }
+  }
+
+  /**
+   * Assert absence of content edit link given its content title.
+   *
+   * @param string $title
+   *    Content title.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *    If edit link for given content has been found.
+   *
+   * @Then I should not see a link to edit content :content
+   */
+  public function assertNoContentEditLink($title) {
+    if ($this->getContentEditLink(NULL, $title)) {
+      throw new ExpectationException("link to edit '$title' has been found.", $this->getSession());
+    }
+  }
+
+  /**
+   * Get the edit link for a node.
+   *
+   * @param string $link
+   *   The link name.
+   * @param string $title
+   *   The node title.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   The link if found.
+   *
+   * @throws \Exception
+   */
+  public function getContentEditLink($link, $title) {
+    $node = $this->getCore()->loadNodeByName($title);
+
+    /** @var \Behat\Mink\Element\DocumentElement $element */
+    $element = $this->getSession()->getPage();
+
+    $locator = ($link ? array('link', sprintf("'%s'", $link)) : array('link', "."));
+
+    /** @var \Behat\Mink\Element\NodeElement[] $links */
+    $links = $element->findAll('named', $locator);
+
+    // Loop over all the links on the page and check for the node edit path.
+    foreach ($links as $result) {
+      $target = $result->getAttribute('href');
+      if (strpos($target, 'node/' . $this->getCore()->getNodeId($node) . '/edit') !== FALSE) {
+        return $result;
+      }
+    }
+    return NULL;
   }
 
 }

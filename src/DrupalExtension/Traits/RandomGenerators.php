@@ -5,7 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
 /**
  * Trait RandomGenerators.
  *
- * @package Nuvole\Drupal\Behat\Traits
+ * @package NuvoleWeb\Drupal\DrupalExtension\Traits
  */
 trait RandomGenerators {
 
