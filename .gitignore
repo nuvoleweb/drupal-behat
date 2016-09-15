@@ -2,4 +2,4 @@
 vendor/
 composer.lock
 behat.yml
-tests/cores/drupal8/drupal
+tests/cores/*/drupal

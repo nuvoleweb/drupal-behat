@@ -33,4 +33,4 @@ before_script:
 
 script:
   - composer phpcs
-  - ./vendor/bin/behat -c tests/cores/drupal8/behat.yml -fprogress --strict
+  - ./vendor/bin/behat -c tests/cores/drupal8/behat.yml.dist -fprogress --strict
