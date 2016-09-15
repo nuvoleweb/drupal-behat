@@ -52,3 +52,8 @@ Feature: Content Context
       | article_editor  | create | My first page |
       | article_editor  | edit   | My first page |
       | article_editor  | delete | My first page |
+
+  Scenario: Test content edit link steps.
+
+    Given I am logged in as "article_editor"
+    Then I should not see a link to edit content "My first page"

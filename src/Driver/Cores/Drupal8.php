@@ -63,7 +63,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * {@inheritdoc}
    */
   public function getEntityIdByLabel($entity_type, $bundle, $label) {
-    /** @var NodeStorage $storage */
+    /** @var \Drupal\node\NodeStorage $storage */
     $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
     $bundle_key = $storage->getEntityType()->getKey('bundle');
     $label_key = $storage->getEntityType()->getKey('label');

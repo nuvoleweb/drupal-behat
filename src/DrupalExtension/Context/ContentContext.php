@@ -140,6 +140,7 @@ class ContentContext extends RawDrupalContext implements SnippetAcceptingContext
    *    If no edit link for given content has been found.
    *
    * @Then I should see the link :link to edit content :content
+   * @Then I should see a link :link to edit content :content
    */
   public function assertContentEditLink($link, $title) {
     if (!$this->getContentEditLink($link, $title)) {
@@ -157,6 +158,7 @@ class ContentContext extends RawDrupalContext implements SnippetAcceptingContext
    *    If edit link for given content has been found.
    *
    * @Then I should not see a link to edit content :content
+   * @Then I should not see the link to edit content :content
    */
   public function assertNoContentEditLink($title) {
     if ($this->getContentEditLink(NULL, $title)) {
