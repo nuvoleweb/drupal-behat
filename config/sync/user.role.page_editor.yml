@@ -1,0 +1,18 @@
+uuid: b9bcd215-4c0f-4620-9546-85435eee63d8
+langcode: en
+status: true
+dependencies: {  }
+id: page_editor
+label: 'Page editor'
+weight: 3
+is_admin: null
+permissions:
+  - 'access content overview'
+  - 'create page content'
+  - 'delete any page content'
+  - 'delete own page content'
+  - 'delete page revisions'
+  - 'edit any page content'
+  - 'edit own page content'
+  - 'revert page revisions'
+  - 'view page revisions'

@@ -91,6 +91,7 @@ class ContentContext extends RawDrupalContext implements SnippetAcceptingContext
    *   If user cannot perform given operation on given content.
    *
    * @Then :name can :op content :content
+   * @Then :name can :op :content content
    */
   public function userCanContent($name, $op, $title) {
     $op = strtr($op, ['edit' => 'update']);
@@ -116,6 +117,7 @@ class ContentContext extends RawDrupalContext implements SnippetAcceptingContext
    *
    * @Then :name can not :op content :content
    * @Then :name cannot :op content :content
+   * @Then :name cannot :op :content content
    */
   public function userCanNotContent($name, $op, $title) {
     $op = strtr($op, ['edit' => 'update']);

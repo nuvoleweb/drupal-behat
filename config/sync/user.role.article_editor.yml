@@ -1,0 +1,18 @@
+uuid: 6c7a8757-28c3-497b-a9b8-e904106aa1db
+langcode: en
+status: true
+dependencies: {  }
+id: article_editor
+label: 'Article editor'
+weight: 4
+is_admin: null
+permissions:
+  - 'access content overview'
+  - 'create article content'
+  - 'delete any article content'
+  - 'delete own article content'
+  - 'delete article revisions'
+  - 'edit any article content'
+  - 'edit own article content'
+  - 'revert article revisions'
+  - 'view article revisions'

@@ -1,0 +1,14 @@
+uuid: 9476ecf6-eccd-45a0-8d78-a1b815cfe067
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.article_editor
+  module:
+    - user
+id: user_add_role_action.article_editor
+label: 'Add the Article editor role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: article_editor

@@ -1,0 +1,15 @@
+minimum_single: 20
+minimum_multiple: 20
+disable_search_threshold: 0
+minimum_width: 200
+jquery_selector: ''
+search_contains: false
+disable_search: false
+placeholder_text_multiple: 'Choose some option'
+placeholder_text_single: 'Choose an option'
+no_results_text: 'No results match'
+disabled_themes:
+  bartik: '0'
+  seven: '0'
+_core:
+  default_config_hash: CfTouXqr6kEJh_sBai8mKteNq1V2CXwJG4VsV7QT7R0

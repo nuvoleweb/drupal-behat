@@ -5,11 +5,13 @@ dependencies:
   config:
     - field.field.node.article.body
     - field.field.node.article.comment
+    - field.field.node.article.field_category
     - field.field.node.article.field_image
     - field.field.node.article.field_tags
     - image.style.thumbnail
     - node.type.article
   module:
+    - chosen_field
     - comment
     - image
     - path
@@ -39,6 +41,11 @@ content:
     weight: 10
     settings: {  }
     third_party_settings: {  }
+  field_category:
+    weight: 31
+    settings: {  }
+    third_party_settings: {  }
+    type: chosen_select
   field_image:
     type: image_image
     weight: 4
@@ -49,7 +56,10 @@ content:
   field_tags:
     type: entity_reference_autocomplete_tags
     weight: 3
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   path:
     type: path
