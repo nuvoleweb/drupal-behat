@@ -4,7 +4,6 @@
   "require": {
     "composer/installers": "1.1.0",
     "drupal-composer/drupal-scaffold": "dev-master",
-    "drupal/coder": "8.2.8",
     "drush/drush": "~8.1",
     "drupal/core": "~8.1",
     "drupal/chosen": "~8.2",

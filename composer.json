@@ -8,6 +8,9 @@
     "phpunit/phpunit": "5.5.*",
     "bovigo/assert": "^1.7"
   },
+  "require-dev": {
+    "drupal/coder": "8.2.8"
+  },
   "autoload": {
     "psr-4": {
       "NuvoleWeb\\Drupal\\": "./src/"
