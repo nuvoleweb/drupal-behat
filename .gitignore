@@ -1,5 +1,5 @@
 # Ignore non relevant files
 vendor/
-drupal
 composer.lock
 behat.yml
+tests/cores/drupal8/drupal

@@ -13,26 +13,23 @@ install:
   - composer install
 
 before_script:
-  # Setup Code Sniffer.
-  - bash ./scripts/setup.sh
   # Start PhantomJS server.
   - phantomjs --webdriver=4444 > /dev/null &
-  # Change to Drupal root directory.
-  - cd drupal
   # Set sendmail so drush doesn't throw an error during site install.
   - echo "sendmail_path='true'" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
   # Create database.
   - mysql -e 'create database drupal'
-  # Install Drupal 8 from existing configuration.
+  # Install Drupal 8 target site.
+  - cd tests/cores/drupal8
+  - composer install
+  - cd drupal
   - ../vendor/bin/drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../config/sync
   # Run Drush web server.
   - ../vendor/bin/drush --debug runserver :8888 > ~/debug.txt 2>&1 &
-  - cd -
   - sleep 4s
+  - cd ../../../..
 
 script:
   - composer phpcs
-  - vendor/bin/behat -fprogress --strict
-
-after_failure:
-  - cat ~/debug.txt
+  - cd tests
+  - ../vendor/bin/behat -fprogress --strict
