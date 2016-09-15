@@ -10,6 +10,7 @@ default:
         - Drupal\DrupalExtension\Context\DrupalContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\DrupalContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\ContentContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\CKEditorContext
   extensions:
     Behat\MinkExtension:
       goutte: ~
