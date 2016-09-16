@@ -6,14 +6,15 @@
   "require": {
     "drupal/drupal-extension": "~3.2",
     "phpunit/phpunit": "5.5.*",
-    "bovigo/assert": "^1.7"
+    "bovigo/assert": ">=1.7.1"
   },
   "require-dev": {
     "drupal/coder": "8.2.8"
   },
   "autoload": {
     "psr-4": {
-      "NuvoleWeb\\Drupal\\": "./src/"
+      "NuvoleWeb\\Drupal\\": "./src/",
+      "NuvoleWeb\\Drupal\\Tests\\": "./tests/scr/"
     }
   },
   "scripts": {
@@ -22,7 +23,8 @@
       "vendor/bin/phpcs --config-set show_progress 1",
       "cp scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push"
     ],
-    "phpcs": "./vendor/bin/phpcs --standard=Drupal,DrupalPractice ./src",
-    "phpcbf": "./vendor/bin/phpcbf --standard=Drupal,DrupalPractice ./src"
+    "phpcs": "./vendor/bin/phpcs --standard=Drupal,DrupalPractice ./src ./tests/scr",
+    "phpcbf": "./vendor/bin/phpcbf --standard=Drupal,DrupalPractice ./src ./tests/scr",
+    "phpunit": "./vendor/bin/phpunit tests/scr/PhpUnit"
   }
 }

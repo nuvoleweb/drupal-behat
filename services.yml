@@ -1,0 +1,3 @@
+services:
+  drupal.behat.component.resolution:
+    class: NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent

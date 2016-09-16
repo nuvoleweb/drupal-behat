@@ -14,28 +14,6 @@ use Behat\Mink\Exception\UnsupportedDriverActionException;
 trait Generic {
 
   /**
-   * Default screen size.
-   */
-  protected $defaultScreenSize = ['width' => 1024, 'height' => 768];
-
-  /**
-   * Screen size in use.
-   */
-  protected $screenSize = ['width' => 1024, 'height' => 768];
-
-  /**
-   * Assert string in HTTP response header.
-   *
-   * @Then I should see in the header :header::value
-   */
-  public function iShouldSeeInTheHeader($header, $value) {
-    $headers = $this->getSession()->getResponseHeaders();
-    if ($headers[$header] != $value) {
-      throw new \Exception(sprintf("Did not see %s with value %s.", $header, $value));
-    }
-  }
-
-  /**
    * Checks that the given element is of the given type.
    *
    * @param NodeElement $element
@@ -49,38 +27,6 @@ trait Generic {
   public function assertElementType(NodeElement $element, $type) {
     if ($element->getTagName() !== $type) {
       throw new ExpectationException("The element is not a '$type'' field.", $this->getSession());
-    }
-  }
-
-  /**
-   * Set browser size to mobile.
-   *
-   * @BeforeScenario @javascript&&@mobile
-   */
-  public function beforeMobileScenario() {
-    $this->screenSize = ['width' => 450, 'height' => 768];
-  }
-
-  /**
-   * Reset browser size.
-   *
-   * @AfterScenario @javascript
-   */
-  public function afterJavascriptScenario() {
-    $this->screenSize = $this->defaultScreenSize;
-  }
-
-  /**
-   * Resize the browser window.
-   *
-   * @BeforeStep
-   */
-  public function adjustScreenSizeBeforeStep() {
-    try {
-      // We make sure all selenium drivers use the same screen size.
-      $this->getSession()->resizeWindow($this->screenSize['width'], $this->screenSize['height'], 'current');
-    }
-    catch (UnsupportedDriverActionException $e) {
     }
   }
 

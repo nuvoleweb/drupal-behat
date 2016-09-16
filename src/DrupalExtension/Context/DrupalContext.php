@@ -63,4 +63,16 @@ class DrupalContext extends RawDrupalContext implements SnippetAcceptingContext 
 
   }
 
+  /**
+   * Assert string in HTTP response header.
+   *
+   * @Then I should see in the header :header::value
+   */
+  public function iShouldSeeInTheHeader($header, $value) {
+    $headers = $this->getSession()->getResponseHeaders();
+    if ($headers[$header] != $value) {
+      throw new \Exception(sprintf("Did not see %s with value %s.", $header, $value));
+    }
+  }
+
 }
