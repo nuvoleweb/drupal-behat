@@ -1,17 +1,17 @@
 <?php
 
-namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
+namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Trait SelectField.
+ * Class SelectFieldContext.
  *
- * @package Nuvole\Drupal\Behat\Traits
+ * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-trait SelectField {
+class SelectFieldContext extends RawMinkContext {
 
   /**
    * Checks that the given select field has the options listed in the table.

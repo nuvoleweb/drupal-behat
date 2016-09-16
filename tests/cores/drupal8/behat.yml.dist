@@ -20,6 +20,10 @@ default:
               tablet_landscape: 1024x768
               laptop: 1280x800
               desktop: 2560x1440
+        - NuvoleWeb\Drupal\DrupalExtension\Context\PositionContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\VisibilityContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\SelectFieldContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\ChosenFieldContext
   extensions:
     Behat\MinkExtension:
       goutte: ~

@@ -33,5 +33,5 @@ before_script:
 
 script:
   - composer phpcs
-  - composer phpunit --coverage-text
+  - composer phpunit
   - ./vendor/bin/behat --strict -c tests/cores/drupal8/behat.yml.dist

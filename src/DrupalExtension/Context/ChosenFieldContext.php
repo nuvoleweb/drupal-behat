@@ -1,16 +1,16 @@
 <?php
 
-namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
+namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Trait Chosen.
+ * Class ChosenFieldContext.
  *
- * @package Nuvole\Drupal\Behat\Traits
+ * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-trait Chosen {
+class ChosenFieldContext extends RawMinkContext {
 
   /**
    * Fills in chosen form fields with provided table.
