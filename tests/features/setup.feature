@@ -36,3 +36,13 @@ Feature: Setup
 
     Then I should not see "Actions"
     But I should see "Block"
+
+    @run
+  Scenario: Test that Behat can load defined services.
+
+    Given I can access the service container
+    Then the service container can load the "drupal.behat.component.resolution" service
+    And the service container can load the "drupal.behat.component.py_string_yaml_parser" service
+    And the service container can load the "drupal.behat.component.random" service
+    And the service container can load the "drupal.behat.component.hello_world" service
+

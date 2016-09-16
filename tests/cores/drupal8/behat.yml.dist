@@ -9,6 +9,7 @@ default:
         - Drupal\DrupalExtension\Context\MarkupContext
         - Drupal\DrupalExtension\Context\MessageContext
         - Drupal\DrupalExtension\Context\DrupalContext
+        - NuvoleWeb\Drupal\Tests\Behat\TestContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\DrupalContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\ContentContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\CKEditorContext
@@ -33,6 +34,7 @@ default:
       javascript_session: selenium2
       base_url: http://127.0.0.1:8888
     NuvoleWeb\Drupal\DrupalExtension:
+      services: "tests/my_services.yml"
       api_driver: "drupal"
       drupal:
         # Change this to the absolute path to Drupal install.

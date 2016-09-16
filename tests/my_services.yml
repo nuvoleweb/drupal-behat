@@ -1,0 +1,3 @@
+services:
+  drupal.behat.component.hello_world:
+    class: NuvoleWeb\Drupal\Tests\Behat\HelloWorldService

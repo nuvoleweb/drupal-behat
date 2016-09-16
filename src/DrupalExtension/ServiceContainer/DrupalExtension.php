@@ -21,13 +21,20 @@ class DrupalExtension extends OriginalDrupalExtension {
   public function load(ContainerBuilder $container, array $config) {
     parent::load($container, $config);
 
-    // Search for services.yml in following paths in order to perform overrides.
-    $paths[] = __DIR__ . '/../../..';
-    $paths[] = $container->getParameter('paths.base');
+    // Load default service definitions.
     $container_overrides = new ContainerBuilder();
-    $loader = new YamlFileLoader($container_overrides, new FileLocator($paths));
+    $loader = new YamlFileLoader($container_overrides, new FileLocator(__DIR__ . '/../../..'));
     $loader->load('services.yml');
     $container->merge($container_overrides);
+
+    // Load custom service definitions.
+    if ($config['services']) {
+      $path_parts = pathinfo($config['services']);
+      $container_overrides = new ContainerBuilder();
+      $loader = new YamlFileLoader($container_overrides, new FileLocator($path_parts['dirname']));
+      $loader->load($path_parts['basename']);
+      $container->merge($container_overrides);
+    }
 
     $this->loadContextInitializer($container);
   }
@@ -53,6 +60,10 @@ class DrupalExtension extends OriginalDrupalExtension {
     // @codingStandardsIgnoreStart
     $builder->
       children()->
+        scalarNode('services')->
+          defaultValue('')->
+          info('Path to service definition YAML file, e.g. "/path/to/my_services.yml". Services and parameters specified therein will override the original Behat Extension service definitions.')->
+        end()->
         arrayNode('text')->
           info(
             'Text strings, such as Log out or the Username field can be altered via behat.yml if they vary from the default values.' . PHP_EOL
