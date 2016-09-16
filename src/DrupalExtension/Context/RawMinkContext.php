@@ -5,13 +5,35 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\RawMinkContext as OriginalRawMinkContext;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class RawMinkContext.
  *
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-class RawMinkContext extends OriginalRawMinkContext {
+class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerAwareInterface {
+
+  /**
+   * Service container instance.
+   *
+   * @var ContainerBuilder
+   */
+  private $container;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setContainer(ContainerBuilder $container) {
+    $this->container = $container;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContainer() {
+    return $this->container;
+  }
 
   /**
    * Checks that the given element is of the given type.

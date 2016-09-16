@@ -1,3 +1,24 @@
+parameters:
+  drupal.behat.component.resolution.class: NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent
+  drupal.behat.component.py_string_yaml_parser.class: NuvoleWeb\Drupal\DrupalExtension\Component\PyStringYamlParser
+  drupal.behat.component.random.class: NuvoleWeb\Drupal\DrupalExtension\Component\RandomGeneratorComponent
+  # Overrides Drupal Extension Drupal 6 core class.
+  drupal.driver.cores.6.class: NuvoleWeb\Drupal\Driver\Cores\Drupal6
+  # Overrides Drupal Extension Drupal 7 core class.
+  drupal.driver.cores.7.class: NuvoleWeb\Drupal\Driver\Cores\Drupal7
+  # Overrides Drupal Extension Drupal 8 core class.
+  drupal.driver.cores.8.class: NuvoleWeb\Drupal\Driver\Cores\Drupal8
+  # Class responsible to inject service container instance in all contexts.
+  drupal.behat.context_initializer.service_container.class: NuvoleWeb\Drupal\DrupalExtension\Context\Initializer\ServiceContainerInitializer
+
 services:
   drupal.behat.component.resolution:
-    class: NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent
+    class: %drupal.behat.component.resolution.class%
+  drupal.behat.component.py_string_yaml_parser:
+    class: %drupal.behat.component.py_string_yaml_parser.class%
+  drupal.behat.component.random:
+    class: %drupal.behat.component.random.class%
+  drupal.behat.context_initializer.service_container:
+    class: %drupal.behat.context_initializer.service_container.class%
+    tags:
+      -  { name: context.initializer }

@@ -6,8 +6,6 @@ use Behat\Mink\Exception\ExpectationException;
 use function bovigo\assert\predicate\isOfType;
 use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\assert;
-use Behat\MinkExtension\Context\RawMinkContext;
-use NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent;
 
 /**
  * Class ResponsiveContext.
@@ -45,22 +43,7 @@ class ResponsiveContext extends RawMinkContext {
    */
   public function __construct($devices = []) {
     assert($devices, isOfType('array'));
-    $devices = $devices + $this->defaultDevices;
-    $this->processDevices($devices);
-  }
-
-  /**
-   * Process devices.
-   *
-   * @param array $devices
-   *    List of devices.
-   */
-  private function processDevices(array $devices) {
-    foreach ($devices as $name => $resolution) {
-      $resolution_component = new ResolutionComponent();
-      $resolution_component->parse($resolution);
-      $this->devices[$name] = $resolution_component;
-    }
+    $this->devices = $devices + $this->defaultDevices;
   }
 
   /**
@@ -69,12 +52,14 @@ class ResponsiveContext extends RawMinkContext {
    * @param string $name
    *    Device name.
    *
-   * @return ResolutionComponent
+   * @return \NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent
    *    Resolution object.
    */
   protected function getDeviceResolution($name) {
     assert($this->devices, hasKey($name), "Device '{$name}' not found.");
-    return $this->devices[$name];
+    $service = $this->getContainer()->get('drupal.behat.component.resolution');
+    $service->parse($this->devices[$name]);
+    return $service;
   }
 
   /**
