@@ -1,6 +1,6 @@
 <?php
 
-namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
+namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
@@ -8,11 +8,11 @@ use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Exception\DriverException;
 
 /**
- * Trait ScreenShot.
+ * Class ScreenShotContext.
  *
- * @package Nuvole\Drupal\Behat\Traits
+ * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-trait ScreenShot {
+class ScreenShotContext extends RawMinkContext {
 
   /**
    * Save screenshot with a specific name.

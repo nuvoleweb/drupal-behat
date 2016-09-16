@@ -24,6 +24,7 @@ default:
         - NuvoleWeb\Drupal\DrupalExtension\Context\VisibilityContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\SelectFieldContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\ChosenFieldContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\ScreenShotContext
   extensions:
     Behat\MinkExtension:
       goutte: ~
