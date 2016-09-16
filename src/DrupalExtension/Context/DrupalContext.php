@@ -2,7 +2,6 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
 
 /**
@@ -12,7 +11,7 @@ use Behat\Gherkin\Node\TableNode;
  *
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-class DrupalContext extends RawDrupalContext implements SnippetAcceptingContext {
+class DrupalContext extends RawDrupalContext {
 
   /**
    * Assert access denied page.

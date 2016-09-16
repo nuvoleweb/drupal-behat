@@ -2,6 +2,7 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
+use Behat\Behat\Context\SnippetAcceptingContext;
 use Drupal\DrupalExtension\Context\RawDrupalContext as OriginalRawDrupalContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -10,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-class RawDrupalContext extends OriginalRawDrupalContext implements ServiceContainerAwareInterface {
+class RawDrupalContext extends OriginalRawDrupalContext implements ServiceContainerAwareInterface, SnippetAcceptingContext {
 
   /**
    * Service container instance.

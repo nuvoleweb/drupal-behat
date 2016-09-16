@@ -2,7 +2,6 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
@@ -10,7 +9,7 @@ use Behat\Mink\Exception\ExpectationException;
  *
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-class ContentContext extends RawDrupalContext implements SnippetAcceptingContext {
+class ContentContext extends RawDrupalContext {
 
   /**
    * Assert viewing content given its type and title.

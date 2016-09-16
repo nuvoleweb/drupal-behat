@@ -105,4 +105,28 @@ interface CoreInterface extends OriginalCoreInterface {
    */
   public function getNodeId($node);
 
+  /**
+   * Load taxonomy term given its vocabulary and name.
+   *
+   * @param string $type
+   *    Vocabulary machine name.
+   * @param string $name
+   *    Taxonomy term name.
+   *
+   * @return object
+   *    Taxonomy term object.
+   */
+  public function loadTaxonomyTermByName($type, $name);
+
+  /**
+   * Get taxonomy term ID given taxonomy term object.
+   *
+   * @param object $term
+   *    Taxonomy term object.
+   *
+   * @return int
+   *    Taxonomy term ID.
+   */
+  public function getTaxonomyTermId($term);
+
 }

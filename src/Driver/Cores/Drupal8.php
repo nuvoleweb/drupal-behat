@@ -8,6 +8,7 @@ use function bovigo\assert\predicate\isNotEqualTo;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
@@ -98,6 +99,27 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   public function getNodeId($node) {
     return $node->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadTaxonomyTermByName($type, $name) {
+    $result = \Drupal::entityQuery('taxonomy_term')
+      ->condition('name', $name)
+      ->condition('vid', $type)
+      ->range(0, 1)
+      ->execute();
+    assert($result, isNotEmpty());
+    $id = current($result);
+    return Term::load($id);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTaxonomyTermId($term) {
+    return $term->id();
   }
 
 }

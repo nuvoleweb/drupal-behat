@@ -2,6 +2,7 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
+use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\RawMinkContext as OriginalRawMinkContext;
@@ -12,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
-class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerAwareInterface {
+class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerAwareInterface, SnippetAcceptingContext {
 
   /**
    * Service container instance.
