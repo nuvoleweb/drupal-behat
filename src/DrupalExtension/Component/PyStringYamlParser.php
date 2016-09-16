@@ -13,31 +13,17 @@ use Symfony\Component\Yaml\Yaml;
 class PyStringYamlParser {
 
   /**
-   * PyStringNode object.
-   *
-   * @var PyStringNode;
-   */
-  protected $node;
-
-  /**
-   * PyStringYamlParser constructor.
+   * Parse YAML contained in a PyString node.
    *
    * @param \Behat\Gherkin\Node\PyStringNode $node
    *    PyString containing text in YAML format.
-   */
-  public function __construct(PyStringNode $node) {
-    $this->node = $node;
-  }
-
-  /**
-   * Parse YAML contained in a PyString node.
    *
    * @return array
    *    Parsed YAML.
    */
-  public function parse() {
+  public function parse(PyStringNode $node) {
     // Sanitize PyString test by removing initial indentation spaces.
-    $strings = $this->node->getStrings();
+    $strings = $node->getStrings();
     if ($strings) {
       preg_match('/^(\s+)/', $strings[0], $matches);
       $indentation_size = isset($matches[1]) ? strlen($matches[1]) : 0;

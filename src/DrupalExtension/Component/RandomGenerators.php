@@ -1,13 +1,13 @@
 <?php
 
-namespace NuvoleWeb\Drupal\DrupalExtension\Traits;
+namespace NuvoleWeb\Drupal\DrupalExtension\Component;
 
 /**
- * Trait RandomGenerators.
+ * Class RandomGeneratorComponent.
  *
- * @package NuvoleWeb\Drupal\DrupalExtension\Traits
+ * @package NuvoleWeb\Drupal\DrupalExtension\Component
  */
-trait RandomGenerators {
+class RandomGeneratorComponent {
 
   /**
    * Generates a random string of ASCII characters of codes 32 to 126.
