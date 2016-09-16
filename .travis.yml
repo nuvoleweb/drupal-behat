@@ -35,3 +35,6 @@ script:
   - composer phpcs
   - composer phpunit
   - ./vendor/bin/behat --strict -c tests/cores/drupal8/behat.yml.dist
+
+notifications:
+  email: false

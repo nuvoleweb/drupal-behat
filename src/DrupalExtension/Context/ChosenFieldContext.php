@@ -38,6 +38,7 @@ class ChosenFieldContext extends RawMinkContext {
    * Select one more option from a Chosen select box.
    *
    * @When /^I add "([^"]*)" to the chosen element "([^"]*)"$/
+   * @When /^I select "([^"]*)" on the Chosen element "([^"]*)"$/
    */
   public function iAddChosenElement($value, $locator) {
     $this->iSetChosenElement($locator, $value);
@@ -87,6 +88,7 @@ class ChosenFieldContext extends RawMinkContext {
    * Remove an option from a Chosen select box.
    *
    * @When /^I remove "([^"]*)" from the chosen element "([^"]*)"$/
+   * @When I remove :arg1 from the Chosen element :arg2
    */
   public function iUnSetChosenElement($value, $locator) {
     $session = $this->getSession();
