@@ -16,10 +16,16 @@ in order to provide the following features:
 - Developers can organize their test using dependency injection by declaring their services in a YAML file and/or 
   override default Behat services.
 
-## Installation
-Follow the [Quick start](https://github.com/jhedstrom/drupalextension#quick-start) section on the Behat Drupal Extension
-page, only use `NuvoleWeb\Drupal\DrupalExtension` instead of the native `Drupal\DrupalExtension` as in your `behat.yml`
-as shown below:
+## Installation and setup
+Install Nuvole's Behat Drupal Extension with [Composer](https://getcomposer.org/) by running:
+
+```bash
+$ composer require nuvoleweb/drupal-behat
+```
+
+To setup the extension just follow the [Quick start](https://github.com/jhedstrom/drupalextension#quick-start) section
+available on the original Behat Drupal Extension page, only use `NuvoleWeb\Drupal\DrupalExtension` instead of the native
+`Drupal\DrupalExtension` as in your `behat.yml` as shown below:
 
 ```yaml
 default:
