@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/nuvoleweb/drupal-behat.svg?branch=1.0.x)](https://travis-ci.org/nuvoleweb/drupal-behat)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nuvoleweb/drupal-behat/badges/quality-score.png?b=1.0.x)](https://scrutinizer-ci.com/g/nuvoleweb/drupal-behat/?branch=1.0.x)
+[![Latest Stable Version](https://poser.pugx.org/nuvoleweb/drupal-behat/v/stable)](https://packagist.org/packages/nuvoleweb/drupal-behat)
+[![Latest Unstable Version](https://poser.pugx.org/nuvoleweb/drupal-behat/v/unstable)](https://packagist.org/packages/nuvoleweb/drupal-behat)
+[![Total Downloads](https://poser.pugx.org/nuvoleweb/drupal-behat/downloads)](https://packagist.org/packages/nuvoleweb/drupal-behat)
+[![License](https://poser.pugx.org/nuvoleweb/drupal-behat/license)](https://packagist.org/packages/nuvoleweb/drupal-behat)
 
 Nuvole's Behat Drupal Extension extends the popular [Behat Drupal Extension](https://www.drupal.org/project/drupalextension)
 in order to provide the following features:
