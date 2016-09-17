@@ -1,7 +1,16 @@
 {
   "name": "nuvoleweb/drupal-behat",
-  "description": "Contexts and other components for the Drupal Behat extension.",
+  "type": "behat-extension",
+  "description": "Drupal Behat extension.",
+  "keywords": ["drupal", "web", "test", "behat"],
   "minimum-stability": "stable",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Nuvole Web",
+      "email": "info@nuvole.org"
+    }
+  ],
   "prefer-stable": true,
   "require": {
     "drupal/drupal-extension": "~3.2",
