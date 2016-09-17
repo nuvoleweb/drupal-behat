@@ -12,9 +12,11 @@ in order to provide the following features:
 
 - Additional step definitions covering contributed modules, core functionality and popular third-party plugins (see below
   for an exhaustive list).
-- Base raw contexts class can access the global Behat service container.  
+- Contexts can access the global Behat service container.  
 - Developers can organize their test using dependency injection by declaring their services in a YAML file and/or 
   override default Behat services.
+- Developers can override Drupal driver core classes and allow their step definitions to run transparently on different
+  Drupal core versions.
 
 ## Installation and setup
 Install Nuvole's Behat Drupal Extension with [Composer](https://getcomposer.org/) by running:
@@ -23,16 +25,14 @@ Install Nuvole's Behat Drupal Extension with [Composer](https://getcomposer.org/
 $ composer require nuvoleweb/drupal-behat
 ```
 
-To setup the extension just follow the [Quick start](https://github.com/jhedstrom/drupalextension#quick-start) section
-available on the original Behat Drupal Extension page, only use `NuvoleWeb\Drupal\DrupalExtension` instead of the native
-`Drupal\DrupalExtension` as in your `behat.yml` as shown below:
+Setup the extension by following the [Quick start](https://github.com/jhedstrom/drupalextension#quick-start) section
+available on the original Behat Drupal Extension page, just use `NuvoleWeb\Drupal\DrupalExtension` instead of the native
+`Drupal\DrupalExtension` in your `behat.yml` as shown below:
 
 ```yaml
 default:
   suites:
     default:
-      paths:
-        - %paths.base%/../../features
       contexts:
         - Drupal\DrupalExtension\Context\DrupalContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\DrupalContext
@@ -54,7 +54,7 @@ default:
 Nuvole's Behat Drupal Extension accepts all parameters of the original Behat Drupal Extension and it provides the 
 following additional ones:
 
-| Setting | Description |
-|---------|-------------|
+| Parameter | Description |
+|-----------|-------------|
 | `services: "tests/my_services.yml"` | Path to your custom service definition YAML file. |
 | `text.node_submit_label: "Save and publish"` | Label of node form submit button (different in Drupal 7/6 and Drupal 8). |
