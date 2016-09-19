@@ -10,13 +10,14 @@
 Nuvole's Behat Drupal Extension extends the popular [Behat Drupal Extension](https://www.drupal.org/project/drupalextension)
 in order to provide the following features:
 
-- Additional step definitions covering contributed modules, core functionality and popular third-party plugins (see below
-  for an exhaustive list).
+- Additional step definitions covering contributed modules, core functionality and popular third-party plugins.
 - Contexts can access the global Behat service container.  
 - Developers can organize their test using dependency injection by declaring their services in a YAML file and/or 
   override default Behat services.
 - Developers can override Drupal driver core classes and allow their step definitions to run transparently on different
   Drupal core versions.
+
+For more information please check the [documentation](https://github.com/nuvoleweb/drupal-behat/wiki/Documentation).
 
 ## Installation and setup
 Install Nuvole's Behat Drupal Extension with [Composer](https://getcomposer.org/) by running:
@@ -58,3 +59,10 @@ following additional ones:
 |-----------|-------------|
 | `services: "tests/my_services.yml"` | Path to your custom service definition YAML file. |
 | `text.node_submit_label: "Save and publish"` | Label of node form submit button (different in Drupal 7/6 and Drupal 8). |
+
+## Additional resources
+
+ * [Behat Drupal Extension documentation](https://behat-drupal-extension.readthedocs.org)
+ * [Behat documentation](http://docs.behat.org)
+ * [Mink documentation](http://mink.behat.org)
+ * [Drupal Behat group](http://groups.drupal.org/behat)
