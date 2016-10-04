@@ -1,3 +1,7 @@
+### 1.0.x
+- Fix device dimensions casting in `ResponsiveContext`.
+- Add steps to check for CSS visibility of elements containing a specific text.
+
 ### 1.0.1
 - Fix `bovigo/assert` version to `~1.7` for better PHP compatibility.
 

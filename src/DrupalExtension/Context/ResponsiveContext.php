@@ -72,7 +72,7 @@ class ResponsiveContext extends RawMinkContext {
    */
   public function assertDeviceScreenResize($device) {
     $resolution = $this->getDeviceResolution($device);
-    $this->getSession()->resizeWindow($resolution->getWidth(), $resolution->getHeight(), 'current');
+    $this->getSession()->resizeWindow((int) $resolution->getWidth(), (int) $resolution->getHeight(), 'current');
   }
 
   /**
