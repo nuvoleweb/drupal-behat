@@ -30,7 +30,7 @@ before_script:
   - ../vendor/bin/drush --debug runserver :8888 > ~/debug.txt 2>&1 &
   - sleep 4s
   - chmod -R ug+w sites
-  - echo "global $conf; $conf['container_service_providers'][] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';" >> ./sites/default/settings.php
+  - echo "global \$conf; \$conf['container_service_providers'][] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';" >> ./sites/default/settings.php
   - cd ../../../..
 
 script:

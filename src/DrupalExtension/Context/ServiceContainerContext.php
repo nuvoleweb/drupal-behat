@@ -57,7 +57,8 @@ class ServiceContainerContext extends RawDrupalContext {
       $value = \Drupal::getContainer()->getParameter($name);
       assert($value, not(equals($expected)));
     }
-    catch (ParameterNotFoundException $e) { }
+    catch (ParameterNotFoundException $e) {
+    }
   }
 
 }
