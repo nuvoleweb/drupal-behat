@@ -27,6 +27,7 @@ default:
         - NuvoleWeb\Drupal\DrupalExtension\Context\ChosenFieldContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\ScreenShotContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\TaxonomyTermContext
+        - NuvoleWeb\Drupal\DrupalExtension\Context\ServiceContainerContext
   extensions:
     Behat\MinkExtension:
       goutte: ~
