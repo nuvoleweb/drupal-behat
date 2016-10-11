@@ -4,6 +4,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\ServiceProvider;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Class BehatServiceProvider.
@@ -30,8 +31,13 @@ class BehatServiceProvider extends ServiceProviderBase {
    *    Array of parameters.
    */
   protected function getParameters() {
-    $parameters = \Drupal::state()->get('nuvole_web.drupal_extension.parameter_overrides');
-    return $parameters ? $parameters : [];
+    $parameters = [];
+    try {
+      $parameters = \Drupal::state()->get('nuvole_web.drupal_extension.parameter_overrides');
+    }
+    catch (ServiceNotFoundException $e) {
+    }
+    return $parameters;
   }
 
 }
