@@ -3,6 +3,7 @@
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use function bovigo\assert\assert;
 use function bovigo\assert\predicate\equals;
@@ -20,9 +21,8 @@ class ServiceContainerContext extends RawDrupalContext {
    *
    * @Given I override the following service parameters:
    */
-  public function overrideParameters(TableNode $table) {
-    \Drupal::state()->set('nuvole_web.drupal_extension.parameter_overrides', $table->getRowsHash());
-    \Drupal::service('kernel')->rebuildContainer();
+  public function assertOverrideParameters(TableNode $table) {
+    $this->overrideParameters($table->getRowsHash());
   }
 
   /**
@@ -30,7 +30,7 @@ class ServiceContainerContext extends RawDrupalContext {
    *
    * @AfterScenario
    */
-  public function rebuildContainer() {
+  public function resetParameters() {
     if (\Drupal::state()->get('nuvole_web.drupal_extension.parameter_overrides')) {
       \Drupal::state()->set('nuvole_web.drupal_extension.parameter_overrides', []);
       \Drupal::service('kernel')->rebuildContainer();
@@ -58,6 +58,34 @@ class ServiceContainerContext extends RawDrupalContext {
       assert($value, not(equals($expected)));
     }
     catch (ParameterNotFoundException $e) {
+    }
+  }
+
+  /**
+   * Apply parameters overrides and rebuild container.
+   *
+   * @param array $parameters
+   *    List of parameters to be overridden.
+   */
+  protected function overrideParameters(array $parameters) {
+    $this->setServiceProvider();
+    \Drupal::state()->set('nuvole_web.drupal_extension.parameter_overrides', $parameters);
+    \Drupal::service('kernel')->rebuildContainer();
+  }
+
+  /**
+   * Set custom service provider ar run-time.
+   */
+  protected function setServiceProvider() {
+    // Setting service providers will change in Drupal 8.3.
+    // @link https://www.drupal.org/node/2183323
+    if (\Drupal::VERSION < '8.3') {
+      $GLOBALS['conf']['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
+    }
+    else {
+      $settings = Settings::getAll();
+      $settings['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
+      new Settings($settings);
     }
   }
 

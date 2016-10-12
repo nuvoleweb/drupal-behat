@@ -32,8 +32,7 @@ class BehatServiceProvider extends ServiceProviderBase {
    */
   protected function getParameters() {
     try {
-      $parameters = \Drupal::state()->get('nuvole_web.drupal_extension.parameter_overrides');
-      return $parameters ? $parameters : [];
+      return \Drupal::state()->get('nuvole_web.drupal_extension.parameter_overrides', []);
     }
     catch (ServiceNotFoundException $e) {
       return [];
