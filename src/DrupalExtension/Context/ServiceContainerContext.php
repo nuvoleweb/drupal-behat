@@ -44,7 +44,7 @@ class ServiceContainerContext extends RawDrupalContext {
    */
   public function assertParameters($name, $expected) {
     $value = \Drupal::getContainer()->getParameter($name);
-    assert($value, equals($expected));
+    assert($value, equals($this->castParameter($expected)));
   }
 
   /**
@@ -55,7 +55,7 @@ class ServiceContainerContext extends RawDrupalContext {
   public function negateParameters($name, $expected) {
     try {
       $value = \Drupal::getContainer()->getParameter($name);
-      assert($value, not(equals($expected)));
+      assert($value, not(equals($this->castParameter($expected))));
     }
     catch (ParameterNotFoundException $e) {
     }
@@ -69,6 +69,12 @@ class ServiceContainerContext extends RawDrupalContext {
    */
   protected function overrideParameters(array $parameters) {
     $this->setServiceProvider();
+
+    // Cast service parameters.
+    foreach ($parameters as $name => $value) {
+      $parameters[$name] = $this->castParameter($value);
+    }
+
     \Drupal::state()->set('nuvole_web.drupal_extension.parameter_overrides', $parameters);
     \Drupal::service('kernel')->rebuildContainer();
   }
@@ -86,6 +92,27 @@ class ServiceContainerContext extends RawDrupalContext {
       $settings = Settings::getAll();
       $settings['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
       new Settings($settings);
+    }
+  }
+
+  /**
+   * Cast service parameters.
+   *
+   * @param string $value
+   *    Parameter value.
+   *
+   * @return mixed
+   *    Casted value.
+   */
+  protected function castParameter($value) {
+    if ($value == 'TRUE' || $value == 'true') {
+      return TRUE;
+    }
+    elseif ($value == 'FALSE' || $value == 'false') {
+      return FALSE;
+    }
+    else {
+      return $value;
     }
   }
 
