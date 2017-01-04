@@ -6,6 +6,7 @@ use function bovigo\assert\assert;
 use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\predicate\isNotEmpty;
 use function bovigo\assert\predicate\isNotEqualTo;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
@@ -194,6 +195,13 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   public function clearMenuCache() {
     \Drupal::cache('menu')->invalidateAll();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function invalidateCacheTags(array $tags) {
+    Cache::invalidateTags($tags);
   }
 
   /**

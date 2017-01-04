@@ -202,4 +202,12 @@ interface CoreInterface extends OriginalCoreInterface {
    */
   public function clearMenuCache();
 
+  /**
+   * Invalidate cache tags, clearing relevant caches.
+   *
+   * @param string[] $tags
+   *   An array of cache tags to invalidate
+   */
+  public function invalidateCacheTags(array $tags);
+
 }

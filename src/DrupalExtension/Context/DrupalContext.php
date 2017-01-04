@@ -74,4 +74,23 @@ class DrupalContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Invalidate cache tags.
+   *
+   * Usage:
+   *
+   * Given I invalidate the following cache tags:
+   *   | tag_one |
+   *   | tag_two |
+   *
+   * @Given I invalidate the following cache tags:
+   */
+  public function invalidateCacheTags(TableNode $table) {
+    $tags = [];
+    foreach ($table->getRows() as $row) {
+      $tags[] = $row[0];
+    }
+    $this->getCore()->invalidateCacheTags($tags);
+  }
+
 }
