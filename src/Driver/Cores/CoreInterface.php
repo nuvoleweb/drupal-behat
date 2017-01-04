@@ -57,16 +57,68 @@ interface CoreInterface extends OriginalCoreInterface {
    * Get entity ID given its type, bundle and label.
    *
    * @param string $entity_type
-   *    Entity type machine name.
+   *   Entity type machine name.
    * @param string $bundle
-   *    Entity type machine name.
+   *   Entity bundle machine name, can be empty.
    * @param string $label
-   *    Entity type machine name.
+   *   Entity name.
    *
    * @return int
-   *    Entity ID.
+   *   Entity ID.
    */
   public function getEntityIdByLabel($entity_type, $bundle, $label);
+
+  /**
+   * Create an entity.
+   *
+   * @param string $entity_type
+   *   Entity type.
+   * @param array $values
+   *   The Values to create the entity with.
+   *
+   * @return object
+   *   Entity object.
+   */
+  public function entityCreate($entity_type, $values);
+
+  /**
+   * Load an entity.
+   *
+   * @param string $entity_type
+   *   Entity type.
+   * @param int $entity_id
+   *   Entity ID.
+   *
+   * @return object
+   *   Entity object.
+   */
+  public function entityLoad($entity_type, $entity_id);
+
+  /**
+   * Deletes an entity permanently.
+   *
+   * @param object $entity
+   *   The drupal entity, appropriately typed.
+   *
+   * @throws \Exception
+   *   In case of failures an exception is thrown.
+   */
+  public function entityDelete($entity);
+
+  /**
+   * Add a translation for an entity.
+   *
+   * @param object $entity
+   *   The entity to translate.
+   * @param string $language
+   *   The language to translate to.
+   * @param array $values
+   *   The values for the translation.
+   *
+   * @return object
+   *   The translation entity.
+   */
+  public function entityAddTranslation($entity, $language, array $values);
 
   /**
    * Load user given its username.

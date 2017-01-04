@@ -3,11 +3,16 @@
 namespace NuvoleWeb\Drupal\Driver\Cores;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\predicate\isNotEmpty;
 use function bovigo\assert\predicate\isNotEqualTo;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 
@@ -68,12 +73,16 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
     $bundle_key = $storage->getEntityType()->getKey('bundle');
     $label_key = $storage->getEntityType()->getKey('label');
-    $result = \Drupal::entityQuery($entity_type)
-      ->condition($bundle_key, $bundle)
-      ->condition($label_key, $label)
-      ->range(0, 1)
-      ->execute();
-    assert($result, isNotEmpty());
+
+    $query = \Drupal::entityQuery($entity_type);
+    if ($bundle) {
+      $query->condition($bundle_key, $bundle);
+    }
+    $query->condition($label_key, $label);
+    $query->range(0, 1);
+
+    $result = $query->execute();
+    assert($result, isNotEmpty(), __METHOD__ . ": No Entity {$entity_type} with name {$label} found.");
     return current($result);
   }
 
@@ -120,6 +129,171 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   public function getTaxonomyTermId($term) {
     return $term->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadMenuItemByTitle($menu_name, $title) {
+    $items = \Drupal::entityTypeManager()->getStorage('menu_link_content')
+      ->loadByProperties([
+        'menu_name' => $menu_name,
+        'title' => $title,
+      ]);
+    if (!empty($items)) {
+      return array_shift($items);
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  /**
+   * Create an entity.
+   *
+   * @param string $entity_type
+   *   Entity type.
+   * @param array $values
+   *   The Values to create the entity with.
+   * @param boolean $save
+   *   Indicate
+   *
+   * @return EntityInterface
+   *   Entity object.
+   */
+  public function entityCreate($entity_type, $values, $save = TRUE) {
+    if (!is_array($values)) {
+      // Cast an object to array to be compatible with nodeCreate().
+      $values = (array) $values;
+    }
+
+    $entity = $this->getStubEntity($entity_type, $values);
+
+    foreach ($values as $name => $value) {
+      $definition = $this->getFieldDefinition($entity->getEntityTypeId(), $name);
+      $settings = $definition->getSettings();
+      switch ($definition->getType()) {
+        case 'entity_reference':
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
+            // @todo: only supports single values for the moment.
+            $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
+            $entity->{$name}->setValue($id);
+          }
+          break;
+
+        case 'entity_reference_revisions':
+          $entities = [];
+          foreach ($value as $target_values) {
+            assert($target_values, hasKey('type'), __METHOD__ . ": Required fields 'type' not found.");
+            $entities[] = $this->entityCreate($settings['target_type'], $target_values, FALSE);
+          }
+
+          $entity->{$name}->setValue($entities);
+          break;
+      }
+    }
+
+    if ($save) {
+      $entity->save();
+    }
+
+    return $entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function entityLoad($entity_type, $entity_id) {
+    return \Drupal::entityTypeManager()->getStorage($entity_type)->load($entity_id);
+  }
+
+  /**
+   * @param EntityInterface $entity
+   */
+  public function entityDelete($entity) {
+    $entity->delete();
+  }
+
+  /**
+   * Add a translation for an entity.
+   *
+   * @param ContentEntityInterface $entity
+   *   The entity to translate.
+   * @param string $language
+   *   The language to translate to.
+   * @param array $values
+   *   The values for the translation.
+   *
+   * @return object
+   *   The translation entity.
+   */
+  public function entityAddTranslation($entity, $language, array $values) {
+
+    /** @var ContentEntityInterface $translation */
+    $translation = $this->getStubEntity($entity->getEntityTypeId(), $values);
+
+    foreach ($values as $name => $value) {
+      $definition = $this->getFieldDefinition($translation->getEntityTypeId(), $name);
+      $settings = $definition->getSettings();
+      switch ($definition->getType()) {
+        case 'entity_reference':
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
+            // @todo: only supports single values for the moment.
+            $source_values = $entity->get($name)->getValue();
+            $translation->{$name}->setValue($source_values);
+          }
+          break;
+
+        case 'entity_reference_revisions':
+          $source_values = $entity->get($name)->getValue();
+          foreach ($source_values as $key => $item) {
+            // Recurse over the referenced entities.
+            $source = $this->entityLoad($settings['target_type'], $item['target_id']);
+            $this->entityAddTranslation($source, $language, $value[$key]);
+          }
+          break;
+      }
+    }
+
+    // Add the translation to the entity.
+    $translation = $entity->addTranslation($language, $translation->toArray());
+
+    $translation->save();
+
+    return $translation;
+  }
+
+  /**
+   * Get field definition.
+   *
+   * @param string $entity_type
+   *    Entity type machine name.
+   * @param string $field_name
+   *    Field machine name.
+   *
+   * @return \Drupal\Core\Field\FieldStorageDefinitionInterface
+   *    Field definition.
+   */
+  protected function getFieldDefinition($entity_type, $field_name) {
+    $definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type);
+    assert($definitions, hasKey($field_name), __METHOD__ . ": Field '{$field_name}' not found for entity type '{$entity_type}'.");
+    return $definitions[$field_name];
+  }
+
+
+  /**
+   * Get stub entity.
+   *
+   * @param string $entity_type
+   *    Entity type.
+   * @param array $values
+   *    Entity values.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *    Entity object.
+   */
+  protected function getStubEntity($entity_type, array $values) {
+    return \Drupal::entityTypeManager()->getStorage($entity_type)->create($values);
   }
 
 }

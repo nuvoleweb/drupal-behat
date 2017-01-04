@@ -3,6 +3,9 @@
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Mink\Exception\ExpectationException;
+use Behat\Gherkin\Node\PyStringNode;
+use function bovigo\assert\assert;
+use function bovigo\assert\predicate\hasKey;
 
 /**
  * Class ContentContext.
@@ -165,6 +168,48 @@ class ContentContext extends RawDrupalContext {
     }
   }
 
+
+  /**
+   * Create content defined in YAML format.
+   *
+   * @param PyStringNode $string
+   *   The text in yaml format that represents the content.
+   *
+   * @Given the following content:
+   */
+  public function assertContent(PyStringNode $string) {
+    $values = $this->getYamlParser()->parse($string);
+    assert($values, hasKey('type')
+      ->and(hasKey('title'))
+      ->and(hasKey('langcode')),
+      __METHOD__ . ": Required fields 'type', 'title' and 'langcode' not found."
+    );
+    $node = $this->getCore()->entityCreate('node', $values);
+    $this->nodes[] = $node;
+  }
+
+  /**
+   * Assert translation for given content.
+   *
+   * @param string $content_type
+   *   The node type for which to add the translation.
+   * @param string $title
+   *   The title to identify the content by.
+   * @param PyStringNode $string
+   *   The text in yaml format that represents the translation.
+   *
+   * @Given the following translation for :content_type content :title:
+   */
+  public function assertTranslation($content_type, $title, PyStringNode $string) {
+    $values = $this->getYamlParser()->parse($string);
+    assert($values, hasKey('langcode'), __METHOD__ . ": Required field 'langcode' not found.");
+
+    $nid = $this->getCore()->getEntityIdByLabel('node', $content_type, $title);
+    $source = $this->getCore()->entityLoad('node', $nid);
+
+    $this->getCore()->entityAddTranslation($source, $values['langcode'], $values);
+  }
+
   /**
    * Get the edit link for a node.
    *
@@ -178,7 +223,7 @@ class ContentContext extends RawDrupalContext {
    *
    * @throws \Exception
    */
-  public function getContentEditLink($link, $title) {
+  protected function getContentEditLink($link, $title) {
     $node = $this->getCore()->loadNodeByName($title);
 
     /** @var \Behat\Mink\Element\DocumentElement $element */
@@ -197,6 +242,16 @@ class ContentContext extends RawDrupalContext {
       }
     }
     return NULL;
+  }
+
+  /**
+   * Get the yaml parser from the behat container.
+   *
+   * @return \NuvoleWeb\Drupal\DrupalExtension\Component\PyStringYamlParser
+   *   The parser.
+   */
+  protected function getYamlParser() {
+    return $this->getContainer()->get('drupal.behat.component.py_string_yaml_parser');
   }
 
 }
