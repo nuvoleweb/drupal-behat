@@ -181,4 +181,25 @@ interface CoreInterface extends OriginalCoreInterface {
    */
   public function getTaxonomyTermId($term);
 
+  /**
+   * Create menu structure.
+   *
+   * @param string $menu_name
+   *   Menu machine name.
+   * @param array $menu_items
+   *   List of menu items specifying title, parent and uri.
+   *
+   * @return object
+   *   The menu entity which can be deleted with entityDelete()
+   *
+   * @throws \InvalidArgumentException
+   *   Throws exception if menu not found.
+   */
+  public function createMenuStructure($menu_name, $menu_items);
+
+  /**
+   * Clears menu cache.
+   */
+  public function clearMenuCache();
+
 }

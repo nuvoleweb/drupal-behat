@@ -149,6 +149,54 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function createMenuStructure($menu_name, $menu_items) {
+    if (!Menu::load($menu_name)) {
+      throw new \InvalidArgumentException("Menu '{$menu_name}' not found.");
+    }
+
+    /* @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent[] $parents */
+    $parents = [];
+    $weight = 0;
+    $menu_links = [];
+    foreach ($menu_items as $menu_item) {
+      $values = [
+        'title' => $menu_item['title'],
+        'link' => ['uri' => $menu_item['uri']],
+        'menu_name' => $menu_name,
+        'weight' => $weight++,
+      ];
+
+      // Assign parent item.
+      if ($menu_item['parent']) {
+        $values['parent'] = $menu_item['parent'];
+        $parent = $this->loadMenuItemByTitle($menu_name, $menu_item['parent']);
+        if ($parent) {
+          $values['parent'] = $parent->getPluginId();
+        }
+      }
+
+      // Create menu link.
+      $menu_link = MenuLinkContent::create($values);
+      $menu_link->save();
+
+      // Store current menu link in parents array for later use in loop.
+      $parents[$menu_item['title']] = $menu_link;
+      $menu_links[] = $menu_link;
+    }
+
+    return $menu_links;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function clearMenuCache() {
+    \Drupal::cache('menu')->invalidateAll();
+  }
+
+  /**
    * Create an entity.
    *
    * @param string $entity_type
