@@ -1,0 +1,9 @@
+uuid: c9af0e81-6618-41f5-ae5f-7388980d580c
+langcode: en-x-pirate
+status: true
+dependencies: {  }
+id: en-x-pirate
+label: Pirate
+direction: ltr
+weight: 1
+locked: false

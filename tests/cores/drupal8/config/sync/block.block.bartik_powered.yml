@@ -11,7 +11,7 @@ _core:
 id: bartik_powered
 theme: bartik
 region: footer_fifth
-weight: 10
+weight: -8
 provider: null
 plugin: system_powered_by_block
 settings:

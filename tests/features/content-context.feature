@@ -57,3 +57,29 @@ Feature: Content Context
 
     Given I am logged in as "article_editor"
     Then I should not see a link to edit content "My first page"
+
+
+  Scenario: Test yaml content creation and translation.
+
+    Given the following content:
+      """
+      title: English example page
+      type: page
+      langcode: en
+      body: Behat is very awesome
+      """
+    And the following translation for "page" content "English example page":
+      """
+      title: Arrr example
+      type: page
+      langcode: en-x-pirate
+      body: Behat be extra full 'o awe
+      """
+    When I am an anonymous user
+    And I am visiting the "page" content "English example page"
+    Then I should see the heading "English example page"
+    And I should see the text "Behat is very awesome"
+    # The language switcher is in the sidebar.
+    When I click "Pirate"
+    Then I should see the heading "Arrr example"
+    And I should see the text "Behat be extra full 'o awe"
