@@ -1,0 +1,6 @@
+uuid: 007bbb8c-dad8-4c79-a783-8d69828cbdaf
+langcode: en
+status: true
+dependencies: {  }
+id: title_paragraph
+label: 'Title Paragraph'

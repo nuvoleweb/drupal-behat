@@ -83,3 +83,52 @@ Feature: Content Context
     When I click "Pirate"
     Then I should see the heading "Arrr example"
     And I should see the text "Behat be extra full 'o awe"
+
+
+  Scenario: Test yaml content creation with paragraphs.
+
+    Given "category" terms:
+      | name       |
+      | Category A |
+      | Category B |
+    Given the following content:
+      """
+      title: Example paragraph page
+      type: page
+      langcode: en
+      field_paragraphs:
+        -
+          type: title_paragraph
+          field_title: Simple paragraph
+        -
+          type: complex
+          field_category: Category A
+          field_link:
+            title: Single link example
+            uri: http://example.com
+          field_sub_paragraph:
+            -
+              type: complex
+              field_category: Category B
+              field_link:
+                -
+                  title: Multiple links example
+                  uri: http://example.com
+                -
+                  title: Second example
+                  uri: http://example.com
+            -
+              type: title_paragraph
+              field_title: Complex paragraph with sub paragraphs
+
+      """
+
+    When I am an anonymous user
+    And I am visiting the "page" content "Example paragraph page"
+    And I should see the text "Simple paragraph"
+    And I should see the link "Single link example"
+    And I should see the link "Multiple links example"
+    And I should see the link "Second example"
+    And I should see the text "Complex paragraph with sub paragraphs"
+    And I should see the text "Category A"
+    And I should see the text "Category B"

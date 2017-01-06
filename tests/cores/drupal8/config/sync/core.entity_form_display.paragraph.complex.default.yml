@@ -1,0 +1,48 @@
+uuid: cb067c20-f373-448d-a63d-b0dbd848e963
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.complex.field_category
+    - field.field.paragraph.complex.field_link
+    - field.field.paragraph.complex.field_sub_paragraph
+    - paragraphs.paragraphs_type.complex
+  module:
+    - link
+    - paragraphs
+id: paragraph.complex.default
+targetEntityType: paragraph
+bundle: complex
+mode: default
+content:
+  field_category:
+    weight: 12
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+  field_link:
+    weight: 11
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+  field_sub_paragraph:
+    type: entity_reference_paragraphs
+    weight: 1
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+    third_party_settings: {  }
+  translation:
+    weight: 10
+hidden:
+  created: true
+  status: true
+  uid: true

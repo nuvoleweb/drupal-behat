@@ -1,0 +1,16 @@
+uuid: 2fc2a02a-160c-4492-beec-ad9eb3733536
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.complex
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.complex
+target_entity_type_id: paragraph
+target_bundle: complex
+default_langcode: site_default
+language_alterable: true

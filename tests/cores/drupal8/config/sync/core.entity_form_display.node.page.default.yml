@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_paragraphs
     - node.type.page
   module:
+    - paragraphs
     - path
     - text
 _core:
@@ -27,6 +29,16 @@ content:
     type: datetime_timestamp
     weight: 10
     settings: {  }
+    third_party_settings: {  }
+  field_paragraphs:
+    type: entity_reference_paragraphs
+    weight: 32
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
     third_party_settings: {  }
   langcode:
     type: language_select
@@ -57,6 +69,8 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  translation:
+    weight: 10
   uid:
     type: entity_reference_autocomplete
     weight: 5

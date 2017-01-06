@@ -1,0 +1,23 @@
+uuid: c174de34-e4d8-436c-ae9d-74e3a0c94ac0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.title_paragraph.field_title
+    - paragraphs.paragraphs_type.title_paragraph
+id: paragraph.title_paragraph.default
+targetEntityType: paragraph
+bundle: title_paragraph
+mode: default
+content:
+  field_title:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+hidden:
+  created: true
+  status: true
+  uid: true
