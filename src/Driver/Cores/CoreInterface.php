@@ -206,7 +206,7 @@ interface CoreInterface extends OriginalCoreInterface {
    * Invalidate cache tags, clearing relevant caches.
    *
    * @param string[] $tags
-   *   An array of cache tags to invalidate
+   *   An array of cache tags to invalidate.
    */
   public function invalidateCacheTags(array $tags);
 

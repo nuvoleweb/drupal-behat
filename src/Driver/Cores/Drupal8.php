@@ -7,8 +7,6 @@ use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\predicate\isNotEmpty;
 use function bovigo\assert\predicate\isNotEqualTo;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
@@ -157,8 +155,6 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       throw new \InvalidArgumentException("Menu '{$menu_name}' not found.");
     }
 
-    /* @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent[] $parents */
-    $parents = [];
     $weight = 0;
     $menu_links = [];
     foreach ($menu_items as $menu_item) {
@@ -181,9 +177,6 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       // Create menu link.
       $menu_link = MenuLinkContent::create($values);
       $menu_link->save();
-
-      // Store current menu link in parents array for later use in loop.
-      $parents[$menu_item['title']] = $menu_link;
       $menu_links[] = $menu_link;
     }
 
@@ -211,8 +204,8 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    *   Entity type.
    * @param array $values
    *   The Values to create the entity with.
-   * @param boolean $save
-   *   Indicate
+   * @param bool $save
+   *   Indicate whether to directly save the entity or not.
    *
    * @return EntityInterface
    *   Entity object.
@@ -264,24 +257,14 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   }
 
   /**
-   * @param EntityInterface $entity
+   * {@inheritdoc}
    */
   public function entityDelete($entity) {
     $entity->delete();
   }
 
   /**
-   * Add a translation for an entity.
-   *
-   * @param ContentEntityInterface $entity
-   *   The entity to translate.
-   * @param string $language
-   *   The language to translate to.
-   * @param array $values
-   *   The values for the translation.
-   *
-   * @return object
-   *   The translation entity.
+   * {@inheritdoc}
    */
   public function entityAddTranslation($entity, $language, array $values) {
 
@@ -335,7 +318,6 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     assert($definitions, hasKey($field_name), __METHOD__ . ": Field '{$field_name}' not found for entity type '{$entity_type}'.");
     return $definitions[$field_name];
   }
-
 
   /**
    * Get stub entity.

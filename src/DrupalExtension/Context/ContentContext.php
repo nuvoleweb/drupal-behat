@@ -168,7 +168,6 @@ class ContentContext extends RawDrupalContext {
     }
   }
 
-
   /**
    * Create content defined in YAML format.
    *

@@ -2,8 +2,6 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
-use Drupal\menu_link_content\Entity\MenuLinkContent;
-use Drupal\system\Entity\Menu;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Mink\Exception\ExpectationException;
