@@ -14,10 +14,10 @@
   "prefer-stable": true,
   "require": {
     "drupal/drupal-extension": "~3.2",
-    "phpunit/phpunit": "5.5.*",
     "bovigo/assert": "~1.7"
   },
   "require-dev": {
+    "phpunit/phpunit": "5.5.*",
     "drupal/coder": "8.2.8"
   },
   "autoload": {
