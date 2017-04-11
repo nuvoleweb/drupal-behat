@@ -223,7 +223,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       $settings = $definition->getSettings();
       switch ($definition->getType()) {
         case 'entity_reference':
-          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media'])) {
             // @todo: only supports single values for the moment.
             $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
             $entity->{$name}->setValue($id);
