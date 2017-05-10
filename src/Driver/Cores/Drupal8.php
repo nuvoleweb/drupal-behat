@@ -222,6 +222,12 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       $definition = $this->getFieldDefinition($entity->getEntityTypeId(), $name);
       $settings = $definition->getSettings();
       switch ($definition->getType()) {
+        case 'image':
+          $id = $this->getEntityIdByLabel('file', NULL, $value['target_id']);
+          $entity->{$name}->setValue($id);
+          $entity->{$name}->width = $value['width'];
+          $entity->{$name}->height = $value['height'];
+          break;
         case 'entity_reference':
           if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media'])) {
             // @todo: only supports single values for the moment.
