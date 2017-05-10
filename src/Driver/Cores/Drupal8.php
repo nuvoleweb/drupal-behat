@@ -229,10 +229,18 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           $entity->{$name}->height = $value['height'];
           break;
         case 'entity_reference':
-          if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media'])) {
-            // @todo: only supports single values for the moment.
-            $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
-            $entity->{$name}->setValue($id);
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media', 'file'])) {
+            if (!is_array($value)) {
+              $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
+              $entity->{$name}->setValue($id);
+            }
+            else {
+              $ids = array();
+              foreach ($value as $idx => $label) {
+                $ids[] = $this->getEntityIdByLabel($settings['target_type'], NULL, $label);
+              }
+              $entity->{$name}->setValue($ids);
+            }
           }
           break;
 
