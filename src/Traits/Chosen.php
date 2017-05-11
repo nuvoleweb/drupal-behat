@@ -74,7 +74,7 @@ trait Chosen {
       $el->click();
     }
 
-    $selector = "//div[@id='{$element_id}']/div[@class='chosen-drop']/ul[@class='chosen-results']/li[text() = '{$value}']";
+    $selector = "//div[@id='{$element_id}']/div[@class='chosen-drop']/ul[@class='chosen-results']/li[text()[contains(.,'{$value}')]]";
     $el = $session->getPage()->find('xpath', $selector);
 
     if (empty($el)) {
