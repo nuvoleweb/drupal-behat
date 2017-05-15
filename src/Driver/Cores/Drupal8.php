@@ -267,25 +267,38 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * {@inheritdoc}
    */
   public function entityAddTranslation($entity, $language, array $values) {
-
     /** @var ContentEntityInterface $translation */
     $translation = $this->getStubEntity($entity->getEntityTypeId(), $values);
 
     foreach ($values as $name => $value) {
       $definition = $this->getFieldDefinition($translation->getEntityTypeId(), $name);
       $settings = $definition->getSettings();
+      $source_values = $entity->get($name)->getValue();
       switch ($definition->getType()) {
         case 'entity_reference':
           if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
             // @todo: only supports single values for the moment.
-            $source_values = $entity->get($name)->getValue();
             $translation->{$name}->setValue($source_values);
           }
           break;
 
         case 'entity_reference_revisions':
-          $source_values = $entity->get($name)->getValue();
-          foreach ($source_values as $key => $item) {
+
+          // When reference field is translatable then we will need to create
+          // new entities and reference them.
+          // @link https://www.drupal.org/node/2461695
+          if ($definition->isTranslatable()) {
+            $target_values = [];
+            foreach ($source_values as $key => $item) {
+              $_entity = $this->entityCreate($settings['target_type'], $value[$key]);
+              $target_values[] = [
+                'target_id' => $_entity->id(),
+                'target_revision_id' => $_entity->getRevisionId(),
+              ];
+            }
+            $translation->{$name}->setValue($target_values);
+          }
+          else {
             // Recurse over the referenced entities.
             $source = $this->entityLoad($settings['target_type'], $item['target_id']);
             $this->entityAddTranslation($source, $language, $value[$key]);
