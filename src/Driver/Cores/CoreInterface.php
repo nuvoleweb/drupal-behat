@@ -210,4 +210,23 @@ interface CoreInterface extends OriginalCoreInterface {
    */
   public function invalidateCacheTags(array $tags);
 
+  /**
+   * Get the drupal state.
+   *
+   * @return \NuvoleWeb\Drupal\Driver\Objects\StateInterface
+   *   The drupal 8 state or an object with those methods.
+   */
+  public function state();
+
+  /**
+   * Get an editable config object
+   *
+   * @param string $name
+   *   The name of the config object.
+   *
+   * @return \NuvoleWeb\Drupal\Driver\Objects\EditableConfigInterface
+   *   The config object to manipulate.
+   */
+  public function getEditableConfig($name);
+
 }

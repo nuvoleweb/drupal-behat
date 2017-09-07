@@ -14,6 +14,8 @@ use Drupal\node\Entity\NodeType;
 use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use NuvoleWeb\Drupal\Driver\Objects\Drupal8\EditableConfig;
+use NuvoleWeb\Drupal\Driver\Objects\Drupal8\State;
 
 /**
  * Class Drupal8.
@@ -313,6 +315,20 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $translation->save();
 
     return $translation;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function state() {
+    return new State();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEditableConfig($name) {
+    return new EditableConfig($name);
   }
 
   /**
