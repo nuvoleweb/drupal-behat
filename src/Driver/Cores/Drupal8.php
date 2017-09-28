@@ -270,15 +270,15 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     /** @var ContentEntityInterface $translation */
     $translation = $this->getStubEntity($entity->getEntityTypeId(), $values);
 
-    foreach ($values as $name => $value) {
-      $definition = $this->getFieldDefinition($translation->getEntityTypeId(), $name);
+    foreach ($values as $field_name => $field_value) {
+      $definition = $this->getFieldDefinition($translation->getEntityTypeId(), $field_name, $entity->bundle());
       $settings = $definition->getSettings();
-      $source_values = $entity->get($name)->getValue();
+      $source_values = $entity->get($field_name)->getValue();
       switch ($definition->getType()) {
         case 'entity_reference':
           if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
             // @todo: only supports single values for the moment.
-            $translation->{$name}->setValue($source_values);
+            $translation->{$field_name}->setValue($source_values);
           }
           break;
 
@@ -290,18 +290,20 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           if ($definition->isTranslatable()) {
             $target_values = [];
             foreach ($source_values as $key => $item) {
-              $_entity = $this->entityCreate($settings['target_type'], $value[$key]);
+              $_entity = $this->entityCreate($settings['target_type'], $field_value[$key]);
               $target_values[] = [
                 'target_id' => $_entity->id(),
                 'target_revision_id' => $_entity->getRevisionId(),
               ];
             }
-            $translation->{$name}->setValue($target_values);
+            $translation->{$field_name}->setValue($target_values);
           }
           else {
             // Recurse over the referenced entities.
-            $source = $this->entityLoad($settings['target_type'], $item['target_id']);
-            $this->entityAddTranslation($source, $language, $value[$key]);
+            foreach ($source_values as $key => $item) {
+              $source = $this->entityLoad($settings['target_type'], $item['target_id']);
+              $this->entityAddTranslation($source, $language, $field_value[$key]);
+            }
           }
           break;
       }
@@ -326,8 +328,13 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * @return \Drupal\Core\Field\FieldStorageDefinitionInterface
    *    Field definition.
    */
-  protected function getFieldDefinition($entity_type, $field_name) {
-    $definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type);
+  protected function getFieldDefinition($entity_type, $field_name, $bundle = NULL) {
+    if (NULL === $bundle) {
+      $definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type);
+    }
+    else {
+      $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type, $bundle);
+    }
     assert($definitions, hasKey($field_name), __METHOD__ . ": Field '{$field_name}' not found for entity type '{$entity_type}'.");
     return $definitions[$field_name];
   }
