@@ -3,6 +3,8 @@ vendor/*
 composer.lock
 behat.yml
 tests/cores/*/drupal
+grumphp.yml
+phpunit.xml
 
 # Docker4drupal
 docker-compose.yml

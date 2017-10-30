@@ -3,7 +3,8 @@
   "type": "behat-extension",
   "description": "Drupal Behat extension.",
   "keywords": ["drupal", "web", "test", "behat"],
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "license": "GPL-2.0+",
   "authors": [
     {
@@ -11,13 +12,13 @@
       "email": "info@nuvole.org"
     }
   ],
-  "prefer-stable": true,
   "require": {
     "drupal/drupal-extension": "~3.2",
     "bovigo/assert": "~1.7"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.5.*",
+    "phpunit/phpunit": "~5",
+    "phpro/grumphp": "0.11.4",
     "drupal/coder": "8.2.8"
   },
   "autoload": {
@@ -25,15 +26,5 @@
       "NuvoleWeb\\Drupal\\": "./src/",
       "NuvoleWeb\\Drupal\\Tests\\": "./tests/scr/"
     }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer",
-      "vendor/bin/phpcs --config-set show_progress 1",
-      "cp scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push"
-    ],
-    "phpcs": "./vendor/bin/phpcs --standard=Drupal,DrupalPractice ./src ./tests/scr",
-    "phpcbf": "./vendor/bin/phpcbf --standard=Drupal,DrupalPractice ./src ./tests/scr",
-    "phpunit": "./vendor/bin/phpunit tests/scr/PhpUnit"
   }
 }
