@@ -2,18 +2,24 @@ language: php
 dist: precise
 
 php:
-  - 5.6
   - 7.0
 
 env:
   global:
     - PATH=$PATH:/home/travis/.composer/vendor/bin:$TRAVIS_BUILD_DIR/vendor/bin
+  matrix:
+    - DRUPAL_VERSION=8.3.x-dev
+    - DRUPAL_VERSION=8.4.x-dev
+    - DRUPAL_VERSION=8.5.x-dev
+
+matrix:
+  allow_failures:
+    - php: 7.0
+      env: DRUPAL_VERSION=8.5.x-dev
 
 install:
   - composer self-update
   - composer install
-  - vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
-  - vendor/bin/phpcs --config-set show_progress 1
 
 before_script:
   # Start PhantomJS server.
@@ -24,7 +30,7 @@ before_script:
   - mysql -e 'create database drupal'
   # Install Drupal 8 target site.
   - cd tests/cores/drupal8
-  - composer install
+  - composer require drupal/core:$DRUPAL_VERSION --dev --prefer-dist
   - cd drupal
   - ../vendor/bin/drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../config/sync
   # Run Drush web server.
