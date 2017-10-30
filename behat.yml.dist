@@ -28,6 +28,8 @@ default:
         - NuvoleWeb\Drupal\DrupalExtension\Context\ScreenShotContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\TaxonomyTermContext
         - NuvoleWeb\Drupal\DrupalExtension\Context\ServiceContainerContext
+      filters:
+        tags: "~@wip"
   extensions:
     Behat\MinkExtension:
       goutte: ~
