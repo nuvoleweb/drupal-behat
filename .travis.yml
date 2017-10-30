@@ -15,11 +15,13 @@ env:
 matrix:
   allow_failures:
     - php: 7.0
+      env: DRUPAL_VERSION=8.4.x-dev
+    - php: 7.0
       env: DRUPAL_VERSION=8.5.x-dev
 
 install:
   - composer self-update
-  - composer install
+  - composer require drupal/core:$DRUPAL_VERSION --dev --prefer-dist
 
 before_script:
   # Start PhantomJS server.
@@ -29,20 +31,18 @@ before_script:
   # Create database.
   - mysql -e 'create database drupal'
   # Install Drupal 8 target site.
-  - cd tests/cores/drupal8
-  - composer require drupal/core:$DRUPAL_VERSION --dev --prefer-dist
-  - cd drupal
-  - ../vendor/bin/drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../config/sync
+  - cd build
+  - ../vendor/bin/drush si config_installer -y --db-url=mysql://travis:@127.0.0.1/drupal config_installer_sync_configure_form.sync_directory=../tests/config/sync
   # Run Drush web server.
   - ../vendor/bin/drush --debug runserver :8888 > ~/debug.txt 2>&1 &
   - sleep 4s
   - chmod -R ug+w sites
-  - cd ../../../..
 
 script:
+  - cd $TRAVIS_BUILD_DIR
   - grumphp run
   - phpunit
-  - behat --strict -c tests/cores/drupal8/behat.yml.dist
+  - behat
 
 notifications:
   email: false

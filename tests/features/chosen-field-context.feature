@@ -23,13 +23,13 @@ Feature: Chosen Context
     And I add "Category 1" to the chosen element "Category"
     And I select "Category 2" on the Chosen element "Category"
 
-    When I press "edit-submit"
+    When I press "Save and publish"
     Then I should see the link "Category 1"
     And I should see the link "Category 2"
 
     When I click "Edit"
     And I remove "Category 2" from the Chosen element "Category"
-    And I press "edit-submit"
+    And I press "Save and keep published"
 
     Then I should see the link "Category 1"
     And I should not see the link "Category 2"
@@ -38,12 +38,12 @@ Feature: Chosen Context
     And I fill in "Title" with "My second article"
     And I fill in the following chosen fields:
       | Category | Category 1 |
-    When I press "edit-submit"
+    When I press "Save and publish"
     Then I should see the link "Category 1"
 
     When I click "Edit"
     And I unset the following chosen fields:
       | Category | Category 1 |
-    And I press "edit-submit"
+    And I press "Save and keep published"
 
     Then I should not see the link "Category 1"
