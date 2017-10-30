@@ -23,6 +23,7 @@ content:
     weight: 100
     settings: {  }
     third_party_settings: {  }
+    region: content
   field_paragraphs:
     type: entity_reference_revisions_entity_view
     weight: 102
@@ -31,7 +32,9 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    region: content
   links:
     weight: 101
+    region: content
 hidden:
   langcode: true

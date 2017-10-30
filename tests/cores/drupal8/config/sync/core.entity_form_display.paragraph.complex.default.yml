@@ -23,6 +23,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
+    region: content
   field_link:
     weight: 11
     settings:
@@ -30,6 +31,7 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
   field_sub_paragraph:
     type: entity_reference_paragraphs
     weight: 1
@@ -40,8 +42,10 @@ content:
       add_mode: dropdown
       form_display_mode: default
     third_party_settings: {  }
+    region: content
   translation:
     weight: 10
+    region: content
 hidden:
   created: true
   status: true

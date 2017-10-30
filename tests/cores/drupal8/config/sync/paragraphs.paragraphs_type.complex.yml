@@ -4,3 +4,6 @@ status: true
 dependencies: {  }
 id: complex
 label: Complex
+icon_uuid: null
+description: null
+behavior_plugins: {  }

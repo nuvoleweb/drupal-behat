@@ -4,3 +4,6 @@ status: true
 dependencies: {  }
 id: title_paragraph
 label: 'Title Paragraph'
+icon_uuid: null
+description: null
+behavior_plugins: {  }
