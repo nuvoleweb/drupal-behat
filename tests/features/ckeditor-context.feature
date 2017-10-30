@@ -17,7 +17,7 @@ Feature: CKEditor Context
     When I am on "node/add/page"
     And I fill in "Title" with "My page title"
     And I fill in the rich text editor "Body" with "My <b>body</b>."
-    And I press "Save and publish"
+    And I press "edit-submit"
 
     Then I should see the heading "My page title"
     And I should see "My body."
