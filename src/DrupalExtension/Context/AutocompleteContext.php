@@ -4,7 +4,6 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
-use NuvoleWeb\Drupal\DrupalExtension\Context\RawMinkContext;
 
 /**
  * Autocomplete step definitions.

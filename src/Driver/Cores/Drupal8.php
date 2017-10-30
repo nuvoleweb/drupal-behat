@@ -363,7 +363,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   protected function saveFile($source) {
     $name = basename($source);
-    $path = realpath(DRUPAL_ROOT . '/'. $source);
+    $path = realpath(DRUPAL_ROOT . '/' . $source);
     $uri = file_unmanaged_copy($path, 'public://' . $name, FILE_EXISTS_REPLACE);
     $file = File::create(['uri' => $uri]);
     $file->save();
