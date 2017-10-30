@@ -1,4 +1,4 @@
-uuid: cb067c20-f373-448d-a63d-b0dbd848e963
+uuid: 2b828ad5-d7db-4582-abae-bb516b0d42d2
 langcode: en
 status: true
 dependencies:
@@ -8,41 +8,42 @@ dependencies:
     - field.field.paragraph.complex.field_sub_paragraph
     - paragraphs.paragraphs_type.complex
   module:
+    - entity_reference_revisions
     - link
-    - paragraphs
 id: paragraph.complex.default
 targetEntityType: paragraph
 bundle: complex
 mode: default
 content:
   field_category:
-    weight: 12
+    weight: 3
+    label: above
     settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
+      link: true
     third_party_settings: {  }
-    type: entity_reference_autocomplete
+    type: entity_reference_label
+    region: content
   field_link:
-    weight: 11
+    weight: 2
+    label: above
     settings:
-      placeholder_url: ''
-      placeholder_title: ''
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
     third_party_settings: {  }
-    type: link_default
+    type: link
+    region: content
   field_sub_paragraph:
-    type: entity_reference_paragraphs
+    type: entity_reference_revisions_entity_view
     weight: 1
+    label: above
     settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      add_mode: dropdown
-      form_display_mode: default
+      view_mode: default
+      link: ''
     third_party_settings: {  }
-  translation:
-    weight: 10
+    region: content
 hidden:
   created: true
-  status: true
   uid: true

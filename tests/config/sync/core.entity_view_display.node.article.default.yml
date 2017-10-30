@@ -29,6 +29,7 @@ content:
     settings: {  }
     third_party_settings: {  }
     label: hidden
+    region: content
   comment:
     label: above
     type: comment_default
@@ -36,6 +37,7 @@ content:
     settings:
       pager_id: 0
     third_party_settings: {  }
+    region: content
   field_category:
     weight: 101
     label: above
@@ -43,6 +45,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
+    region: content
   field_image:
     type: image
     weight: -1
@@ -51,6 +54,7 @@ content:
       image_link: ''
     third_party_settings: {  }
     label: hidden
+    region: content
   field_tags:
     type: entity_reference_label
     weight: 10
@@ -58,8 +62,10 @@ content:
     settings:
       link: true
     third_party_settings: {  }
+    region: content
   links:
     weight: 100
+    region: content
 hidden:
   field_image: true
   field_tags: true
