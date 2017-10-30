@@ -1,5 +1,22 @@
 # Change Log
 
+## [1.1.0](https://github.com/nuvoleweb/drupal-behat/tree/1.1.0) (2017-10-30)
+[Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.0.2...1.1.0)
+
+**Closed issues:**
+
+- Fix build [\#22](https://github.com/nuvoleweb/drupal-behat/issues/22)
+- Add email context [\#19](https://github.com/nuvoleweb/drupal-behat/issues/19)
+- Add autocomplete context [\#18](https://github.com/nuvoleweb/drupal-behat/issues/18)
+- Move PHPUnit to require-dev [\#11](https://github.com/nuvoleweb/drupal-behat/issues/11)
+- Add test for node creation from yaml format [\#5](https://github.com/nuvoleweb/drupal-behat/issues/5)
+
+**Merged Pull Requests**
+
+- Fix build \#22 [\#23](https://github.com/nuvoleweb/drupal-behat/pull/23) ([ademarco](https://github.com/ademarco))
+- Add email context \#19 [\#20](https://github.com/nuvoleweb/drupal-behat/pull/20) ([bircher](https://github.com/bircher))
+- PHPUnit version \#11 [\#12](https://github.com/nuvoleweb/drupal-behat/pull/12) ([ademarco](https://github.com/ademarco))
+
 ## [1.0.2](https://github.com/nuvoleweb/drupal-behat/tree/1.0.2) (2017-01-06)
 [Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.0.1...1.0.2)
 
@@ -9,7 +26,7 @@
 - Add steps for handling menu items in tests [\#8](https://github.com/nuvoleweb/drupal-behat/issues/8)
 - Add content creation with a yaml format [\#7](https://github.com/nuvoleweb/drupal-behat/issues/7)
 
-**Merged pull requests:**
+**Merged Pull Requests**
 
 - \#5 yaml content test [\#6](https://github.com/nuvoleweb/drupal-behat/pull/6) ([bircher](https://github.com/bircher))
 
@@ -22,7 +39,7 @@
 ## [0.8.1](https://github.com/nuvoleweb/drupal-behat/tree/0.8.1) (2016-08-17)
 [Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/0.7.1...0.8.1)
 
-**Merged pull requests:**
+**Merged Pull Requests**
 
 - Step: check if select field option is selected or not. [\#4](https://github.com/nuvoleweb/drupal-behat/pull/4) ([claudiu-cristea](https://github.com/claudiu-cristea))
 - Backport pull requests 1 & 2 in 7.0.x. [\#3](https://github.com/nuvoleweb/drupal-behat/pull/3) ([claudiu-cristea](https://github.com/claudiu-cristea))
