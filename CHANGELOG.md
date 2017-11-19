@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.1.1](https://github.com/nuvoleweb/drupal-behat/tree/1.1.1) (2017-11-19)
+[Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.1.0...1.1.1)
+
+**Closed issues:**
+
+- Fix versions of Drupal Driver and Behat extension dependencies [\#24](https://github.com/nuvoleweb/drupal-behat/issues/24)
+
+**Merged Pull Requests**
+
+- Issue \#24: Fix Drupal Driver and Behat extension versions. [\#25](https://github.com/nuvoleweb/drupal-behat/pull/25) ([ademarco](https://github.com/ademarco))
+
 ## [1.1.0](https://github.com/nuvoleweb/drupal-behat/tree/1.1.0) (2017-10-30)
 [Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.0.2...1.1.0)
 
