@@ -1,0 +1,6 @@
+imports:
+  - ./behat.yml.dist
+default:
+  NuvoleWeb\Drupal\DrupalExtension:
+    text:
+      node_submit_label: "Save"

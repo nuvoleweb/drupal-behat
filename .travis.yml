@@ -40,7 +40,7 @@ script:
   - cd $TRAVIS_BUILD_DIR
   - grumphp run
   - phpunit
-  - behat
+  - behat -c behat-$DRUPAL_VERSION.yml
 
 notifications:
   email: false

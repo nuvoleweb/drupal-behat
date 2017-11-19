@@ -63,6 +63,21 @@ class DrupalContext extends RawDrupalContext {
   }
 
   /**
+   * Submit node form using "node_submit_label" value.
+   *
+   * @When I submit the content form
+   */
+  public function submitContentForm() {
+    $element = $this->getSession()->getPage();
+    $submit = $element->findButton($this->getDrupalText('node_submit_label'));
+    if (empty($submit)) {
+      throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
+    }
+    // Submit the form.
+    $submit->click();
+  }
+
+  /**
    * Assert string in HTTP response header.
    *
    * @Then I should see in the header :header::value
