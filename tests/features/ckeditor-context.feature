@@ -1,3 +1,4 @@
+@run
 @api @javascript
 Feature: CKEditor Context
   In order to be able to use our custom CKEditorContext
@@ -17,7 +18,7 @@ Feature: CKEditor Context
     When I am on "node/add/page"
     And I fill in "Title" with "My page title"
     And I fill in the rich text editor "Body" with "My <b>body</b>."
-    And I press "edit-submit"
+    And I submit the content form
 
     Then I should see the heading "My page title"
     And I should see "My body."
