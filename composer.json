@@ -3,7 +3,7 @@
   "type": "behat-extension",
   "description": "Drupal Behat extension.",
   "keywords": ["drupal", "web", "test", "behat"],
-  "minimum-stability": "dev",
+  "minimum-stability": "alpha",
   "prefer-stable": true,
   "license": "GPL-2.0+",
   "authors": [
@@ -24,13 +24,13 @@
     "drupal/coder": "8.2.8",
     "composer/installers": "~1",
     "drupal-composer/drupal-scaffold": "dev-master",
-    "drush/drush": "*",
+    "drush/drush": "~9",
     "drupal/chosen": "~2",
     "drupal/coffee": "~1",
     "drupal/config_installer": "~1",
     "drupal/paragraphs": "~1",
     "harvesthq/chosen": "1.5.0",
-    "drupal/core": "8"
+    "drupal/core": "~8"
   },
   "autoload": {
     "psr-4": {

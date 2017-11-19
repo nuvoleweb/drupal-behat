@@ -37,7 +37,6 @@ Feature: Setup
     Then I should not see "Actions"
     But I should see "Block"
 
-    @run
   Scenario: Test that Behat can load defined services.
 
     Given I can access the service container
