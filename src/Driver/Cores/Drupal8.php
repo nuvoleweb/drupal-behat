@@ -6,7 +6,10 @@ use function bovigo\assert\assert;
 use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\predicate\isNotEmpty;
 use function bovigo\assert\predicate\isNotEqualTo;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
 use Drupal\file\Entity\File;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
@@ -210,7 +213,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * @param bool $save
    *   Indicate whether to directly save the entity or not.
    *
-   * @return EntityInterface
+   * @return ContentEntityInterface
    *   Entity object.
    */
   public function entityCreate($entity_type, $values, $save = TRUE) {
@@ -222,7 +225,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $entity = $this->getStubEntity($entity_type, $values);
 
     foreach ($values as $name => $value) {
-      $definition = $this->getFieldDefinition($entity->getEntityTypeId(), $name);
+      $definition = $entity->getFieldDefinition($name);
       $settings = $definition->getSettings();
       switch ($definition->getType()) {
         case 'entity_reference':
@@ -278,7 +281,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $translation = $this->getStubEntity($entity->getEntityTypeId(), $values);
 
     foreach ($values as $name => $value) {
-      $definition = $this->getFieldDefinition($translation->getEntityTypeId(), $name);
+      $definition = $translation->getFieldDefinition($name);
       $settings = $definition->getSettings();
       $source_values = $entity->get($name)->getValue();
       switch ($definition->getType()) {
@@ -307,8 +310,10 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           }
           else {
             // Recurse over the referenced entities.
-            $source = $this->entityLoad($settings['target_type'], $item['target_id']);
-            $this->entityAddTranslation($source, $language, $value[$key]);
+            foreach ($source_values as $key => $item) {
+              $source = $this->entityLoad($settings['target_type'], $item['target_id']);
+              $this->entityAddTranslation($source, $language, $value[$key]);
+            }
           }
           break;
       }
@@ -337,23 +342,6 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   }
 
   /**
-   * Get field definition.
-   *
-   * @param string $entity_type
-   *    Entity type machine name.
-   * @param string $field_name
-   *    Field machine name.
-   *
-   * @return \Drupal\Core\Field\FieldStorageDefinitionInterface
-   *    Field definition.
-   */
-  protected function getFieldDefinition($entity_type, $field_name) {
-    $definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type);
-    assert($definitions, hasKey($field_name), __METHOD__ . ": Field '{$field_name}' not found for entity type '{$entity_type}'.");
-    return $definitions[$field_name];
-  }
-
-  /**
    * Get stub entity.
    *
    * @param string $entity_type
@@ -361,11 +349,18 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * @param array $values
    *    Entity values.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
+   * @return \Drupal\Core\Entity\ContentEntityInterface
    *    Entity object.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   protected function getStubEntity($entity_type, array $values) {
-    return \Drupal::entityTypeManager()->getStorage($entity_type)->create($values);
+    $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->create($values);
+    if (!$entity instanceof ContentEntityInterface) {
+      throw new EntityMalformedException("Only content entities are supported.");
+    }
+    return $entity;
   }
 
   /**
