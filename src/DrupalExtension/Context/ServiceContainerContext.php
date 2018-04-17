@@ -83,16 +83,15 @@ class ServiceContainerContext extends RawDrupalContext {
    * Set custom service provider ar run-time.
    */
   protected function setServiceProvider() {
-    // Setting service providers will change in Drupal 8.5.
+    // Setting service providers will change in a future version of Drupal.
     // @link https://www.drupal.org/node/2183323
-    if (\Drupal::VERSION < '8.5') {
-      $GLOBALS['conf']['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
-    }
-    else {
-      $settings = Settings::getAll();
-      $settings['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
-      new Settings($settings);
-    }
+    // We implement both since they can co-exist.
+    // Current version of setting this.
+    $GLOBALS['conf']['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
+    // Future version of this setting.
+    $settings = Settings::getAll();
+    $settings['container_service_providers']['BehatServiceProvider'] = '\NuvoleWeb\Drupal\DrupalExtension\ServiceProvider\BehatServiceProvider';
+    new Settings($settings);
   }
 
   /**
