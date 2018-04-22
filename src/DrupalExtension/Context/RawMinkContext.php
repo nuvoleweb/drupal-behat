@@ -18,7 +18,7 @@ class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerA
   /**
    * Service container instance.
    *
-   * @var ContainerBuilder
+   * @var \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   private $container;
 
@@ -39,7 +39,7 @@ class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerA
   /**
    * Checks that the given element is of the given type.
    *
-   * @param NodeElement $element
+   * @param \Behat\Mink\Element\NodeElement $element
    *   The element to check.
    * @param string $type
    *   The expected type.

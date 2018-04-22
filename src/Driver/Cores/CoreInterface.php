@@ -73,7 +73,7 @@ interface CoreInterface extends OriginalCoreInterface {
    *
    * @param string $entity_type
    *   Entity type.
-   * @param array $values
+   * @param mixed $values
    *   The Values to create the entity with.
    *
    * @return object
@@ -124,10 +124,10 @@ interface CoreInterface extends OriginalCoreInterface {
    * Load user given its username.
    *
    * @param string $name
-   *    User name.
+   *   User name.
    *
    * @return object
-   *    The full user object.
+   *   The full user object.
    */
   public function loadUserByName($name);
 
@@ -135,14 +135,14 @@ interface CoreInterface extends OriginalCoreInterface {
    * Check whereas a user can perform and operation on a given node.
    *
    * @param string $op
-   *    Operation: view, update or delete.
+   *   Operation: view, update or delete.
    * @param string $name
-   *    Username.
+   *   Username.
    * @param object $node
-   *    Node object.
+   *   Node object.
    *
    * @return bool
-   *    TRUE if user can perform operation, FALSE otherwise.
+   *   TRUE if user can perform operation, FALSE otherwise.
    */
   public function nodeAccess($op, $name, $node);
 
@@ -150,10 +150,10 @@ interface CoreInterface extends OriginalCoreInterface {
    * Get node ID given node object.
    *
    * @param object $node
-   *    Node object.
+   *   Node object.
    *
    * @return int
-   *    Node ID.
+   *   Node ID.
    */
   public function getNodeId($node);
 
@@ -161,12 +161,12 @@ interface CoreInterface extends OriginalCoreInterface {
    * Load taxonomy term given its vocabulary and name.
    *
    * @param string $type
-   *    Vocabulary machine name.
+   *   Vocabulary machine name.
    * @param string $name
-   *    Taxonomy term name.
+   *   Taxonomy term name.
    *
    * @return object
-   *    Taxonomy term object.
+   *   Taxonomy term object.
    */
   public function loadTaxonomyTermByName($type, $name);
 
@@ -174,10 +174,10 @@ interface CoreInterface extends OriginalCoreInterface {
    * Get taxonomy term ID given taxonomy term object.
    *
    * @param object $term
-   *    Taxonomy term object.
+   *   Taxonomy term object.
    *
    * @return int
-   *    Taxonomy term ID.
+   *   Taxonomy term ID.
    */
   public function getTaxonomyTermId($term);
 
@@ -186,7 +186,7 @@ interface CoreInterface extends OriginalCoreInterface {
    *
    * @param string $menu_name
    *   Menu machine name.
-   * @param array $menu_items
+   * @param mixed $menu_items
    *   List of menu items specifying title, parent and uri.
    *
    * @return object
@@ -219,7 +219,7 @@ interface CoreInterface extends OriginalCoreInterface {
   public function state();
 
   /**
-   * Get an editable config object
+   * Get an editable config object.
    *
    * @param string $name
    *   The name of the config object.

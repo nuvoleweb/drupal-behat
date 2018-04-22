@@ -15,7 +15,7 @@ interface ServiceContainerAwareInterface {
    * Set reference to service container.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-   *    Service container instance.
+   *   Service container instance.
    */
   public function setContainer(ContainerBuilder $container);
 
@@ -23,7 +23,7 @@ interface ServiceContainerAwareInterface {
    * Get service container.
    *
    * @return \Symfony\Component\DependencyInjection\ContainerBuilder
-   *    Service container instance.
+   *   Service container instance.
    */
   public function getContainer();
 

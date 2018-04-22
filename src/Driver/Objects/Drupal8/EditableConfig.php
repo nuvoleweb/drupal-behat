@@ -5,7 +5,7 @@ namespace NuvoleWeb\Drupal\Driver\Objects\Drupal8;
 use NuvoleWeb\Drupal\Driver\Objects\EditableConfigInterface;
 
 /**
- * Class EditableConfig
+ * Class EditableConfig.
  *
  * @package NuvoleWeb\Drupal\Driver\Objects\Drupal8
  */

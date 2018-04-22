@@ -6,7 +6,6 @@ namespace NuvoleWeb\Drupal\Driver\Objects;
  * Interface EditableConfigInterface.
  *
  * This is in essence an interface for Drupal 8s \Drupal\Core\Config\Config.
- *
  */
 interface EditableConfigInterface {
 
@@ -15,14 +14,15 @@ interface EditableConfigInterface {
    *
    * @param string $key
    *   A string that maps to a key within the configuration data.
-   *   For instance in the following configuration array:
-   *   @code
+   *   For instance in the following configuration array:.
+   *
+   * @code
    *   array(
    *     'foo' => array(
    *       'bar' => 'baz',
    *     ),
    *   );
-   *   @endcode
+   * @endcode
    *   A key of 'foo.bar' would return the string 'baz'. However, a key of 'foo'
    *   would return array('bar' => 'baz').
    *   If no key is specified, then the entire data array is returned.
@@ -68,4 +68,5 @@ interface EditableConfigInterface {
    * Saves the configuration object.
    */
   public function save();
+
 }

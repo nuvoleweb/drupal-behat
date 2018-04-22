@@ -16,7 +16,7 @@ class RawDrupalContext extends OriginalRawDrupalContext implements ServiceContai
   /**
    * Service container instance.
    *
-   * @var ContainerBuilder
+   * @var \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   private $container;
 
@@ -38,7 +38,7 @@ class RawDrupalContext extends OriginalRawDrupalContext implements ServiceContai
    * Get current Drupal core.
    *
    * @return \NuvoleWeb\Drupal\Driver\Cores\CoreInterface|\Drupal\Driver\Cores\CoreInterface
-   *    Drupal core object instance.
+   *   Drupal core object instance.
    */
   public function getCore() {
     return $this->getDriver()->getCore();

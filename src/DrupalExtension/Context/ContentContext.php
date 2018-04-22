@@ -18,9 +18,9 @@ class ContentContext extends RawDrupalContext {
    * Assert viewing content given its type and title.
    *
    * @param string $type
-   *    Content type machine name.
+   *   Content type machine name.
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @Given I am visiting the :type content :title
    * @Given I visit the :type content :title
@@ -33,9 +33,9 @@ class ContentContext extends RawDrupalContext {
    * Assert editing content given its type and title.
    *
    * @param string $type
-   *    Content type machine name.
+   *   Content type machine name.
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @Given I am editing the :type content :title
    * @Given I edit the :type content :title
@@ -48,9 +48,9 @@ class ContentContext extends RawDrupalContext {
    * Assert deleting content given its type and title.
    *
    * @param string $type
-   *    Content type machine name.
+   *   Content type machine name.
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @Given I am deleting the :type content :title
    * @Given I delete the :type content :title
@@ -83,11 +83,11 @@ class ContentContext extends RawDrupalContext {
    * Assert that given user can perform given operation on given content.
    *
    * @param string $name
-   *    User name.
+   *   User name.
    * @param string $op
-   *    Operation: view, edit or delete.
+   *   Operation: view, edit or delete.
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @throws \Exception
    *   If user cannot perform given operation on given content.
@@ -108,11 +108,11 @@ class ContentContext extends RawDrupalContext {
    * Assert that given user cannot perform given operation on given content.
    *
    * @param string $name
-   *    User name.
+   *   User name.
    * @param string $op
-   *    Operation: view, edit or delete.
+   *   Operation: view, edit or delete.
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @throws \Exception
    *   If user can perform given operation on given content.
@@ -134,9 +134,9 @@ class ContentContext extends RawDrupalContext {
    * Assert presence of content edit link given its name and content title.
    *
    * @param string $link
-   *    Link "name" HTML attribute.
+   *   Link "name" HTML attribute.
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *    If no edit link for given content has been found.
@@ -154,7 +154,7 @@ class ContentContext extends RawDrupalContext {
    * Assert absence of content edit link given its content title.
    *
    * @param string $title
-   *    Content title.
+   *   Content title.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *    If edit link for given content has been found.
@@ -171,7 +171,7 @@ class ContentContext extends RawDrupalContext {
   /**
    * Create content defined in YAML format.
    *
-   * @param PyStringNode $string
+   * @param \Behat\Gherkin\Node\PyStringNode $string
    *   The text in yaml format that represents the content.
    *
    * @Given the following content:
@@ -194,7 +194,7 @@ class ContentContext extends RawDrupalContext {
    *   The node type for which to add the translation.
    * @param string $title
    *   The title to identify the content by.
-   * @param PyStringNode $string
+   * @param \Behat\Gherkin\Node\PyStringNode $string
    *   The text in yaml format that represents the translation.
    *
    * @Given the following translation for :content_type content :title:

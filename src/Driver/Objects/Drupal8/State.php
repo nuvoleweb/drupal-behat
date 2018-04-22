@@ -5,7 +5,7 @@ namespace NuvoleWeb\Drupal\Driver\Objects\Drupal8;
 use NuvoleWeb\Drupal\Driver\Objects\StateInterface;
 
 /**
- * Class State
+ * Class State.
  *
  * @package NuvoleWeb\Drupal\Driver\Objects\Drupal8
  */

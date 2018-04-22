@@ -16,10 +16,10 @@ class PyStringYamlParser {
    * Parse YAML contained in a PyString node.
    *
    * @param \Behat\Gherkin\Node\PyStringNode $node
-   *    PyString containing text in YAML format.
+   *   PyString containing text in YAML format.
    *
    * @return array
-   *    Parsed YAML.
+   *   Parsed YAML.
    */
   public function parse(PyStringNode $node) {
     // Sanitize PyString test by removing initial indentation spaces.

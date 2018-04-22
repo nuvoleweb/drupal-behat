@@ -28,7 +28,7 @@ class BehatServiceProvider extends ServiceProviderBase {
    * @see ServiceContainerContext::overrideParameters()
    *
    * @return array
-   *    Array of parameters.
+   *   Array of parameters.
    */
   protected function getParameters() {
     try {

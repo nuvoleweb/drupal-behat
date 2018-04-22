@@ -6,7 +6,6 @@ use function bovigo\assert\assert;
 use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\predicate\isNotEmpty;
 use function bovigo\assert\predicate\isNotEqualTo;
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
@@ -208,12 +207,12 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    *
    * @param string $entity_type
    *   Entity type.
-   * @param array $values
+   * @param mixed $values
    *   The Values to create the entity with.
    * @param bool $save
    *   Indicate whether to directly save the entity or not.
    *
-   * @return ContentEntityInterface
+   * @return \Drupal\Core\Entity\ContentEntityInterface
    *   Entity object.
    */
   public function entityCreate($entity_type, $values, $save = TRUE) {
@@ -277,7 +276,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * {@inheritdoc}
    */
   public function entityAddTranslation($entity, $language, array $values) {
-    /** @var ContentEntityInterface $translation */
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $translation */
     $translation = $this->getStubEntity($entity->getEntityTypeId(), $values);
 
     foreach ($values as $name => $value) {
@@ -345,12 +344,12 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * Get stub entity.
    *
    * @param string $entity_type
-   *    Entity type.
+   *   Entity type.
    * @param array $values
-   *    Entity values.
+   *   Entity values.
    *
    * @return \Drupal\Core\Entity\ContentEntityInterface
-   *    Entity object.
+   *   Entity object.
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -367,10 +366,10 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * Save a file and return its id.
    *
    * @param string $source
-   *    Source path relative to Drupal installation root.
+   *   Source path relative to Drupal installation root.
    *
    * @return \Drupal\Core\Entity\EntityInterface
-   *    Saved file object.
+   *   Saved file object.
    */
   protected function saveFile($source) {
     $name = basename($source);
