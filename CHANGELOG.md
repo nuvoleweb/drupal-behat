@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/nuvoleweb/drupal-behat/tree/HEAD)
-
-[Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.1.2...HEAD)
+## [1.1.3](https://github.com/nuvoleweb/drupal-behat/tree/1.1.3) (2018-04-22)
+[Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.1.2...1.1.3)
 
 **Closed issues:**
 
@@ -10,6 +9,7 @@
 
 **Merged Pull Requests**
 
+- Remove bovigo/assert in favour of webmozart/assert [\#33](https://github.com/nuvoleweb/drupal-behat/pull/33) ([ademarco](https://github.com/ademarco))
 - Integrate Task Runner [\#32](https://github.com/nuvoleweb/drupal-behat/pull/32) ([ademarco](https://github.com/ademarco))
 - Use entities getFieldDefinition [\#27](https://github.com/nuvoleweb/drupal-behat/pull/27) ([bircher](https://github.com/bircher))
 
