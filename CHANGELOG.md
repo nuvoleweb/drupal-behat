@@ -1,5 +1,29 @@
 # Change Log
 
+## [Unreleased](https://github.com/nuvoleweb/drupal-behat/tree/HEAD)
+
+[Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.1.2...HEAD)
+
+**Closed issues:**
+
+- Cannot add to a fresh Drupal 8.5 installation [\#29](https://github.com/nuvoleweb/drupal-behat/issues/29)
+
+**Merged Pull Requests**
+
+- Integrate Task Runner [\#32](https://github.com/nuvoleweb/drupal-behat/pull/32) ([ademarco](https://github.com/ademarco))
+- Use entities getFieldDefinition [\#27](https://github.com/nuvoleweb/drupal-behat/pull/27) ([bircher](https://github.com/bircher))
+
+## [1.1.2](https://github.com/nuvoleweb/drupal-behat/tree/1.1.2) (2018-04-18)
+[Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.1.1...1.1.2)
+
+**Closed issues:**
+
+- Fatal error: Undefined method Drupal\Driver\Cores\Drupal8::getEntityIdByLabel\(\) [\#28](https://github.com/nuvoleweb/drupal-behat/issues/28)
+
+**Merged Pull Requests**
+
+- Update code to work with Drupal 8.5 [\#31](https://github.com/nuvoleweb/drupal-behat/pull/31) ([bircher](https://github.com/bircher))
+
 ## [1.1.1](https://github.com/nuvoleweb/drupal-behat/tree/1.1.1) (2017-11-19)
 [Full Changelog](https://github.com/nuvoleweb/drupal-behat/compare/1.1.0...1.1.1)
 
