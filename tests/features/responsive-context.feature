@@ -12,7 +12,10 @@ Feature: Responsive Context
     And the browser window height should be "<height>"
 
     Examples:
-      | device  | width | height |
-      | laptop  | 1280  | 800    |
-      | desktop | 2560  | 1440   |
+      | device           | width | height |
+      | mobile_landscape | 640   | 360    |
+      | tablet_portrait  | 768   | 1024   |
+      | tablet_landscape | 1024  | 768    |
+      | laptop           | 1280  | 800    |
+      | desktop          | 2560  | 1440   |
 

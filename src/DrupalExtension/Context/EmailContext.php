@@ -5,7 +5,6 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use NuvoleWeb\Drupal\DrupalExtension\Context\RawDrupalContext;
 use function bovigo\assert\assert;
 use function bovigo\assert\predicate\hasKey;
 use function bovigo\assert\predicate\equals;

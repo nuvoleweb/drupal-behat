@@ -70,9 +70,9 @@ class VisibilityContext extends RawMinkContext {
    * Assert visibility of an element.
    *
    * @param string $element
-   *    Element selector or a string that describes it.
+   *   Element selector or a string that describes it.
    * @param \Behat\Mink\Element\NodeElement $node
-   *    Node representing the element above, if any.
+   *   Node representing the element above, if any.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *    Throws exception if element not found.
@@ -97,9 +97,9 @@ class VisibilityContext extends RawMinkContext {
    * Assert non visibility of an element.
    *
    * @param string $element
-   *    Element selector or a string that describes it.
+   *   Element selector or a string that describes it.
    * @param \Behat\Mink\Element\NodeElement $node
-   *    Node representing the element above, if any.
+   *   Node representing the element above, if any.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *    Throws exception if element is found.

@@ -43,7 +43,7 @@ class DrupalExtension extends OriginalDrupalExtension {
    * Load context initializer.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-   *    Service container instance.
+   *   Service container instance.
    */
   private function loadContextInitializer(ContainerBuilder $container) {
     // Set current service container instance for service container initializer.

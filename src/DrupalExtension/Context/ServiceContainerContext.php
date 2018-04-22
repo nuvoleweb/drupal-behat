@@ -65,7 +65,7 @@ class ServiceContainerContext extends RawDrupalContext {
    * Apply parameters overrides and rebuild container.
    *
    * @param array $parameters
-   *    List of parameters to be overridden.
+   *   List of parameters to be overridden.
    */
   protected function overrideParameters(array $parameters) {
     $this->setServiceProvider();
@@ -98,10 +98,10 @@ class ServiceContainerContext extends RawDrupalContext {
    * Cast service parameters.
    *
    * @param string $value
-   *    Parameter value.
+   *   Parameter value.
    *
    * @return mixed
-   *    Casted value.
+   *   Casted value.
    */
   protected function castParameter($value) {
     if ($value == 'TRUE' || $value == 'true') {

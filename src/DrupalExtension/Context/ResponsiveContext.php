@@ -39,9 +39,9 @@ class ResponsiveContext extends RawMinkContext {
    * ResponsiveContext constructor.
    *
    * @param array $devices
-   *    List of devices.
+   *   List of devices.
    */
-  public function __construct($devices = []) {
+  public function __construct(array $devices = []) {
     assert($devices, isOfType('array'));
     $this->devices = $devices + $this->defaultDevices;
   }
@@ -50,10 +50,10 @@ class ResponsiveContext extends RawMinkContext {
    * Get device resolution.
    *
    * @param string $name
-   *    Device name.
+   *   Device name.
    *
    * @return \NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent
-   *    Resolution object.
+   *   Resolution object.
    */
   protected function getDeviceResolution($name) {
     assert($this->devices, hasKey($name), "Device '{$name}' not found.");
@@ -66,7 +66,7 @@ class ResponsiveContext extends RawMinkContext {
    * Resize browser window according to the specified device.
    *
    * @param string $device
-   *    Device name as specified in behat.yml.
+   *   Device name as specified in behat.yml.
    *
    * @Given I view the site on a :device device
    */
@@ -79,7 +79,7 @@ class ResponsiveContext extends RawMinkContext {
    * Resize browser window width.
    *
    * @param string $size
-   *    Size in pixel.
+   *   Size in pixel.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *
@@ -96,14 +96,14 @@ class ResponsiveContext extends RawMinkContext {
    * Resize browser window height.
    *
    * @param string $size
-   *    Size in pixel.
+   *   Size in pixel.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *
    * @Then the browser window height should be :size
    */
   public function assertBrowserWindowHeight($size) {
-    $actual = $this->getSession()->evaluateScript('return window.innerHeight;');
+    $actual = $this->getSession()->evaluateScript('return window.outerHeight;');
     if ($actual != $size) {
       throw new ExpectationException("Browser window height expected to be {$size} but it is {$actual} instead.", $this->getSession());
     }

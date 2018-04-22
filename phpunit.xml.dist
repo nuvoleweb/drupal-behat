@@ -7,7 +7,7 @@
   </php>
   <testsuites>
     <testsuite>
-      <directory>./tests/scr/PhpUnit/</directory>
+      <directory>./tests/src/PhpUnit/</directory>
     </testsuite>
   </testsuites>
 </phpunit>

@@ -25,9 +25,9 @@ class MenuContext extends RawDrupalContext {
    * Create menu structure for nodes.
    *
    * @param string $menu_name
-   *    Menu machine name.
+   *   Menu machine name.
    * @param \Behat\Gherkin\Node\TableNode $table
-   *    Table representing the menu structure to be specified as follows:
+   *   Table representing the menu structure to be specified as follows:
    *      | title  | parent |
    *      | Page 1 |        |
    *      | Page 2 | Page 1 |
@@ -57,9 +57,9 @@ class MenuContext extends RawDrupalContext {
    * Create menu structure my adding menu links.
    *
    * @param string $menu_name
-   *    Menu machine name.
+   *   Menu machine name.
    * @param \Behat\Gherkin\Node\TableNode $table
-   *    Table representing the menu structure to be specified as follows:
+   *   Table representing the menu structure to be specified as follows:
    *       | title   | uri        | parent |
    *       | Link 1  | internal:/ |        |
    *       | Link 2  | internal:/ | Link 1 |
@@ -84,7 +84,7 @@ class MenuContext extends RawDrupalContext {
    * Assert clean Watchdog after every step.
    *
    * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $event
-   *    Event object.
+   *   Event object.
    *
    * @AfterScenario
    */

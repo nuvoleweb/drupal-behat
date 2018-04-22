@@ -17,7 +17,7 @@ class ServiceContainerInitializer implements ContextInitializer {
   /**
    * Service container instance.
    *
-   * @var ContainerBuilder
+   * @var \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   private $container;
 
@@ -25,7 +25,7 @@ class ServiceContainerInitializer implements ContextInitializer {
    * ServiceContainerInitializer constructor.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-   *    Service container instance.
+   *   Service container instance.
    *
    * @see \NuvoleWeb\Drupal\DrupalExtension\ServiceContainer\DrupalExtension::loadContextInitializer
    */
@@ -36,12 +36,12 @@ class ServiceContainerInitializer implements ContextInitializer {
   /**
    * Initializes provided context.
    *
-   * @param Context $context
-   *    Context instance.
+   * @param \Behat\Behat\Context\Context $context
+   *   Context instance.
    */
   public function initializeContext(Context $context) {
     if ($context instanceof ServiceContainerAwareInterface) {
-      /** @var ServiceContainerAwareInterface $context */
+      /** @var \NuvoleWeb\Drupal\DrupalExtension\Context\ServiceContainerAwareInterface $context */
       $context->setContainer($this->container);
     }
   }

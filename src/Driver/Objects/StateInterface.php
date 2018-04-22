@@ -48,4 +48,3 @@ interface StateInterface {
   public function resetCache();
 
 }
-

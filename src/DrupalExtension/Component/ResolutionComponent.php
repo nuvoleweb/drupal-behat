@@ -36,7 +36,7 @@ class ResolutionComponent {
    * Get width.
    *
    * @return int
-   *    Resolution width.
+   *   Resolution width.
    */
   public function getWidth() {
     return $this->width;
@@ -46,7 +46,7 @@ class ResolutionComponent {
    * Set width.
    *
    * @param int $width
-   *    Resolution width.
+   *   Resolution width.
    */
   public function setWidth($width) {
     $this->width = $width;
@@ -56,7 +56,7 @@ class ResolutionComponent {
    * Get height.
    *
    * @return int
-   *    Resolution height.
+   *   Resolution height.
    */
   public function getHeight() {
     return $this->height;
@@ -66,7 +66,7 @@ class ResolutionComponent {
    * Set height.
    *
    * @param int $height
-   *    Resolution height.
+   *   Resolution height.
    */
   public function setHeight($height) {
     $this->height = $height;
@@ -76,7 +76,7 @@ class ResolutionComponent {
    * Parse resolution.
    *
    * @param string $resolution
-   *    Resolution string, i.e. "360x640".
+   *   Resolution string, i.e. "360x640".
    *
    * @return $this
    */
