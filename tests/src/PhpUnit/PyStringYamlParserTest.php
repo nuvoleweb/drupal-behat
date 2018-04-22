@@ -2,10 +2,9 @@
 
 namespace NuvoleWeb\Drupal\Tests\PhpUnit;
 
-use function \bovigo\assert\assert;
-use function \bovigo\assert\predicate\hasKey;
 use Behat\Gherkin\Node\PyStringNode;
 use NuvoleWeb\Drupal\DrupalExtension\Component\PyStringYamlParser;
+use Webmozart\Assert\Assert;
 
 /**
  * Class PyStringYamlParserTest.
@@ -35,17 +34,18 @@ YAML;
     $node = new PyStringNode(explode(PHP_EOL, $yaml), 0);
     $parser = new PyStringYamlParser();
     $result = $parser->parse($node);
-    assert($result, hasKey('mail')
-      ->and(hasKey('slogan'))
-      ->and(hasKey('page'))
-      ->and(hasKey('admin_compact_mode'))
-      ->and(hasKey('weight_select_max'))
-      ->and(hasKey('weight_select_max'))
-      ->and(hasKey('langcode'))
-      ->and(hasKey('default_langcode')));
-    assert($result['page'], hasKey('403')
-      ->and(hasKey('404'))
-      ->and(hasKey('front')));
+    Assert::keyExists($result, 'mail');
+    Assert::keyExists($result, 'slogan');
+    Assert::keyExists($result, 'page');
+    Assert::keyExists($result, 'admin_compact_mode');
+    Assert::keyExists($result, 'weight_select_max');
+    Assert::keyExists($result, 'weight_select_max');
+    Assert::keyExists($result, 'langcode');
+    Assert::keyExists($result, 'default_langcode');
+
+    Assert::keyExists($result['page'], '403');
+    Assert::keyExists($result['page'], '404');
+    Assert::keyExists($result['page'], 'front');
   }
 
 }

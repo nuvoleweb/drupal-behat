@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use function bovigo\assert\assert;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\not;
+use Webmozart\Assert\Assert;
 
 /**
  * Contains Contacts specific step definitions.
@@ -44,7 +42,7 @@ class ServiceContainerContext extends RawDrupalContext {
    */
   public function assertParameters($name, $expected) {
     $value = \Drupal::getContainer()->getParameter($name);
-    assert($value, equals($this->castParameter($expected)));
+    Assert::eq($value, $this->castParameter($expected));
   }
 
   /**
@@ -55,7 +53,7 @@ class ServiceContainerContext extends RawDrupalContext {
   public function negateParameters($name, $expected) {
     try {
       $value = \Drupal::getContainer()->getParameter($name);
-      assert($value, not(equals($this->castParameter($expected))));
+      Assert::notEq($value, $this->castParameter($expected));
     }
     catch (ParameterNotFoundException $e) {
     }

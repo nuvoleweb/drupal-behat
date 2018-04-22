@@ -2,9 +2,7 @@
 
 namespace NuvoleWeb\Drupal\DrupalExtension\Component;
 
-use function bovigo\assert\predicate\isNotEmpty;
-use function bovigo\assert\predicate\hasKey;
-use function bovigo\assert\assert;
+use Webmozart\Assert\Assert;
 
 /**
  * Class ResolutionComponent.
@@ -83,9 +81,12 @@ class ResolutionComponent {
   public function parse($resolution) {
     preg_match_all(self::RESOLUTION_FORMAT, $resolution, $matches);
     $message = "Cannot parse provided resolution '{$resolution}'. It must be in the following format: 360x640";
-    assert($matches, isNotEmpty()->and(hasKey(0))->and(hasKey(1))->and(hasKey(2)), $message);
-    assert($matches[1][0], isNotEmpty(), $message);
-    assert($matches[2][0], isNotEmpty(), $message);
+    Assert::notEmpty($matches, $message);
+    Assert::keyExists($matches, 0, $message);
+    Assert::keyExists($matches, 1, $message);
+    Assert::keyExists($matches, 2, $message);
+    Assert::notEmpty($matches[1][0], $message);
+    Assert::notEmpty($matches[2][0], $message);
     $this->setWidth($matches[1][0]);
     $this->setHeight($matches[2][0]);
     return $this;

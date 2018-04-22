@@ -2,10 +2,6 @@
 
 namespace NuvoleWeb\Drupal\Driver\Cores;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\predicate\hasKey;
-use function bovigo\assert\predicate\isNotEmpty;
-use function bovigo\assert\predicate\isNotEqualTo;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
@@ -19,6 +15,7 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use NuvoleWeb\Drupal\Driver\Objects\Drupal8\EditableConfig;
 use NuvoleWeb\Drupal\Driver\Objects\Drupal8\State;
+use Webmozart\Assert\Assert;
 
 /**
  * Class Drupal8.
@@ -37,7 +34,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     }
     $storage = \Drupal::entityTypeManager()->getStorage('node_type');
     $result = $storage->loadByProperties(['name' => $type]);
-    assert($result, isNotEmpty());
+    Assert::notEmpty($result);
     return key($result);
   }
 
@@ -51,7 +48,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     }
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary');
     $result = $storage->loadByProperties(['name' => $type]);
-    assert($result, isNotEmpty());
+    Assert::notEmpty($result);
     return key($result);
   }
 
@@ -64,7 +61,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       ->condition('status', NODE_PUBLISHED)
       ->range(0, 1)
       ->execute();
-    assert($result, isNotEmpty());
+    Assert::notEmpty($result);
     $nid = current($result);
     return Node::load($nid);
   }
@@ -86,7 +83,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $query->range(0, 1);
 
     $result = $query->execute();
-    assert($result, isNotEmpty(), __METHOD__ . ": No Entity {$entity_type} with name {$label} found.");
+    Assert::notEmpty($result, __METHOD__ . ": No Entity {$entity_type} with name {$label} found.");
     return current($result);
   }
 
@@ -95,7 +92,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   public function loadUserByName($name) {
     $user = user_load_by_name($name);
-    assert($user, isNotEqualTo(FALSE));
+    Assert::notEq($user, FALSE);
     return $user;
   }
 
@@ -123,7 +120,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       ->condition('vid', $type)
       ->range(0, 1)
       ->execute();
-    assert($result, isNotEmpty());
+    Assert::notEmpty($result);
     $id = current($result);
     return Term::load($id);
   }
@@ -238,7 +235,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
         case 'entity_reference_revisions':
           $entities = [];
           foreach ($value as $target_values) {
-            assert($target_values, hasKey('type'), __METHOD__ . ": Required fields 'type' not found.");
+            Assert::keyExists($target_values, 'type', __METHOD__ . ": Required fields 'type' not found.");
             $entities[] = $this->entityCreate($settings['target_type'], $target_values, FALSE);
           }
 
