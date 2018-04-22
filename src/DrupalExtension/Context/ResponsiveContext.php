@@ -103,7 +103,7 @@ class ResponsiveContext extends RawMinkContext {
    * @Then the browser window height should be :size
    */
   public function assertBrowserWindowHeight($size) {
-    $actual = $this->getSession()->evaluateScript('return window.innerHeight;');
+    $actual = $this->getSession()->evaluateScript('return window.outerHeight;');
     if ($actual != $size) {
       throw new ExpectationException("Browser window height expected to be {$size} but it is {$actual} instead.", $this->getSession());
     }
