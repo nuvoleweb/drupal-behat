@@ -4,8 +4,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Gherkin\Node\PyStringNode;
-use function bovigo\assert\assert;
-use function bovigo\assert\predicate\hasKey;
+use Webmozart\Assert\Assert;
 
 /**
  * Class ContentContext.
@@ -178,11 +177,10 @@ class ContentContext extends RawDrupalContext {
    */
   public function assertContent(PyStringNode $string) {
     $values = $this->getYamlParser()->parse($string);
-    assert($values, hasKey('type')
-      ->and(hasKey('title'))
-      ->and(hasKey('langcode')),
-      __METHOD__ . ": Required fields 'type', 'title' and 'langcode' not found."
-    );
+    $message = __METHOD__ . ": Required fields 'type', 'title' and 'langcode' not found.";
+    Assert::keyExists($values, 'type', $message);
+    Assert::keyExists($values, 'title', $message);
+    Assert::keyExists($values, 'langcode', $message);
     $node = $this->getCore()->entityCreate('node', $values);
     $this->nodes[] = $node;
   }
@@ -201,7 +199,7 @@ class ContentContext extends RawDrupalContext {
    */
   public function assertTranslation($content_type, $title, PyStringNode $string) {
     $values = $this->getYamlParser()->parse($string);
-    assert($values, hasKey('langcode'), __METHOD__ . ": Required field 'langcode' not found.");
+    Assert::keyExists($values, 'langcode', __METHOD__ . ": Required field 'langcode' not found.");
 
     $nid = $this->getCore()->getEntityIdByLabel('node', $content_type, $title);
     $source = $this->getCore()->entityLoad('node', $nid);

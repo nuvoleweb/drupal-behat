@@ -3,9 +3,7 @@
 namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 
 use Behat\Mink\Exception\ExpectationException;
-use function bovigo\assert\predicate\isOfType;
-use function bovigo\assert\predicate\hasKey;
-use function bovigo\assert\assert;
+use Webmozart\Assert\Assert;
 
 /**
  * Class ResponsiveContext.
@@ -42,7 +40,6 @@ class ResponsiveContext extends RawMinkContext {
    *   List of devices.
    */
   public function __construct(array $devices = []) {
-    assert($devices, isOfType('array'));
     $this->devices = $devices + $this->defaultDevices;
   }
 
@@ -56,7 +53,7 @@ class ResponsiveContext extends RawMinkContext {
    *   Resolution object.
    */
   protected function getDeviceResolution($name) {
-    assert($this->devices, hasKey($name), "Device '{$name}' not found.");
+    Assert::keyExists($this->devices, $name, "Device '{$name}' not found.");
     $service = $this->getContainer()->get('drupal.behat.component.resolution');
     $service->parse($this->devices[$name]);
     return $service;

@@ -3,8 +3,7 @@
 namespace NuvoleWeb\Drupal\Tests\Behat;
 
 use NuvoleWeb\Drupal\DrupalExtension\Context\RawDrupalContext;
-use function bovigo\assert\predicate\isNotEmpty;
-use function bovigo\assert\assert;
+use Webmozart\Assert\Assert;
 
 /**
  * Class TestContext.
@@ -19,7 +18,7 @@ class TestContext extends RawDrupalContext {
    * @Given I can access the service container
    */
   public function assertServiceContainer() {
-    assert($this->getContainer(), isNotEmpty());
+    Assert::notEmpty($this->getContainer());
   }
 
   /**

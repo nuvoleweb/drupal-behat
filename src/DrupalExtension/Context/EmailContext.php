@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use function bovigo\assert\assert;
-use function bovigo\assert\predicate\hasKey;
-use function bovigo\assert\predicate\equals;
+use Webmozart\Assert\Assert;
 
 /**
  * Email step definitions.
@@ -64,8 +62,8 @@ class EmailContext extends RawDrupalContext {
   public function assertEmailSentWithProperties(TableNode $table) {
     $last_mail = $this->getLastEmail();
     foreach ($table->getRowsHash() as $name => $value) {
-      assert($last_mail, hasKey($name));
-      assert($last_mail[$name], equals($value));
+      Assert::keyExists($last_mail, $name);
+      Assert::eq($last_mail[$name], $value);
     }
   }
 

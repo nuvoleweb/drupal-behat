@@ -28,7 +28,7 @@ class ResolutionComponentTest extends AbstractTest {
   /**
    * Test invalid resolution.
    *
-   * @expectedException \bovigo\assert\AssertionFailure
+   * @expectedException \InvalidArgumentException
    * @covers ::parse
    * @covers ::getWidth
    * @covers ::getHeight
