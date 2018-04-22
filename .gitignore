@@ -9,3 +9,5 @@ build/
 # Docker4drupal
 docker-compose.yml
 docker-runtime/*
+
+.idea/
