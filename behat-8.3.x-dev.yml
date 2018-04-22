@@ -1,5 +1,5 @@
 imports:
-  - ./behat.yml.dist
+  - ./behat.yml
 default:
   extensions:
     NuvoleWeb\Drupal\DrupalExtension:

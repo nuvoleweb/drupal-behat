@@ -30,7 +30,8 @@
     "drupal/config_installer": "~1",
     "drupal/paragraphs": "~1",
     "harvesthq/chosen": "1.5.0",
-    "drupal/core": "~8"
+    "drupal/core": "~8",
+    "openeuropa/task-runner": "^0.5"
   },
   "autoload": {
     "psr-4": {
