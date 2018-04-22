@@ -36,7 +36,7 @@
   "autoload": {
     "psr-4": {
       "NuvoleWeb\\Drupal\\": "./src/",
-      "NuvoleWeb\\Drupal\\Tests\\": "./tests/scr/"
+      "NuvoleWeb\\Drupal\\Tests\\": "./tests/src/"
     }
   },
   "repositories": [
