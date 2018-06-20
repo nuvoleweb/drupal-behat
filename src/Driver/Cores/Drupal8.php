@@ -8,12 +8,15 @@ use function bovigo\assert\predicate\isNotEmpty;
 use function bovigo\assert\predicate\isNotEqualTo;
 use Drupal\Core\Cache\Cache;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
+use Drupal\file\Entity\File;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use NuvoleWeb\Drupal\Driver\Objects\Drupal8\EditableConfig;
+use NuvoleWeb\Drupal\Driver\Objects\Drupal8\State;
 
 /**
  * Class Drupal8.
@@ -253,6 +256,10 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
 
           $entity->{$name}->setValue($entities);
           break;
+
+        case 'image':
+          $entity->{$name}->setValue(['target_id' => $this->saveFile($value)->id()]);
+          break;
       }
     }
 
@@ -330,6 +337,20 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function state() {
+    return new State();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEditableConfig($name) {
+    return new EditableConfig($name);
+  }
+
+  /**
    * Get field definition.
    *
    * @param string $entity_type
@@ -359,6 +380,24 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   protected function getStubEntity($entity_type, array $values) {
     return \Drupal::entityTypeManager()->getStorage($entity_type)->create($values);
+  }
+
+  /**
+   * Save a file and return its id.
+   *
+   * @param string $source
+   *    Source path relative to Drupal installation root.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *    Saved file object.
+   */
+  protected function saveFile($source) {
+    $name = basename($source);
+    $path = realpath(DRUPAL_ROOT . '/' . $source);
+    $uri = file_unmanaged_copy($path, 'public://' . $name, FILE_EXISTS_REPLACE);
+    $file = File::create(['uri' => $uri]);
+    $file->save();
+    return $file;
   }
 
 }
