@@ -95,17 +95,6 @@ interface CoreInterface extends OriginalCoreInterface {
   public function entityLoad($entity_type, $entity_id);
 
   /**
-   * Deletes an entity permanently.
-   *
-   * @param object $entity
-   *   The drupal entity, appropriately typed.
-   *
-   * @throws \Exception
-   *   In case of failures an exception is thrown.
-   */
-  public function entityDelete($entity);
-
-  /**
    * Add a translation for an entity.
    *
    * @param object $entity
