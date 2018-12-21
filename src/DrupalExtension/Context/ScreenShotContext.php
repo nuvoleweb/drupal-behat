@@ -64,6 +64,7 @@ class ScreenShotContext extends RawMinkContext {
         if ($context->getMink()->isSessionStarted()) {
           try {
             $context->assertNotWarningMessage('Notice:');
+            $context->assertNotErrorVisible('Notice:');
           }
           catch (\Exception $e) {
             // Use the step test in the filename.
