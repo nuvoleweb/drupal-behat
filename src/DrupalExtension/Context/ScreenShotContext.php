@@ -96,7 +96,7 @@ class ScreenShotContext extends RawMinkContext {
    * @AfterStep
    */
   public function takeScreenshotAfterFailedStep(AfterStepScope $event) {
-    if ($event->getTestResult()->isPassed()) {
+    if ($event->getTestResult()->getResultCode() !== TestResult::FAILED) {
       // Not a failed step.
       return;
     }
