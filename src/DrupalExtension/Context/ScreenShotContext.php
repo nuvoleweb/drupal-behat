@@ -112,11 +112,24 @@ class ScreenShotContext extends RawMinkContext {
       $file_name = substr($file_name, 0, 30);
       $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-failed__' . ' - ' . $event->getFeature()->getFile() . '-' . $file_name;
       $message = "Screenshot for failed step created in @file_name";
-      $this->createScreenshot($file_name, $message);
+      $this->createScreenshotsForErrors($file_name, $message, $event->getTestResult());
     }
     catch (DriverException $e) {
-
     }
+  }
+
+  /**
+   * Create screenshots for errors.
+   *
+   * @param string $file_name
+   *   File name where the error will be saved.
+   * @param string $message
+   *   Error message.
+   * @param \Behat\Testwork\Tester\Result\TestResult $result
+   *   Test result.
+   */
+  public function createScreenshotsForErrors($file_name, $message, TestResult $result) {
+    $this->createScreenshot($file_name, $message);
   }
 
   /**
