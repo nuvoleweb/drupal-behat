@@ -145,8 +145,10 @@ class ScreenShotContext extends RawMinkContext {
       file_put_contents($file_name, $html_data);
     }
     if ($message) {
-      print strtr($message, ['@file_name' => $file_name]);
+      print strtr($message, ['@file_name' => $file_name]) . "\n";
     }
+
+    return $file_name;
   }
 
 }
