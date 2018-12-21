@@ -6,6 +6,7 @@ use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Exception\DriverException;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Class ScreenShotContext.
@@ -15,12 +16,22 @@ use Behat\Mink\Exception\DriverException;
 class ScreenShotContext extends RawMinkContext {
 
   /**
+   * Get screenshots path.
+   *
+   * @return string
+   *   Path to screenshots.
+   */
+  public function getScreenshotsPath() {
+    return sys_get_temp_dir();
+  }
+
+  /**
    * Save screenshot with a specific name.
    *
    * @Then (I )take a screenshot :name
    */
   public function takeScreenshot($name = NULL) {
-    $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
+    $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . $name;
     $message = "Screenshot created in @file_name";
     $this->createScreenshot($file_name, $message, FALSE);
   }
@@ -31,7 +42,7 @@ class ScreenShotContext extends RawMinkContext {
    * @Then (I )take a screenshot
    */
   public function takeScreenshotUnnamed() {
-    $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-screenshot';
+    $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-screenshot';
     $message = "Screenshot created in @file_name";
     $this->createScreenshot($file_name, $message);
   }
@@ -65,7 +76,7 @@ class ScreenShotContext extends RawMinkContext {
               $file_name = preg_replace('![^0-9A-Za-z_.-]!', '', $file_name);
             }
             $file_name = substr($file_name, 0, 30);
-            $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-notice__' . $file_name;
+            $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-notice__' . $file_name;
             $message = "Screenshot for behat notice in step created in @file_name";
             $this->createScreenshot($file_name, $message);
             // We don't throw $e any more because we don't fail on the notice.
@@ -98,7 +109,7 @@ class ScreenShotContext extends RawMinkContext {
         $file_name = preg_replace('![^0-9A-Za-z_.-]!', '', $file_name);
       }
       $file_name = substr($file_name, 0, 30);
-      $file_name = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat-failed__' . $file_name;
+      $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-failed__' . ' - ' . $event->getFeature()->getFile() . '-' . $file_name;
       $message = "Screenshot for failed step created in @file_name";
       $this->createScreenshot($file_name, $message);
     }
