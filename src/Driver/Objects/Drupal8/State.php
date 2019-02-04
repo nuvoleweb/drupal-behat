@@ -15,7 +15,7 @@ class State implements StateInterface {
    * {@inheritdoc}
    */
   public function get($key, $default = NULL) {
-    \Drupal::state()->get($key, $default);
+    return \Drupal::state()->get($key, $default);
   }
 
   /**
