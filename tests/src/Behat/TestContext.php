@@ -16,9 +16,14 @@ class TestContext extends RawDrupalContext {
    * Assert service container.
    *
    * @Given I can access the service container
+   *
+   * @throws \Exception
    */
   public function assertServiceContainer() {
-    Assert::notEmpty($this->getContainer());
+    $container = $this->getContainer();
+    if (empty($container)) {
+      throw new \Exception('The service container is not set.');
+    }
   }
 
   /**
