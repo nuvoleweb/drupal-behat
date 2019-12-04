@@ -2,7 +2,7 @@ drupal:
   root: "build"
   base_url: "http://nginx"
   site:
-    profile: "standard"
+    profile: "minimal"
   database:
     host: "mariadb"
     port: "3306"
