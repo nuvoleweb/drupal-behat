@@ -34,6 +34,7 @@ module:
   page_cache: 0
   paragraphs: 0
   path: 0
+  path_alias: 0
   quickedit: 0
   rdf: 0
   search: 0
@@ -49,7 +50,7 @@ module:
   menu_link_content: 1
   content_translation: 10
   views: 10
-  standard: 1000
+  minimal: 1000
 theme:
   stable: 0
   classy: 0
