@@ -1,4 +1,9 @@
-sudo: required
+dist: xenial
+language: php
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 services:
   - docker
