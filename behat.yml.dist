@@ -49,6 +49,6 @@ default:
       selectors:
         error_message_selector: '.messages--error'
       text:
-        node_submit_label: "Save and publish"
+        node_submit_label: "Save"
   formatters:
     progress: ~
