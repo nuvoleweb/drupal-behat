@@ -33,7 +33,7 @@ Feature: Content Context
     Then I should see the heading "Edit Basic page My second page"
 
     Given I am deleting the "page" content "My second page"
-    Then I should see the heading "Are you sure you want to delete the content My second page?"
+    Then I should see the heading "Are you sure you want to delete the content item My second page?"
 
   Scenario Outline: Test content access steps.
 
