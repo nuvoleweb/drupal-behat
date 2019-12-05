@@ -80,18 +80,24 @@ services:
       - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
       - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
 
-  chrome:
-    image: selenium/standalone-chrome:$SELENIUM_CHROME_TAG
+  # If you would like to see what is going on you can run the following on your host:
+  # docker run --rm -p 4444:4444 -p 5900:5900 --network="host" selenium/standalone-chrome-debug:latest
+  # Newer version of this image might run into this issue:
+  # @link https://github.com/elgalu/docker-selenium/issues/20
+  selenium:
+    # Newer Selenium Chrome images are not supported at the moment by behat/mink-selenium2-driver.
+    image: selenium/standalone-chrome-debug:$SELENIUM_CHROME_TAG
     container_name: "${PROJECT_NAME}_chrome"
-    volumes:
-      - /dev/shm:/dev/shm
-    entrypoint:
-      - chromedriver
-      - "--no-sandbox"
-      - "--disable-dev-shm-usage"
-      - "--log-path=/tmp/chromedriver.log"
-      - "--verbose"
-      - "--whitelisted-ips="
+    environment:
+      - DISPLAY=:99
+      - SE_OPTS=-debug
+      - SCREEN_WIDTH=1280
+      - SCREEN_HEIGHT=800
+      - VNC_NO_PASSWORD=1
+    ports:
+      - '4444:4444'
+      - '5900:5900'
+    shm_size: 2g
 
   portainer:
     image: portainer/portainer
