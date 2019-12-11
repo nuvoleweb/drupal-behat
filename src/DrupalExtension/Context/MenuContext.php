@@ -91,7 +91,7 @@ class MenuContext extends RawDrupalContext {
   public function deleteMenuLinks(AfterScenarioScope $event) {
     if ($this->menuLinks) {
       foreach ($this->menuLinks as $menu_link) {
-        $this->getCore()->entityDelete($menu_link);
+        $this->getCore()->entityDelete($menu_link->getEntityTypeId(), $menu_link);
       }
 
       $this->getCore()->clearMenuCache();
