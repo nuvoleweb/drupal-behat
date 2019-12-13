@@ -5,11 +5,13 @@ namespace NuvoleWeb\Drupal\Driver\Cores;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
 use Drupal\file\Entity\File;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
@@ -58,7 +60,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   public function loadNodeByName($title) {
     $result = \Drupal::entityQuery('node')
       ->condition('title', $title)
-      ->condition('status', NODE_PUBLISHED)
+      ->condition('status', NodeInterface::PUBLISHED)
       ->range(0, 1)
       ->execute();
     Assert::notEmpty($result);
@@ -371,7 +373,9 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   protected function saveFile($source) {
     $name = basename($source);
     $path = realpath(DRUPAL_ROOT . '/' . $source);
-    $uri = file_unmanaged_copy($path, 'public://' . $name, FILE_EXISTS_REPLACE);
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+    $uri = $file_system->copy($path, 'public://' . $name, FileSystemInterface::EXISTS_REPLACE);
     $file = File::create(['uri' => $uri]);
     $file->save();
     return $file;
