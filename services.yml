@@ -13,12 +13,12 @@ parameters:
 
 services:
   drupal.behat.component.resolution:
-    class: %drupal.behat.component.resolution.class%
+    class: '%drupal.behat.component.resolution.class%'
   drupal.behat.component.py_string_yaml_parser:
-    class: %drupal.behat.component.py_string_yaml_parser.class%
+    class: '%drupal.behat.component.py_string_yaml_parser.class%'
   drupal.behat.component.random:
-    class: %drupal.behat.component.random.class%
+    class: '%drupal.behat.component.random.class%'
   drupal.behat.context_initializer.service_container:
-    class: %drupal.behat.context_initializer.service_container.class%
+    class: '%drupal.behat.context_initializer.service_container.class%'
     tags:
       -  { name: context.initializer }
