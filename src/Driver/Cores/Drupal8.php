@@ -267,13 +267,6 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   /**
    * {@inheritdoc}
    */
-  public function entityDelete($entity_type, $entity) {
-    $entity->delete();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function entityAddTranslation($entity, $language, array $values) {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $translation */
     $translation = $this->getStubEntity($entity->getEntityTypeId(), $values);
