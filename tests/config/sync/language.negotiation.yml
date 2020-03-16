@@ -5,6 +5,7 @@ url:
   prefixes:
     en: ''
     en-x-pirate: en-x-pirate
+    '': null
   domains:
     en: ''
     en-x-pirate: ''

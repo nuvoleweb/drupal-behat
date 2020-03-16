@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: drupal
 
   php:
-    image: wodby/drupal-php:7.0-3.0.0
+    image: wodby/drupal-php:7.2-4.14.4
     environment:
       PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
       PHP_FPM_CLEAR_ENV: "no"
@@ -53,7 +53,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   selenium:
-    image: selenium/standalone-firefox-debug:2.53.1-beryllium
+    image: selenium/standalone-firefox-debug:3.141.59
     ports:
       - "5900:5900"
     expose:

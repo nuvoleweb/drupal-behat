@@ -11,6 +11,11 @@ use NuvoleWeb\Drupal\Driver\Objects\EditableConfigInterface;
  */
 class EditableConfig implements EditableConfigInterface {
 
+  /**
+   * Configuration object.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
   protected $config;
 
   /**

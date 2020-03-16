@@ -2,6 +2,7 @@
 
 namespace NuvoleWeb\Drupal\Tests\PhpUnit;
 
+use InvalidArgumentException;
 use NuvoleWeb\Drupal\DrupalExtension\Component\ResolutionComponent;
 
 /**
@@ -28,12 +29,12 @@ class ResolutionComponentTest extends AbstractTest {
   /**
    * Test invalid resolution.
    *
-   * @expectedException \InvalidArgumentException
    * @covers ::parse
    * @covers ::getWidth
    * @covers ::getHeight
    */
   public function testInvalidResolution() {
+    $this->expectException(InvalidArgumentException::class);
     $resolution = new ResolutionComponent();
     $resolution->parse('absdx123');
   }

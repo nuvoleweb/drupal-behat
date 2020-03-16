@@ -51,7 +51,7 @@ class TaxonomyTermContext extends RawDrupalContext {
    * @param string $name
    *   The term name.
    *
-   * @throws ExpectationException
+   * @throws \Behat\Mink\Exception\ExpectationException
    *   When the term does not exist.
    */
   protected function visitTermPage($op, $type, $name) {

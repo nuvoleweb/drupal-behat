@@ -4,4 +4,5 @@ default:
   extensions:
     NuvoleWeb\Drupal\DrupalExtension:
       text:
-        node_submit_label: "Save and publish"
+        node_submit_label: "Save"
+        login_url: '/user/login'

@@ -5,5 +5,6 @@ dependencies: {  }
 id: complex
 label: Complex
 icon_uuid: null
+icon_default: null
 description: null
 behavior_plugins: {  }

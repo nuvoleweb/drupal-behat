@@ -32,11 +32,21 @@ default:
         tags: "~@wip"
   extensions:
     Behat\MinkExtension:
+      base_url: "${drupal.base_url}"
+      javascript_session: selenium2
       goutte: ~
       selenium2:
         wd_host: 'http://selenium:4444/wd/hub'
-      javascript_session: selenium2
-      base_url: "${drupal.base_url}"
+    Drupal\MinkExtension:
+      base_url: "http://localhost:8888"
+      ajax_timeout: 5
+      javascript_session: 'selenium2'
+      sessions:
+        default:
+          goutte: ~
+        selenium2:
+          selenium2:
+            wd_host: 'http://selenium:4444/wd/hub'
     NuvoleWeb\Drupal\DrupalExtension:
       services: "tests/my_services.yml"
       api_driver: "drupal"
@@ -51,4 +61,17 @@ default:
       text:
         node_submit_label: "Save and publish"
   formatters:
-    progress: ~
+    pretty:
+      output_path: 'php://stdout'
+      output_styles:
+        passed:        ['green']
+        passed_param:  ['green',   null,  ['bold']]
+        undefined:     ['yellow',  null,  ['bold', 'underscore']]
+        pending:       ['yellow',  null,  [        'underscore']]
+        pending_param: ['yellow',  null,  ['bold', 'underscore']]
+        failed:        ['white',   'red']
+        failed_param:  ['white',   'red', ['bold']]
+        skipped:       ['cyan']
+        skipped_param: ['cyan',    null,  ['bold']]
+        comment:       ['default']
+        tag:           ['magenta']

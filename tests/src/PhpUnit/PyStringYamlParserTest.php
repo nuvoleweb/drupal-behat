@@ -4,7 +4,6 @@ namespace NuvoleWeb\Drupal\Tests\PhpUnit;
 
 use Behat\Gherkin\Node\PyStringNode;
 use NuvoleWeb\Drupal\DrupalExtension\Component\PyStringYamlParser;
-use Webmozart\Assert\Assert;
 
 /**
  * Class PyStringYamlParserTest.
@@ -34,18 +33,19 @@ YAML;
     $node = new PyStringNode(explode(PHP_EOL, $yaml), 0);
     $parser = new PyStringYamlParser();
     $result = $parser->parse($node);
-    Assert::keyExists($result, 'mail');
-    Assert::keyExists($result, 'slogan');
-    Assert::keyExists($result, 'page');
-    Assert::keyExists($result, 'admin_compact_mode');
-    Assert::keyExists($result, 'weight_select_max');
-    Assert::keyExists($result, 'weight_select_max');
-    Assert::keyExists($result, 'langcode');
-    Assert::keyExists($result, 'default_langcode');
 
-    Assert::keyExists($result['page'], '403');
-    Assert::keyExists($result['page'], '404');
-    Assert::keyExists($result['page'], 'front');
+    static::assertArrayHasKey('mail', $result);
+    static::assertArrayHasKey('slogan', $result);
+    static::assertArrayHasKey('page', $result);
+    static::assertArrayHasKey('admin_compact_mode', $result);
+    static::assertArrayHasKey('weight_select_max', $result);
+    static::assertArrayHasKey('weight_select_max', $result);
+    static::assertArrayHasKey('langcode', $result);
+    static::assertArrayHasKey('default_langcode', $result);
+
+    static::assertArrayHasKey('403', $result['page']);
+    static::assertArrayHasKey('404', $result['page']);
+    static::assertArrayHasKey('front', $result['page']);
   }
 
 }

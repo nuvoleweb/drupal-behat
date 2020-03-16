@@ -226,7 +226,7 @@ class ContentContext extends RawDrupalContext {
     /** @var \Behat\Mink\Element\DocumentElement $element */
     $element = $this->getSession()->getPage();
 
-    $locator = ($link ? array('link', sprintf("'%s'", $link)) : array('link', "."));
+    $locator = ($link ? ['link', sprintf("'%s'", $link)] : ['link', "."]);
 
     /** @var \Behat\Mink\Element\NodeElement[] $links */
     $links = $element->findAll('named', $locator);

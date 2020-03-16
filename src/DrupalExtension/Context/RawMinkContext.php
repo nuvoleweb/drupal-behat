@@ -44,7 +44,7 @@ class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerA
    * @param string $type
    *   The expected type.
    *
-   * @throws ExpectationException
+   * @throws \Behat\Mink\Exception\ExpectationException
    *   Thrown when the given element is not of the expected type.
    */
   public function assertElementType(NodeElement $element, $type) {
