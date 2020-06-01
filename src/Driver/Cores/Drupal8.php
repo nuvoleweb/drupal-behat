@@ -225,10 +225,21 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       $settings = $definition->getSettings();
       switch ($definition->getType()) {
         case 'entity_reference':
-          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
-            // @todo: only supports single values for the moment.
-            $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
-            $entity->{$name}->setValue($id);
+          if (is_array($value) && !empty($value)) {
+            $referenced_entities = [];
+            foreach ($value as $v) {
+              /** @var \Drupal\Core\Entity\ContentEntityInterface[] $referenced_entities */
+              $referenced_entities[] = $this->createReferencedEntity($settings['target_type'], $v);
+            }
+
+            // Attach the referenced entities to the parent.
+            $entity->set($name, $referenced_entities);
+          }
+          else {
+            if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
+              $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
+              $entity->{$name}->setValue($id);
+            }
           }
           break;
 
@@ -375,6 +386,31 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $file = File::create(['uri' => $uri]);
     $file->save();
     return $file;
+  }
+
+  /**
+   * Creates a referenced entity.
+   *
+   * @param string $type
+   *   The entity type.
+   * @param array $values
+   *   The field values keyed by field name.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface
+   *   The created entity.
+   */
+  protected function createReferencedEntity(string $type, array $values = []): ContentEntityInterface {
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    $entity = \Drupal::entityTypeManager()->getStorage($type)->create();
+
+    // Set the entity fields (if any).
+    foreach ($values as $k => $v) {
+      $entity->set($k, $v);
+    }
+
+    $entity->save();
+
+    return $entity;
   }
 
 }
