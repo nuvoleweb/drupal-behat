@@ -405,7 +405,19 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
 
     // Set the entity fields (if any).
     foreach ($values as $k => $v) {
-      $entity->set($k, $v);
+      $definition = $entity->getFieldDefinition($k);
+      $settings = $definition->getSettings();
+      switch ($definition->getType()) {
+        case 'entity_reference':
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
+            $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $v);
+            $entity->{$k}->setValue($id);
+          }
+          break;
+
+          default:
+           $entity->set($k, $v);
+      }
     }
 
     $entity->save();
