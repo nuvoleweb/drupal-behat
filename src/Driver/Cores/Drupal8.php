@@ -81,6 +81,8 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     }
     $query->condition($label_key, $label);
     $query->range(0, 1);
+    
+    $query->accessCheck(false);
 
     $result = $query->execute();
     Assert::notEmpty($result, __METHOD__ . ": No Entity {$entity_type} with name {$label} found.");
