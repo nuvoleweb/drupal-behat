@@ -20,7 +20,7 @@
     "drupal/core-composer-scaffold": "^8.8 || ~9",
     "drupal/chosen": "~2",
     "drupal/coffee": "~1",
-    "drupal/core-recommended": "^8.8 || ~9",
+    "drupal/core-dev": "^8.8 || ~9",
     "drupal/paragraphs": "~1",
     "drush/drush": "~10.0",
     "harvesthq/chosen": "1.8.7",

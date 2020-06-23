@@ -19,7 +19,7 @@ before_install:
   - docker ps
 
 install:
-  - docker-compose exec -u root php composer require drupal/core-recommended:$DRUPAL_VERSION --dev --prefer-dist
+  - docker-compose exec -u root php composer require drupal/core-dev:$DRUPAL_VERSION --dev --prefer-dist
   - docker-compose exec -u root php composer install
 
 before_script:
