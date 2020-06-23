@@ -5,5 +5,6 @@ dependencies: {  }
 id: title_paragraph
 label: 'Title Paragraph'
 icon_uuid: null
+icon_default: null
 description: null
 behavior_plugins: {  }
