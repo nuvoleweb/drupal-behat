@@ -8,5 +8,6 @@ build/
 
 # Docker4drupal
 docker-runtime/*
+.env
 
 .idea/

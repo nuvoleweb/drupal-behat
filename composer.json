@@ -17,21 +17,21 @@
   },
   "require-dev": {
     "composer/installers": "^1.2",
-    "drupal/core-composer-scaffold": "^8.8",
+    "drupal/core-composer-scaffold": "^8.8 || ~9",
     "drupal/chosen": "~2",
     "drupal/coffee": "~1",
-    "drupal/core-dev": "^8.8",
+    "drupal/core-recommended": "^8.8 || ~9",
     "drupal/paragraphs": "~1",
-    "drush/drush": "~9.0",
+    "drush/drush": "~10.0",
     "harvesthq/chosen": "1.8.7",
     "openeuropa/task-runner": "^1.0.0-beta6",
     "phpro/grumphp": "~0.14"
   },
   "autoload": {
-    "psr-4": {
-      "NuvoleWeb\\Drupal\\": "./src/",
-      "NuvoleWeb\\Drupal\\Tests\\": "./tests/src/"
-    }
+    "psr-4": { "NuvoleWeb\\Drupal\\": "./src/"}
+  },
+  "autoload-dev": {
+    "psr-4": { "NuvoleWeb\\Drupal\\Tests\\": "./tests/src/"}
   },
   "repositories": [
     {
