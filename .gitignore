@@ -2,6 +2,7 @@
 vendor/*
 composer.lock
 behat.yml
+docker-compose.override.yml
 grumphp.yml
 phpunit.xml
 build/
