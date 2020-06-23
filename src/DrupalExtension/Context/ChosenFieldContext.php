@@ -65,16 +65,16 @@ class ChosenFieldContext extends RawMinkContext {
 
     if ($el->hasClass('chosen-container-single')) {
       // This is a single select element.
-      $el = $session->getPage()->find('xpath', "//div[@id='{$element_id}']/a[@class='chosen-single']");
+      $el = $session->getPage()->find('xpath', "//div[@id='{$element_id}']/a[contains(@class, 'chosen-single')]");
       $el->click();
     }
     elseif ($el->hasClass('chosen-container-multi')) {
       // This is a multi select element.
-      $el = $session->getPage()->find('xpath', "//div[@id='{$element_id}']/ul[@class='chosen-choices']/li[@class='search-field']/input");
+      $el = $session->getPage()->find('xpath', "//div[@id='{$element_id}']/ul[contains(@class, 'chosen-choices')]/li[contains(@class, 'search-field')]/input");
       $el->click();
     }
 
-    $selector = "//div[@id='{$element_id}']/div[@class='chosen-drop']/ul[@class='chosen-results']/li[text() = '{$value}']";
+    $selector = "//div[@id='{$element_id}']/div[@class='chosen-drop']/ul[contains(@class, 'chosen-results')]/li[text() = '{$value}']";
     $el = $session->getPage()->find('xpath', $selector);
 
     if (empty($el)) {

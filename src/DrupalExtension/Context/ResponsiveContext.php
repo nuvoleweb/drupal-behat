@@ -44,6 +44,18 @@ class ResponsiveContext extends RawMinkContext {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public function getSession($name = null)
+  {
+    $session = parent::getSession($name);
+    if (!$session->isStarted()) {
+      $session->start();
+    }
+    return $session;
+  }
+
+  /**
    * Get device resolution.
    *
    * @param string $name
