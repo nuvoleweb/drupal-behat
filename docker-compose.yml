@@ -20,12 +20,13 @@ services:
     environment:
       PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
       #      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S opensmtpd:25
-      DB_HOST: $DB_HOST
-      DB_PORT: $DB_PORT
-      DB_USER: $DB_USER
-      DB_PASSWORD: $DB_PASSWORD
-      DB_NAME: $DB_NAME
-      DB_DRIVER: $DB_DRIVER
+      DB_HOST: ${DB_HOST-mariadb}
+      DB_PORT: ${DB_PORT-3306}
+      DB_USER: ${DB_USER-drupal}
+      DB_PASSWORD: ${DB_PASSWORD-drupal}
+      DB_NAME: ${DB_NAME-drupal}
+      DB_DRIVER: ${DB_DRIVER-mysql}
+      TEST_DRUPAL_VERSION: ${DRUPAL_VERSION-8.8.x-dev}
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
       COLUMNS: 80 # Set 80 columns for docker exec -it.

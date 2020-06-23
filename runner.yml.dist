@@ -12,7 +12,7 @@ drupal:
     password: ${env.DB_PASSWORD}
   settings:
     settings:
-      config_sync_directory: "../tests/config/sync"
+      config_sync_directory: "../tests/config/${env.TEST_DRUPAL_VERSION}"
 
 commands:
   drupal:site-setup:
