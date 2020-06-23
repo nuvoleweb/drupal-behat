@@ -135,7 +135,7 @@ class ScreenShotContext extends RawMinkContext {
     }
     try {
       $step = $event->getStep();
-      $file_name = $event->getFeature()->getFile() . '-' . $step->getKeyword() . '_' . $step->getText();
+      $file_name = str_replace('/', '-', $event->getFeature()->getFile()) . '-' . $step->getKeyword() . '_' . $step->getText();
       $file_name = 'behat-failed__' . $file_name;
       $message = "Screenshot for failed step created in @file_name";
       $this->createScreenshotsForErrors($file_name, $message, $event->getTestResult());
