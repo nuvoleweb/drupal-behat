@@ -46,8 +46,7 @@ class ResponsiveContext extends RawMinkContext {
   /**
    * {@inheritDoc}
    */
-  public function getSession($name = null)
-  {
+  public function getSession($name = NULL) {
     $session = parent::getSession($name);
     if (!$session->isStarted()) {
       $session->start();
