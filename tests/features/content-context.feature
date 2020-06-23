@@ -132,3 +132,68 @@ Feature: Content Context
     And I should see the text "Complex paragraph with sub paragraphs"
     And I should see the text "Category A"
     And I should see the text "Category B"
+
+
+  Scenario: Complex entity reference content creation.
+    Given "category" terms:
+      | name  |
+      | Tag 1 |
+      | Tag 2 |
+
+    And the following content:
+      """
+      title: Article one tag
+      type: article
+      langcode: en
+      field_category: Tag 1
+      body: Article body
+      """
+    When I am an anonymous user
+    And I am visiting the "article" content "Article one tag"
+    Then I should see the text "Tag 1"
+
+    And the following content:
+      """
+      title: Article two tags
+      type: article
+      langcode: en
+      body: Article body
+      field_category:
+        - Tag 1
+        - Tag 2
+      """
+    When I am an anonymous user
+    And I am visiting the "article" content "Article two tags"
+    Then I should see the text "Tag 1"
+    Then I should see the text "Tag 2"
+
+    And the following content:
+      """
+      title: Article new tag
+      type: article
+      langcode: en
+      body: Article body
+      field_category:
+        vid: category
+        name: Tag 3
+      """
+    When I am an anonymous user
+    And I am visiting the "article" content "Article new tag"
+    Then I should see the text "Tag 3"
+
+    And the following content:
+      """
+      title: Article mixed new and existing
+      type: article
+      langcode: en
+      body: Article body
+      field_category:
+        - Tag 2
+        -
+          vid: category
+          name: Tag 4
+      """
+    When I am an anonymous user
+    And I am visiting the "article" content "Article mixed new and existing"
+    Then I should see the text "Tag 2"
+    Then I should see the text "Tag 4"

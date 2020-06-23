@@ -4,6 +4,7 @@ namespace NuvoleWeb\Drupal\Driver\Cores;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Driver\Cores\Drupal8 as OriginalDrupal8;
@@ -229,18 +230,35 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       $settings = $definition->getSettings();
       switch ($definition->getType()) {
         case 'entity_reference':
-          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
-            // @todo: only supports single values for the moment.
-            $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
-            $entity->{$name}->setValue($id);
-          }
-          break;
-
         case 'entity_reference_revisions':
+          $target_type = \Drupal::entityTypeManager()->getDefinition($settings['target_type']);
+          if (!($target_type instanceof ContentEntityTypeInterface)) {
+            // We only know how to get deal with content entities.
+            break;
+          }
+
+          if (!is_array($value)) {
+            $value = [$value];
+          }
           $entities = [];
+
+          $mapped = array_filter($value, function ($key) {
+            return !is_int($key);
+          }, ARRAY_FILTER_USE_KEY);
+          if (!empty($mapped)) {
+            var_export($mapped);
+            $entities[] = $this->entityCreate($settings['target_type'], $mapped, FALSE);
+          }
+
+          $value = array_diff_key($value, $mapped);
           foreach ($value as $target_values) {
-            Assert::keyExists($target_values, 'type', __METHOD__ . ": Required fields 'type' not found.");
-            $entities[] = $this->entityCreate($settings['target_type'], $target_values, FALSE);
+            if (!is_array($target_values)) {
+              // If here we don't encounter an array, only the label is given.
+              $entities[] = $this->getEntityIdByLabel($settings['target_type'], NULL, $target_values);
+            }
+            else {
+              $entities[] = $this->entityCreate($settings['target_type'], $target_values, FALSE);
+            }
           }
 
           $entity->{$name}->setValue($entities);
