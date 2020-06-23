@@ -16,13 +16,50 @@ use Behat\Testwork\Tester\Result\TestResult;
 class ScreenShotContext extends RawMinkContext {
 
   /**
+   * Contains list of processed devices.
+   *
+   * @var string
+   */
+  protected $directory;
+
+  /**
+   * Whether or not to create screenshots for notices.
+   *
+   * @var bool
+   */
+  protected $notices;
+
+  /**
+   * ResponsiveContext constructor.
+   *
+   * @param string $directory
+   *   The directory for screenshots absolute or relative to the drupal root.
+   * @param bool $notices
+   *   Whether or not to check for notices.
+   */
+  public function __construct($directory = '', $notices = FALSE) {
+    $this->directory = $directory;
+    $this->notices = $notices;
+  }
+
+  /**
    * Get screenshots path.
    *
    * @return string
    *   Path to screenshots.
    */
   public function getScreenshotsPath() {
-    return sys_get_temp_dir();
+    if ($this->directory) {
+      $screenshot_dir = $this->directory;
+    }
+    else {
+      $screenshot_dir = getenv('BEHAT_SCREENSHOT_DEBUG') ?: sys_get_temp_dir();
+    }
+    if (!file_exists($screenshot_dir)) {
+      @mkdir($screenshot_dir);
+    }
+
+    return $screenshot_dir;
   }
 
   /**
@@ -31,7 +68,7 @@ class ScreenShotContext extends RawMinkContext {
    * @Then (I )take a screenshot :name
    */
   public function takeScreenshot($name = NULL) {
-    $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . $name;
+    $file_name = $this->escapeFilename($name);
     $message = "Screenshot created in @file_name";
     $this->createScreenshot($file_name, $message, FALSE);
   }
@@ -42,7 +79,7 @@ class ScreenShotContext extends RawMinkContext {
    * @Then (I )take a screenshot
    */
   public function takeScreenshotUnnamed() {
-    $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-screenshot';
+    $file_name = 'behat-screenshot';
     $message = "Screenshot created in @file_name";
     $this->createScreenshot($file_name, $message);
   }
@@ -53,6 +90,9 @@ class ScreenShotContext extends RawMinkContext {
    * @AfterStep
    */
   public function screenshotForPhpNotices(AfterStepScope $event) {
+    if (!$this->notices) {
+      return;
+    }
     $environment = $event->getEnvironment();
     // Make sure the environment has the MessageContext.
     $class = 'Drupal\DrupalExtension\Context\MessageContext';
@@ -69,15 +109,8 @@ class ScreenShotContext extends RawMinkContext {
           catch (\Exception $e) {
             // Use the step test in the filename.
             $step = $event->getStep();
-            if (function_exists('transliteration_clean_filename')) {
-              $file_name = transliteration_clean_filename($step->getKeyword() . '_' . $step->getText());
-            }
-            else {
-              $file_name = str_replace(' ', '_', $step->getKeyword() . '_' . $step->getText());
-              $file_name = preg_replace('![^0-9A-Za-z_.-]!', '', $file_name);
-            }
-            $file_name = substr($file_name, 0, 30);
-            $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-notice__' . $file_name;
+            $file_name = $step->getKeyword() . '_' . $step->getText();
+            $file_name = 'behat-notice__' . $file_name;
             $message = "Screenshot for behat notice in step created in @file_name";
             $this->createScreenshot($file_name, $message);
             // We don't throw $e any more because we don't fail on the notice.
@@ -102,15 +135,8 @@ class ScreenShotContext extends RawMinkContext {
     }
     try {
       $step = $event->getStep();
-      if (function_exists('transliteration_clean_filename')) {
-        $file_name = transliteration_clean_filename($step->getKeyword() . '_' . $step->getText());
-      }
-      else {
-        $file_name = str_replace(' ', '_', $step->getKeyword() . '_' . $step->getText());
-        $file_name = preg_replace('![^0-9A-Za-z_.-]!', '', $file_name);
-      }
-      $file_name = substr($file_name, 0, 30);
-      $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . 'behat-failed__' . ' - ' . $event->getFeature()->getFile() . '-' . $file_name;
+      $file_name = $event->getFeature()->getFile() . '-' . $step->getKeyword() . '_' . $step->getText();
+      $file_name = 'behat-failed__' . $file_name;
       $message = "Screenshot for failed step created in @file_name";
       $this->createScreenshotsForErrors($file_name, $message, $event->getTestResult());
     }
@@ -143,6 +169,8 @@ class ScreenShotContext extends RawMinkContext {
    *   Whether to add .png or .html to the name of the screenshot.
    */
   public function createScreenshot($file_name, $message, $ext = TRUE) {
+    $file_name = $this->escapeFilename($file_name);
+    $file_name = $this->getScreenshotsPath() . DIRECTORY_SEPARATOR . $file_name;
     if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
       if ($ext) {
         $file_name .= '.png';
@@ -162,6 +190,24 @@ class ScreenShotContext extends RawMinkContext {
     }
 
     return $file_name;
+  }
+
+  /**
+   * Escape the filename by removing characters that are problematic for files.
+   *
+   * @param string $name
+   *   The name of the file.
+   *
+   * @return string
+   *   The escaped name of the file.
+   */
+  protected function escapeFilename($name) {
+    if (function_exists('transliteration_clean_filename')) {
+      return transliteration_clean_filename($name);
+    }
+
+    $name = str_replace(' ', '_', $name);
+    return preg_replace('![^0-9A-Za-z_.-]!', '', $name);
   }
 
 }
