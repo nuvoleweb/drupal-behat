@@ -3,6 +3,7 @@ drupal:
   base_url: "http://nginx"
   site:
     profile: "minimal"
+    existing_config: TRUE
   database:
     host: ${env.DB_HOST}
     port: ${env.DB_PORT}
@@ -10,8 +11,8 @@ drupal:
     user: ${env.DB_USER}
     password: ${env.DB_PASSWORD}
   settings:
-    config_directories:
-      sync: "../tests/config/sync"
+    settings:
+      config_sync_directory: "../tests/config/sync"
 
 commands:
   drupal:site-setup:
