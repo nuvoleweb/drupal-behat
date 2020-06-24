@@ -16,7 +16,8 @@
         }
     ],
     "require": {
-        "drupal/drupal-extension": "^3.4 || ^4.0"
+        "drupal/drupal-extension": "^3.4 || ^4.0",
+        "symfony/config": "^4.0 || ^5.0"
     },
     "require-dev": {
         "composer/installers": "^1.2",
