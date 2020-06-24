@@ -73,13 +73,40 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    * {@inheritdoc}
    */
   public function getEntityIdByLabel($entity_type, $bundle, $label) {
-    /** @var \Drupal\node\NodeStorage $storage */
-    $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
-    $bundle_key = $storage->getEntityType()->getKey('bundle');
-    $label_key = $storage->getEntityType()->getKey('label');
+    $result = $this->findEntityIdByLabel($entity_type, $bundle, $label);
+    Assert::notNull($result, __METHOD__ . ": No Entity {$entity_type} with name {$label} found.");
+    return $result;
+  }
 
-    $query = \Drupal::entityQuery($entity_type);
+  /**
+   * Get entity ID given its type, bundle and label without throwing exceptions.
+   *
+   * @param string $entity_type
+   *   Entity type machine name.
+   * @param string $bundle
+   *   Entity bundle machine name, can be empty.
+   * @param string $label
+   *   Entity name.
+   *
+   * @return int|null
+   *   Entity ID.
+   */
+  public function findEntityIdByLabel($entity_type, $bundle, $label) {
+    $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
+    $type = $storage->getEntityType();
+
+    if ($type->hasKey('label')) {
+      $label_key = $type->getKey('label');
+    }
+    else {
+      // Fall back to the name field (for users for example) when the entity
+      // type has no label key.
+      $label_key = 'name';
+    }
+
+    $query = $storage->getQuery();
     if ($bundle) {
+      $bundle_key = $type->getKey('bundle');
       $query->condition($bundle_key, $bundle);
     }
     $query->condition($label_key, $label);
@@ -88,7 +115,9 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
     $query->accessCheck(FALSE);
 
     $result = $query->execute();
-    Assert::notEmpty($result, __METHOD__ . ": No Entity {$entity_type} with name {$label} found.");
+    if (empty($result)) {
+      return NULL;
+    }
     return current($result);
   }
 
