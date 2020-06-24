@@ -197,3 +197,28 @@ Feature: Content Context
     And I am visiting the "article" content "Article mixed new and existing"
     Then I should see the text "Tag 2"
     Then I should see the text "Tag 4"
+
+
+  Scenario: Test yaml content creation with re-use of entities.
+
+    Given the following content:
+      """
+      title: Example new Categories page
+      type: page
+      langcode: en
+      field_paragraphs:
+        -
+          type: complex
+          field_category:
+            vid: category
+            name: Category C
+          field_sub_paragraph:
+            -
+              type: complex
+              field_category: Category C
+
+      """
+
+    When I am an anonymous user
+    And I am visiting the "page" content "Example new Categories page"
+    Then I should see the text "Category C"

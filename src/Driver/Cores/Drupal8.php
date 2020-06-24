@@ -260,11 +260,16 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       switch ($definition->getType()) {
         case 'entity_reference':
         case 'entity_reference_revisions':
-          $target_type = \Drupal::entityTypeManager()->getDefinition($settings['target_type']);
-          if (!($target_type instanceof ContentEntityTypeInterface)) {
+          $target_type = $settings['target_type'];
+          $target_entity_type = \Drupal::entityTypeManager()->getDefinition($target_type);
+          if (!($target_entity_type instanceof ContentEntityTypeInterface)) {
             // We only know how to get deal with content entities.
             break;
           }
+          // Save references but don't save reference revisions.
+          // This allows to reference entityies created earlier in the loop
+          // to be referenced by name but keeps the behaviour for paragraphs.
+          $save_target = $definition->getType() !== 'entity_reference_revisions';
 
           if (!is_array($value)) {
             $value = [$value];
@@ -276,17 +281,23 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           }, ARRAY_FILTER_USE_KEY);
           if (!empty($mapped)) {
             var_export($mapped);
-            $entities[] = $this->entityCreate($settings['target_type'], $mapped, FALSE);
+            $entities[] = $this->entityCreate($target_type, $mapped, $save_target);
           }
 
           $value = array_diff_key($value, $mapped);
           foreach ($value as $target_values) {
             if (!is_array($target_values)) {
               // If here we don't encounter an array, only the label is given.
-              $entities[] = $this->getEntityIdByLabel($settings['target_type'], NULL, $target_values);
+              $referenced = $this->findEntityIdByLabel($target_type, NULL, $target_values);
+              if ($referenced === NULL && is_numeric($target_values)) {
+                // For backwards compatibility we accept numeric ids.
+                $referenced = $target_values;
+              }
+              Assert::notEmpty($referenced, __METHOD__ . ": No Entity {$target_type} with name {$target_values} found.");
+              $entities[] = $referenced;
             }
             else {
-              $entities[] = $this->entityCreate($settings['target_type'], $target_values, FALSE);
+              $entities[] = $this->entityCreate($target_type, $target_values, $save_target);
             }
           }
 
