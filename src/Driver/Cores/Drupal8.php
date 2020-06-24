@@ -287,6 +287,10 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           $value = array_diff_key($value, $mapped);
           foreach ($value as $target_values) {
             if (!is_array($target_values)) {
+              if (empty($target_values)) {
+                // If there is no value, do nothing.
+                continue;
+              }
               // If here we don't encounter an array, only the label is given.
               $referenced = $this->findEntityIdByLabel($target_type, NULL, $target_values);
               if ($referenced === NULL && is_numeric($target_values)) {
