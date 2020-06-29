@@ -280,7 +280,6 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
             return !is_int($key);
           }, ARRAY_FILTER_USE_KEY);
           if (!empty($mapped)) {
-            var_export($mapped);
             $entities[] = $this->entityCreate($target_type, $mapped, $save_target);
           }
 
@@ -298,6 +297,9 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
                 $referenced = $target_values;
               }
               Assert::notEmpty($referenced, __METHOD__ . ": No Entity {$target_type} with name {$target_values} found.");
+              // At least for entity_reference_revisions we need to load the
+              // entity to know which revision to reference.
+              $referenced = \Drupal::entityTypeManager()->getStorage($target_type)->load($referenced);
               $entities[] = $referenced;
             }
             else {
