@@ -2,7 +2,7 @@ default:
   suites:
     default:
       paths:
-        - %paths.base%/tests/features
+        - "%paths.base%/tests/features"
       contexts:
         - Drupal\DrupalExtension\Context\ConfigContext
         - Drupal\DrupalExtension\Context\MinkContext
@@ -31,10 +31,20 @@ default:
       filters:
         tags: "~@wip"
   extensions:
-    Behat\MinkExtension:
+    Drupal\MinkExtension:
       goutte: ~
+      ajax_timeout: 10
+      browser_name: 'chrome'
       selenium2:
         wd_host: 'http://selenium:4444/wd/hub'
+        capabilities:
+          browser: 'chrome'
+          version: "*"
+          chrome:
+            switches:
+              - "--headless"
+              - "--disable-gpu"
+              - "--start-maximized"
       javascript_session: selenium2
       base_url: "${drupal.base_url}"
     NuvoleWeb\Drupal\DrupalExtension:
@@ -49,6 +59,6 @@ default:
       selectors:
         error_message_selector: '.messages--error'
       text:
-        node_submit_label: "Save and publish"
+        node_submit_label: "Save"
   formatters:
     progress: ~

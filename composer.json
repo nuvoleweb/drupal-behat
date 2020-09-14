@@ -1,68 +1,94 @@
 {
-  "name": "nuvoleweb/drupal-behat",
-  "type": "behat-extension",
-  "description": "Drupal Behat extension.",
-  "keywords": ["drupal", "web", "test", "behat"],
-  "minimum-stability": "alpha",
-  "prefer-stable": true,
-  "license": "GPL-2.0+",
-  "authors": [
-    {
-      "name": "Nuvole Web",
-      "email": "info@nuvole.org"
-    }
-  ],
-  "require": {
-    "drupal/drupal-extension": "~3.4",
-    "drupal/drupal-driver": "~1.4",
-    "webmozart/assert": "^1.3"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~5",
-    "phpro/grumphp": "0.14",
-    "drupal/coder": "~8",
-    "composer/installers": "~1",
-    "drupal-composer/drupal-scaffold": "dev-master",
-    "drush/drush": "~9",
-    "drupal/chosen": "~2",
-    "drupal/coffee": "~1",
-    "drupal/config_installer": "~1",
-    "drupal/paragraphs": "~1",
-    "harvesthq/chosen": "1.5.0",
-    "drupal/core": "~8",
-    "openeuropa/task-runner": "^0.5"
-  },
-  "autoload": {
-    "psr-4": {
-      "NuvoleWeb\\Drupal\\": "./src/",
-      "NuvoleWeb\\Drupal\\Tests\\": "./tests/src/"
-    }
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "harvesthq/chosen",
-        "version": "1.5.0",
-        "type": "drupal-library",
-        "dist": {
-          "url": "https://github.com/harvesthq/chosen/releases/download/v1.5.0/chosen_v1.5.0.zip",
-          "type": "zip"
+    "name": "nuvoleweb/drupal-behat",
+    "type": "behat-extension",
+    "description": "Drupal Behat extension.",
+    "keywords": [
+        "drupal",
+        "web",
+        "test",
+        "behat"
+    ],
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Nuvole Web",
+            "email": "info@nuvole.org"
         }
-      }
+    ],
+    "require": {
+        "drupal/drupal-extension": "^3.4 || ^4.0",
+        "symfony/config": "^4.0 || ^5.0"
+    },
+    "require-dev": {
+        "composer/installers": "^1.2",
+        "drupal/chosen": "~2",
+        "drupal/coffee": "~1",
+        "drupal/core-composer-scaffold": "^8.8 || ~9",
+        "drupal/core-dev": "^8.8 || ~9",
+        "drupal/paragraphs": "~1",
+        "drush/drush": "~10.0",
+        "ergebnis/composer-normalize": "^2.5",
+        "harvesthq/chosen": "1.8.7",
+        "openeuropa/task-runner": "^1.0.0-beta6",
+        "phpro/grumphp-shim": "^0.19.0"
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "build/"
+            }
+        },
+        "installer-paths": {
+            "build/core": [
+                "type:drupal-core"
+            ],
+            "build/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "build/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "build/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "build/libraries/{$name}": [
+                "type:drupal-library"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "NuvoleWeb\\Drupal\\": "./src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "NuvoleWeb\\Drupal\\Tests\\": "./tests/src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "harvesthq/chosen",
+                "type": "drupal-library",
+                "version": "1.8.7",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/harvesthq/chosen/releases/download/v1.8.7/chosen_v1.8.7.zip"
+                }
+            }
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-update-cmd": [
+            "composer normalize --no-update-lock"
+        ]
     }
-  ],
-  "extra": {
-    "installer-paths": {
-      "build/core": ["type:drupal-core"],
-      "build/modules/contrib/{$name}": ["type:drupal-module"],
-      "build/profiles/contrib/{$name}": ["type:drupal-profile"],
-      "build/themes/contrib/{$name}": ["type:drupal-theme"],
-      "build/libraries/{$name}": ["type:drupal-library"]
-    }
-  }
 }

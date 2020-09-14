@@ -2,16 +2,17 @@ drupal:
   root: "build"
   base_url: "http://nginx"
   site:
-    profile: "config_installer"
+    profile: "minimal"
+    existing_config: TRUE
   database:
-    host: "mariadb"
-    port: "3306"
-    name: "drupal"
-    user: "drupal"
-    password: "drupal"
+    host: ${env.DB_HOST}
+    port: ${env.DB_PORT}
+    name: ${env.DB_NAME}
+    user: ${env.DB_USER}
+    password: ${env.DB_PASSWORD}
   settings:
-    config_directories:
-      sync: "../tests/config/sync"
+    settings:
+      config_sync_directory: "../tests/config/${env.TEST_DRUPAL_VERSION}"
 
 commands:
   drupal:site-setup:

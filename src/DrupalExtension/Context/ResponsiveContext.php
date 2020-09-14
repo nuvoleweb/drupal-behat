@@ -46,8 +46,7 @@ class ResponsiveContext extends RawMinkContext {
   /**
    * {@inheritDoc}
    */
-  public function getSession($name = null)
-  {
+  public function getSession($name = NULL) {
     $session = parent::getSession($name);
     if (!$session->isStarted()) {
       $session->start();
@@ -95,7 +94,7 @@ class ResponsiveContext extends RawMinkContext {
    * @Then the browser window width should be :size
    */
   public function assertBrowserWindowWidth($size) {
-    $actual = $this->getSession()->evaluateScript('return window.innerWidth;');
+    $actual = $this->getSession()->evaluateScript('return window.outerWidth;');
     if ($actual != $size) {
       throw new ExpectationException("Browser window width expected to be {$size} but it is {$actual} instead.", $this->getSession());
     }

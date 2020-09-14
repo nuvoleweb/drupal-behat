@@ -28,12 +28,12 @@ class ResolutionComponentTest extends AbstractTest {
   /**
    * Test invalid resolution.
    *
-   * @expectedException \InvalidArgumentException
    * @covers ::parse
    * @covers ::getWidth
    * @covers ::getHeight
    */
   public function testInvalidResolution() {
+    $this->expectException(\InvalidArgumentException::class);
     $resolution = new ResolutionComponent();
     $resolution->parse('absdx123');
   }
