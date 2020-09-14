@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Class TaxonomyTermContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Taxonomy term context with sep definitions.
  */
 class TaxonomyTermContext extends RawDrupalContext {
 

@@ -8,9 +8,7 @@ use Behat\MinkExtension\Context\RawMinkContext as OriginalRawMinkContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class RawMinkContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Extended raw mink context with service container.
  */
 class RawMinkContext extends OriginalRawMinkContext implements ServiceContainerAwareInterface {
 

@@ -6,9 +6,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext as OriginalRawDrupalContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class RawDrupalContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * The raw drupal context extended with the service container.
  */
 class RawDrupalContext extends OriginalRawDrupalContext implements ServiceContainerAwareInterface {
 

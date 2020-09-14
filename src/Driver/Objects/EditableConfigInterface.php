@@ -3,8 +3,6 @@
 namespace NuvoleWeb\Drupal\Driver\Objects;
 
 /**
- * Interface EditableConfigInterface.
- *
  * This is in essence an interface for Drupal 8s \Drupal\Core\Config\Config.
  */
 interface EditableConfigInterface {

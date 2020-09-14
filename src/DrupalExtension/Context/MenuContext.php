@@ -7,9 +7,7 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Class MenuContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Menu context step definitions.
  */
 class MenuContext extends RawDrupalContext {
 

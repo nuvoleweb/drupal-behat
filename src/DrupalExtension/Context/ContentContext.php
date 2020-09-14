@@ -7,9 +7,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Webmozart\Assert\Assert;
 
 /**
- * Class ContentContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Content context step definitions.
  */
 class ContentContext extends RawDrupalContext {
 

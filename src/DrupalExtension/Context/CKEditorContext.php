@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 /**
- * Class CKEditorContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * CKEditor Context step definitions.
  */
 class CKEditorContext extends RawMinkContext {
 

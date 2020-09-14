@@ -9,9 +9,7 @@ use Behat\Mink\Exception\DriverException;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Class ScreenShotContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Screenshot context for taking screenshots.
  */
 class ScreenShotContext extends RawMinkContext {
 

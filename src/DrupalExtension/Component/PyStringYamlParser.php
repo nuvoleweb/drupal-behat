@@ -6,9 +6,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class PyStringYamlParser.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Component
+ * Our YAML parser.
  */
 class PyStringYamlParser {
 

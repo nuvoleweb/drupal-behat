@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Interface ServiceContainerAwareInterface.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Define a service container aware interface.
  */
 interface ServiceContainerAwareInterface {
 

@@ -21,9 +21,7 @@ use NuvoleWeb\Drupal\Driver\Objects\Drupal8\State;
 use Webmozart\Assert\Assert;
 
 /**
- * Class Drupal8.
- *
- * @package NuvoleWeb\Drupal\Driver\Cores
+ * Extending the Drupal 8 direver with more methods.
  */
 class Drupal8 extends OriginalDrupal8 implements CoreInterface {
 

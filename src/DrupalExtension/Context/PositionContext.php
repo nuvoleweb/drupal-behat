@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Context;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Class PositionContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Position context to determine the order of elements.
  */
 class PositionContext extends RawMinkContext {
 

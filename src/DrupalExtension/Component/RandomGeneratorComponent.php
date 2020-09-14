@@ -3,9 +3,7 @@
 namespace NuvoleWeb\Drupal\DrupalExtension\Component;
 
 /**
- * Class RandomGeneratorComponent.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Component
+ * Random generator component for easy test values.
  */
 class RandomGeneratorComponent {
 

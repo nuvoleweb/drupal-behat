@@ -7,9 +7,7 @@ use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
- * Class BehatServiceProvider.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\ServiceProvider
+ * Behat service provider for getting parameter overrides.
  */
 class BehatServiceProvider extends ServiceProviderBase {
 

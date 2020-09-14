@@ -7,9 +7,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Class SelectFieldContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Select field context to work with select fields.
  */
 class SelectFieldContext extends RawMinkContext {
 
@@ -24,7 +22,7 @@ class SelectFieldContext extends RawMinkContext {
       throw new ExpectationException("Field '$select' not found.", $this->getSession());
     }
 
-    /* @var \Behat\Mink\Element\NodeElement $field */
+    /** @var \Behat\Mink\Element\NodeElement $field */
 
     // Check that the specified field is a <select> field.
     $this->assertElementType($field, 'select');
@@ -62,7 +60,7 @@ class SelectFieldContext extends RawMinkContext {
       throw new ExpectationException("Field '$select' not found.", $this->getSession());
     }
 
-    /* @var \Behat\Mink\Element\NodeElement $field */
+    /** @var \Behat\Mink\Element\NodeElement $field */
 
     // Check that the specified field is a <select> field.
     $this->assertElementType($field, 'select');
@@ -128,7 +126,7 @@ class SelectFieldContext extends RawMinkContext {
       throw new ExpectationException("Field '$select' not found.", $this->getSession());
     }
 
-    /* @var \Behat\Mink\Element\NodeElement $field */
+    /** @var \Behat\Mink\Element\NodeElement $field */
 
     // Check that the specified field is a <select> field.
     $this->assertElementType($field, 'select');

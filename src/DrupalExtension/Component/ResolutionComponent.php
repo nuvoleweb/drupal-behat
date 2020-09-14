@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\DrupalExtension\Component;
 use Webmozart\Assert\Assert;
 
 /**
- * Class ResolutionComponent.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Component
+ * Resolution component to work with screen resolutions.
  */
 class ResolutionComponent {
 

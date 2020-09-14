@@ -6,9 +6,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
- * Class ChosenFieldContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Chosen context step definitions.
  */
 class ChosenFieldContext extends RawMinkContext {
 

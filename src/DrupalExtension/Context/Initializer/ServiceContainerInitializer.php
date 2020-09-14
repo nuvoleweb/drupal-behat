@@ -8,9 +8,7 @@ use Behat\Behat\Context\Initializer\ContextInitializer;
 use NuvoleWeb\Drupal\DrupalExtension\Context\ServiceContainerAwareInterface;
 
 /**
- * Class ServiceContainer.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context\Initializer
+ * Service Container Initializer gives easy access to the container.
  */
 class ServiceContainerInitializer implements ContextInitializer {
 

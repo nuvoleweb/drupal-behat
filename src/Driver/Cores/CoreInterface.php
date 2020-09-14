@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\Driver\Cores;
 use Drupal\Driver\Cores\CoreInterface as OriginalCoreInterface;
 
 /**
- * Interface CoreInterface.
- *
- * @package NuvoleWeb\Drupal\Driver\Cores
+ * Adding more methods to the core interface.
  */
 interface CoreInterface extends OriginalCoreInterface {
 

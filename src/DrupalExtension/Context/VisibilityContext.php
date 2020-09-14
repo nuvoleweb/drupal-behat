@@ -7,9 +7,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 
 /**
- * Class VisibilityContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Visibility context with step definitions.
  */
 class VisibilityContext extends RawMinkContext {
 

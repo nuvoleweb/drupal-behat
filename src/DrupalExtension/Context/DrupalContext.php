@@ -8,8 +8,6 @@ use Behat\Gherkin\Node\TableNode;
  * Extends Drupal Extension DrupalContext class.
  *
  * Load this context instead of Drupal\DrupalExtension\Context\DrupalContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
  */
 class DrupalContext extends RawDrupalContext {
 

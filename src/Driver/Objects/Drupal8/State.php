@@ -5,9 +5,7 @@ namespace NuvoleWeb\Drupal\Driver\Objects\Drupal8;
 use NuvoleWeb\Drupal\Driver\Objects\StateInterface;
 
 /**
- * Class State.
- *
- * @package NuvoleWeb\Drupal\Driver\Objects\Drupal8
+ * Simple state abstraction.
  */
 class State implements StateInterface {
 

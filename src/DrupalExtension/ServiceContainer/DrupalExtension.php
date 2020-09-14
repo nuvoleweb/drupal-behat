@@ -9,9 +9,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Drupal\DrupalExtension\ServiceContainer\DrupalExtension as OriginalDrupalExtension;
 
 /**
- * Class DrupalExtension.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\ServiceContainer
+ * Drupal extension which loads the service container.
  */
 class DrupalExtension extends OriginalDrupalExtension {
 

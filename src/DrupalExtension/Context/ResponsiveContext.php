@@ -6,9 +6,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Webmozart\Assert\Assert;
 
 /**
- * Class ResponsiveContext.
- *
- * @package NuvoleWeb\Drupal\DrupalExtension\Context
+ * Responsive Context for responsive tests.
  */
 class ResponsiveContext extends RawMinkContext {
 
