@@ -58,6 +58,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   public function loadNodeByName($title) {
     $result = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
       ->condition('title', $title)
       ->condition('status', NodeInterface::PUBLISHED)
       ->range(0, 1)
@@ -148,6 +149,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
    */
   public function loadTaxonomyTermByName($type, $name) {
     $result = \Drupal::entityQuery('taxonomy_term')
+      ->accessCheck(FALSE)
       ->condition('name', $name)
       ->condition('vid', $type)
       ->range(0, 1)
