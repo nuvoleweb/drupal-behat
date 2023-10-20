@@ -311,7 +311,17 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           break;
 
         case 'image':
+          $image_data = explode(';', $value);
+          $entity->{$name}->setValue(['target_id' => $this->saveFile($image_data[0])->id(), 'alt' => @$image_data[1]]);
+          break;
+
+        case 'file':
           $entity->{$name}->setValue(['target_id' => $this->saveFile($value)->id()]);
+          break;
+
+        case 'link':
+          $link_data = explode(';', $value);
+          $entity->{$name}->setValue(['uri' => $link_data[0], 'title' => @$link_data[1]]);
           break;
       }
     }
