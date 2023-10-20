@@ -192,15 +192,18 @@ class ContentContext extends RawDrupalContext {
    *   The title to identify the content by.
    * @param \Behat\Gherkin\Node\PyStringNode $string
    *   The text in yaml format that represents the translation.
+   * @param string $type
+   *   Type of entity, by default is node.
    *
    * @Given the following translation for :content_type content :title:
+   * @Given the following translation for :type :content_type content :title:
    */
-  public function assertTranslation($content_type, $title, PyStringNode $string) {
+  public function assertTranslation($content_type, $title, PyStringNode $string, $type = 'node') {
     $values = $this->getYamlParser()->parse($string);
     Assert::keyExists($values, 'langcode', __METHOD__ . ": Required field 'langcode' not found.");
 
-    $nid = $this->getCore()->getEntityIdByLabel('node', $content_type, $title);
-    $source = $this->getCore()->entityLoad('node', $nid);
+    $entity_id = $this->getCore()->getEntityIdByLabel($type, $content_type, $title);
+    $source = $this->getCore()->entityLoad($type, $entity_id);
 
     $this->getCore()->entityAddTranslation($source, $values['langcode'], $values);
   }
