@@ -32,7 +32,7 @@ default:
         tags: "~@wip"
   extensions:
     Drupal\MinkExtension:
-      goutte: ~
+      browserkit_http: ~
       ajax_timeout: 10
       browser_name: 'chrome'
       selenium2:
