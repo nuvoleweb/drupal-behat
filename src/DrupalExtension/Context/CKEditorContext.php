@@ -22,15 +22,20 @@ class CKEditorContext extends RawMinkContext {
       throw new \Exception(sprintf('Field "%s" not found.', $label));
     }
 
-    $args_as_js_object = json_encode([
-      'ckeditor_instance_id' => $field->getAttribute('id'),
-      'value' => $text,
-    ]);
-
-    $this->getSession()->executeScript(
-      "args = {$args_as_js_object};" .
-      "CKEDITOR.instances[args.ckeditor_instance_id].setData(args.value);"
-    );
+    $ckeditor5_id = $field->getAttribute('data-ckeditor5-id');
+    if (!empty($ckeditor5_id)) {
+      $this->getSession()->executeScript("Drupal.CKEditor5Instances.get('$ckeditor5_id').setData('$text');");
+    }
+    else {
+      $args_as_js_object = json_encode([
+        'ckeditor_instance_id' => $field->getAttribute('id'),
+        'value' => $text,
+      ]);
+      $this->getSession()->executeScript(
+        "args = {$args_as_js_object};" .
+        "CKEDITOR.instances[args.ckeditor_instance_id].setData(args.value);"
+      );
+    }
   }
 
 }
